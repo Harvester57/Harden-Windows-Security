@@ -21,6 +21,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Xml;
 using AppControlManager.Others;
@@ -92,7 +93,7 @@ internal static class GetEventLogsData
 		// Make sure there are events to process
 		if (rawEvents.Count is 0)
 		{
-			Logger.Write(GlobalVars.Rizz.GetString("NoCodeIntegrityLogsFoundMessage"));
+			Logger.Write(GlobalVars.GetStr("NoCodeIntegrityLogsFoundMessage"));
 			return fileIdentities.FileIdentitiesInternal;
 		}
 
@@ -207,8 +208,8 @@ internal static class GetEventLogsData
 					FilePath = FilePath,
 					FileName = FileName,
 					ProcessName = GetStringValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Process Name']"),
-					RequestedSigningLevel = GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Requested Signing Level']")),
-					ValidatedSigningLevel = GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Validated Signing Level']")),
+					RequestedSigningLevel = CILogIntel.GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Requested Signing Level']")),
+					ValidatedSigningLevel = CILogIntel.GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Validated Signing Level']")),
 					Status = GetStringValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Status']"),
 					SHA1Hash = GetStringValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='SHA1 Hash']"),
 					SHA256Hash = SHA256Hash,
@@ -265,27 +266,25 @@ internal static class GetEventLogsData
 						}
 
 						// Extract values using XPath
-						FileSignerInfo signerInfo = new()
-						{
-
-							TotalSignatureCount = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
-							Signature = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
-							Hash = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Hash']"),
-							PageHash = GetBooleanValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='PageHash']"),
-							SignatureType = GetSignatureType(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='SignatureType']")),
-							ValidatedSigningLevel = GetValidatedRequestedSigningLevel(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='ValidatedSigningLevel']")),
-							VerificationError = GetVerificationError(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='VerificationError']")),
-							Flags = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Flags']"),
-							NotValidBefore = GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidBefore']"),
-							NotValidAfter = GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidAfter']"),
-							PublisherName = PublisherName,
-							IssuerName = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
-							PublisherTBSHash = PublisherTBSHash,
-							IssuerTBSHash = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']"),
-							OPUSInfo = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='OPUSInfo']"),
-							EKUs = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='EKUs']"),
-							KnownRoot = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='KnownRoot']")
-						};
+						FileSignerInfo signerInfo = new(
+							totalSignatureCount: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
+							signature: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
+							hash: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Hash']"),
+							pageHash: GetBooleanValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='PageHash']"),
+							signatureType: CILogIntel.GetSignatureType(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='SignatureType']")),
+							validatedSigningLevel: CILogIntel.GetValidatedRequestedSigningLevel(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='ValidatedSigningLevel']")),
+							verificationError: CILogIntel.GetVerificationError(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='VerificationError']")),
+							flags: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Flags']"),
+							notValidBefore: GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidBefore']"),
+							notValidAfter: GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidAfter']"),
+							publisherName: PublisherName,
+							issuerName: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
+							publisherTBSHash: PublisherTBSHash,
+							issuerTBSHash: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']"),
+							oPUSInfo: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='OPUSInfo']"),
+							eKUs: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='EKUs']"),
+							knownRoot: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='KnownRoot']")
+						);
 
 
 						// Add the CN of the current signer to the FilePublishers HashSet of the FileIdentity
@@ -396,8 +395,8 @@ internal static class GetEventLogsData
 					FilePath = FilePath,
 					FileName = FileName,
 					ProcessName = GetStringValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Process Name']"),
-					RequestedSigningLevel = GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Requested Signing Level']")),
-					ValidatedSigningLevel = GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Validated Signing Level']")),
+					RequestedSigningLevel = CILogIntel.GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Requested Signing Level']")),
+					ValidatedSigningLevel = CILogIntel.GetValidatedRequestedSigningLevel(GetIntValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Validated Signing Level']")),
 					Status = GetStringValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='Status']"),
 					SHA1Hash = GetStringValue(xmlDocument, namespaceManager, "//evt:EventData/evt:Data[@Name='SHA1 Hash']"),
 					SHA256Hash = SHA256Hash,
@@ -456,27 +455,25 @@ internal static class GetEventLogsData
 
 
 						// Extract values using XPath
-						FileSignerInfo signerInfo = new()
-						{
-
-							TotalSignatureCount = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
-							Signature = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
-							Hash = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Hash']"),
-							PageHash = GetBooleanValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='PageHash']"),
-							SignatureType = GetSignatureType(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='SignatureType']")),
-							ValidatedSigningLevel = GetValidatedRequestedSigningLevel(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='ValidatedSigningLevel']")),
-							VerificationError = GetVerificationError(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='VerificationError']")),
-							Flags = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Flags']"),
-							NotValidBefore = GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidBefore']"),
-							NotValidAfter = GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidAfter']"),
-							PublisherName = PublisherName,
-							IssuerName = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
-							PublisherTBSHash = PublisherTBSHash,
-							IssuerTBSHash = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']"),
-							OPUSInfo = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='OPUSInfo']"),
-							EKUs = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='EKUs']"),
-							KnownRoot = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='KnownRoot']")
-						};
+						FileSignerInfo signerInfo = new(
+							totalSignatureCount: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
+							signature: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
+							hash: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Hash']"),
+							pageHash: GetBooleanValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='PageHash']"),
+							signatureType: CILogIntel.GetSignatureType(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='SignatureType']")),
+							validatedSigningLevel: CILogIntel.GetValidatedRequestedSigningLevel(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='ValidatedSigningLevel']")),
+							verificationError: CILogIntel.GetVerificationError(GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='VerificationError']")),
+							flags: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Flags']"),
+							notValidBefore: GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidBefore']"),
+							notValidAfter: GetEventDataDateTimeValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='NotValidAfter']"),
+							publisherName: PublisherName,
+							issuerName: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
+							publisherTBSHash: PublisherTBSHash,
+							issuerTBSHash: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']"),
+							oPUSInfo: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='OPUSInfo']"),
+							eKUs: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='EKUs']"),
+							knownRoot: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='KnownRoot']")
+						);
 
 
 						// Add the CN of the current signer to the FilePublishers HashSet of the FileIdentity
@@ -485,7 +482,6 @@ internal static class GetEventLogsData
 
 						// Add the current signer info/correlated event data to the main event package
 						_ = eventData.FileSignerInfos.Add(signerInfo);
-
 
 					}
 				}
@@ -502,7 +498,7 @@ internal static class GetEventLogsData
 		}
 
 		Logger.Write(string.Format(
-			GlobalVars.Rizz.GetString("TotalCodeIntegrityLogsMessage"),
+			GlobalVars.GetStr("TotalCodeIntegrityLogsMessage"),
 			fileIdentities.Count));
 
 		// Return the output
@@ -561,7 +557,7 @@ internal static class GetEventLogsData
 		// Make sure there are events to process
 		if (rawEvents.Count == 0)
 		{
-			Logger.Write(GlobalVars.Rizz.GetString("NoAppLockerEventsFoundMessage"));
+			Logger.Write(GlobalVars.GetStr("NoAppLockerEventsFoundMessage"));
 			return fileIdentities.FileIdentitiesInternal;
 		}
 
@@ -716,15 +712,14 @@ internal static class GetEventLogsData
 						}
 
 						// Extract values using XPath
-						FileSignerInfo signerInfo = new()
-						{
-							TotalSignatureCount = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
-							Signature = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
-							PublisherName = PublisherName,
-							IssuerName = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
-							PublisherTBSHash = PublisherTBSHash,
-							IssuerTBSHash = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']"),
-						};
+						FileSignerInfo signerInfo = new(
+							totalSignatureCount: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
+							signature: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
+							publisherName: PublisherName,
+							issuerName: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
+							publisherTBSHash: PublisherTBSHash,
+							issuerTBSHash: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']")
+						);
 
 						// Add the CN of the current signer to the FilePublishers HashSet of the FileIdentity
 						_ = eventData.FilePublishers.Add(PublisherName);
@@ -875,15 +870,14 @@ internal static class GetEventLogsData
 						}
 
 						// Extract values using XPath
-						FileSignerInfo signerInfo = new()
-						{
-							TotalSignatureCount = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
-							Signature = GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
-							PublisherName = PublisherName,
-							IssuerName = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
-							PublisherTBSHash = PublisherTBSHash,
-							IssuerTBSHash = GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']"),
-						};
+						FileSignerInfo signerInfo = new(
+							totalSignatureCount: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='TotalSignatureCount']"),
+							signature: GetIntValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='Signature']"),
+							publisherName: PublisherName,
+							issuerName: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerName']"),
+							publisherTBSHash: PublisherTBSHash,
+							issuerTBSHash: GetStringValue(xmlDocumentCore, namespaceManagerCore, "//evt:EventData/evt:Data[@Name='IssuerTBSHash']")
+						);
 
 
 						// Add the CN of the current signer to the FilePublishers HashSet of the FileIdentity
@@ -909,7 +903,7 @@ internal static class GetEventLogsData
 		}
 
 		Logger.Write(string.Format(
-			GlobalVars.Rizz.GetString("TotalAppLockerLogsMessage"),
+			GlobalVars.GetStr("TotalAppLockerLogsMessage"),
 			fileIdentities.Count));
 
 		// Return the output
@@ -940,6 +934,7 @@ internal static class GetEventLogsData
 	/// <param name="nsManager"></param>
 	/// <param name="xpath"></param>
 	/// <returns></returns>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static int? GetIntValue(XmlDocument xmlDoc, XmlNamespaceManager nsManager, string xpath)
 	{
 		XmlNode? node = xmlDoc.SelectSingleNode(xpath, nsManager);
@@ -960,6 +955,7 @@ internal static class GetEventLogsData
 	/// <summary>
 	/// Returns null if the string is null, empty or whitespaces
 	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private static string? GetStringValue(XmlDocument xmlDoc, XmlNamespaceManager nsManager, string xpath)
 	{
 		XmlNode? node = xmlDoc.SelectSingleNode(xpath, nsManager);
@@ -1004,65 +1000,6 @@ internal static class GetEventLogsData
 		XmlNode? node = xmlDoc.SelectSingleNode(xpath, nsManager);
 		return node is not null && bool.TryParse(node.InnerText, out bool result) ? result : null;
 	}
-
-
-	/// <summary>
-	/// Resolves the Validated/Requested Signing Level int to friendly string
-	/// </summary>
-	/// <param name="SigningLevelInt"></param>
-	/// <returns></returns>
-	private static string? GetValidatedRequestedSigningLevel(int? SigningLevelInt)
-	{
-		if (SigningLevelInt.HasValue)
-		{
-			_ = CILogIntel.ReqValSigningLevels.TryGetValue(SigningLevelInt.Value, out string? SigningLevel);
-
-			return SigningLevel;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-
-	/// <summary>
-	/// Resolves the VerificationError int to a friendly string
-	/// </summary>
-	/// <param name="VerificationError"></param>
-	/// <returns></returns>
-	private static string? GetVerificationError(int? VerificationError)
-	{
-		if (VerificationError.HasValue)
-		{
-			_ = CILogIntel.VerificationErrorTable.TryGetValue(VerificationError.Value, out string? VerificationErrorString);
-			return VerificationErrorString;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-
-	/// <summary>
-	/// Resolves the SignatureType int to a friendly string
-	/// </summary>
-	/// <param name="SignatureType"></param>
-	/// <returns></returns>
-	private static string? GetSignatureType(int? SignatureType)
-	{
-		if (SignatureType.HasValue)
-		{
-			_ = CILogIntel.SignatureTypeTable.TryGetValue(SignatureType.Value, out string? SignatureTypeString);
-			return SignatureTypeString;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 
 	/// <summary>
 	/// Replaces global root NT paths to the normal paths
@@ -1140,7 +1077,7 @@ internal static class GetEventLogsData
 
 
 		Logger.Write(string.Format(
-			GlobalVars.Rizz.GetString("TotalLogsCountMessage"),
+			GlobalVars.GetStr("TotalLogsCountMessage"),
 			combinedResult.Count));
 
 		// Return the combined set

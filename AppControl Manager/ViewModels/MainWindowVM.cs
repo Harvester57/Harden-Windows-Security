@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using AnimatedVisuals;
 using AppControlManager.Others;
 using AppControlManager.WindowComponents;
@@ -27,6 +28,8 @@ using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Windows.Foundation;
+using Windows.Graphics;
 
 namespace AppControlManager.ViewModels;
 
@@ -89,171 +92,170 @@ internal sealed partial class MainWindowVM : ViewModelBase
 		breadCrumbMappingsV2.Clear();
 
 		breadCrumbMappingsV2[typeof(Pages.CreatePolicy)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreatePolicyNavItem/Content")],
-			Pages = [typeof(Pages.CreatePolicy)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreatePolicyNavItem/Content")],
+			pages: [typeof(Pages.CreatePolicy)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.GetCIHashes)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("GetCodeIntegrityHashesNavItem/Content")],
-			Pages = [typeof(Pages.GetCIHashes)]
-		};
+		(
+			titles: [GlobalVars.GetStr("GetCodeIntegrityHashesNavItem/Content")],
+			pages: [typeof(Pages.GetCIHashes)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.GitHubDocumentation)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("GitHubDocsNavItem/Content")],
-			Pages = [typeof(Pages.GitHubDocumentation)]
-		};
+		(
+			titles: [GlobalVars.GetStr("GitHubDocsNavItem/Content")],
+			pages: [typeof(Pages.GitHubDocumentation)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.MicrosoftDocumentation)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("MSFTDocsNavItem/Content")],
-			Pages = [typeof(Pages.MicrosoftDocumentation)]
-		};
+		(
+			titles: [GlobalVars.GetStr("MSFTDocsNavItem/Content")],
+			pages: [typeof(Pages.MicrosoftDocumentation)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.GetSecurePolicySettings)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("GetSecurePolicySettingsNavItem/Content")],
-			Pages = [typeof(Pages.GetSecurePolicySettings)]
-		};
+		(
+			titles: [GlobalVars.GetStr("GetSecurePolicySettingsNavItem/Content")],
+			pages: [typeof(Pages.GetSecurePolicySettings)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.Settings)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("SettingsNavItem/Content")],
-			Pages = [typeof(Pages.Settings)]
-		};
+		(
+			titles: [GlobalVars.GetStr("SettingsNavItem/Content")],
+			pages: [typeof(Pages.Settings)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.SystemInformation)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("SystemInformationNavItem/Content")],
-			Pages = [typeof(Pages.SystemInformation)]
-		};
+		(
+			titles: [GlobalVars.GetStr("SystemInformationNavItem/Content")],
+			pages: [typeof(Pages.SystemInformation)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.ConfigurePolicyRuleOptions)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("ConfigurePolicyRuleOptionsNavItem/Content")],
-			Pages = [typeof(Pages.ConfigurePolicyRuleOptions)]
-		};
+		(
+			titles: [GlobalVars.GetStr("ConfigurePolicyRuleOptionsNavItem/Content")],
+			pages: [typeof(Pages.ConfigurePolicyRuleOptions)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.Logs)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("LogsNavItem/Content")],
-			Pages = [typeof(Pages.Logs)]
-		};
+		(
+			titles: [GlobalVars.GetStr("LogsNavItem/Content")],
+			pages: [typeof(Pages.Logs)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.Simulation)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("SimulationNavItem/Content")],
-			Pages = [typeof(Pages.Simulation)]
-		};
+		(
+			titles: [GlobalVars.GetStr("SimulationNavItem/Content")],
+			pages: [typeof(Pages.Simulation)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.UpdatePage)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("UpdateNavItem/Content"), "Custom MSIXBundle Path"],
-			Pages = [typeof(Pages.UpdatePage), typeof(Pages.UpdatePageCustomMSIXPath)]
-		};
+		(
+			titles: [GlobalVars.GetStr("UpdateNavItem/Content"), GlobalVars.GetStr("UpdatePageCustomMSIXPath")],
+			pages: [typeof(Pages.UpdatePage), typeof(Pages.UpdatePageCustomMSIXPath)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.UpdatePageCustomMSIXPath)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("UpdateNavItem/Content"), "Custom MSIXBundle Path"],
-			Pages = [typeof(Pages.UpdatePage), typeof(Pages.UpdatePageCustomMSIXPath)]
-		};
+		(
+			titles: [GlobalVars.GetStr("UpdateNavItem/Content"), GlobalVars.GetStr("UpdatePageCustomMSIXPath")],
+			pages: [typeof(Pages.UpdatePage), typeof(Pages.UpdatePageCustomMSIXPath)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.DeploymentPage)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("DeploymentNavItem/Content")],
-			Pages = [typeof(Pages.DeploymentPage)]
-		};
+		(
+			titles: [GlobalVars.GetStr("DeploymentNavItem/Content")],
+			pages: [typeof(Pages.DeploymentPage)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.EventLogsPolicyCreation)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreatePolicyFromEventLogsNavItem/Content")],
-			Pages = [typeof(Pages.EventLogsPolicyCreation)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreatePolicyFromEventLogsNavItem/Content")],
+			pages: [typeof(Pages.EventLogsPolicyCreation)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.MDEAHPolicyCreation)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreatePolicyFromMDEAHNavItem/Content")],
-			Pages = [typeof(Pages.MDEAHPolicyCreation)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreatePolicyFromMDEAHNavItem/Content")],
+			pages: [typeof(Pages.MDEAHPolicyCreation)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.AllowNewApps)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("AllowNewAppsNavItem/Content")],
-			Pages = [typeof(Pages.AllowNewApps)]
-		};
+		(
+			titles: [GlobalVars.GetStr("AllowNewAppsNavItem/Content")],
+			pages: [typeof(Pages.AllowNewApps)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.BuildNewCertificate)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("BuildNewCertificateNavItem/Content")],
-			Pages = [typeof(Pages.BuildNewCertificate)]
-		};
+		(
+			titles: [GlobalVars.GetStr("BuildNewCertificateNavItem/Content")],
+			pages: [typeof(Pages.BuildNewCertificate)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.MergePolicies)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("MergePoliciesNavItem/Content")],
-			Pages = [typeof(Pages.MergePolicies)]
-		};
+		(
+			titles: [GlobalVars.GetStr("MergePoliciesNavItem/Content")],
+			pages: [typeof(Pages.MergePolicies)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.CreateSupplementalPolicy)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreateSupplementalPolicyNavItem/Content"), GlobalVars.Rizz.GetString("ScanResults")],
-			Pages = [typeof(Pages.CreateSupplementalPolicy), typeof(Pages.CreateSupplementalPolicyFilesAndFoldersScanResults)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreateSupplementalPolicyNavItem/Content"), GlobalVars.GetStr("ScanResults")],
+			pages: [typeof(Pages.CreateSupplementalPolicy), typeof(Pages.CreateSupplementalPolicyFilesAndFoldersScanResults)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.CreateSupplementalPolicyFilesAndFoldersScanResults)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreateSupplementalPolicyNavItem/Content"), GlobalVars.Rizz.GetString("ScanResults")],
-			Pages = [typeof(Pages.CreateSupplementalPolicy), typeof(Pages.CreateSupplementalPolicyFilesAndFoldersScanResults)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreateSupplementalPolicyNavItem/Content"), GlobalVars.GetStr("ScanResults")],
+			pages: [typeof(Pages.CreateSupplementalPolicy), typeof(Pages.CreateSupplementalPolicyFilesAndFoldersScanResults)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.StrictKernelPolicyScanResults)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreateSupplementalPolicyNavItem/Content"), GlobalVars.Rizz.GetString("ScanResults")],
-			Pages = [typeof(Pages.CreateSupplementalPolicy), typeof(Pages.StrictKernelPolicyScanResults)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreateSupplementalPolicyNavItem/Content"), GlobalVars.GetStr("ScanResults")],
+			pages: [typeof(Pages.CreateSupplementalPolicy), typeof(Pages.StrictKernelPolicyScanResults)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.CreateDenyPolicy)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreateDenyPolicyNavItem/Content"), GlobalVars.Rizz.GetString("ScanResults")],
-			Pages = [typeof(Pages.CreateDenyPolicy), typeof(Pages.CreateDenyPolicyFilesAndFoldersScanResults)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreateDenyPolicyNavItem/Content"), GlobalVars.GetStr("ScanResults")],
+			pages: [typeof(Pages.CreateDenyPolicy), typeof(Pages.CreateDenyPolicyFilesAndFoldersScanResults)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.CreateDenyPolicyFilesAndFoldersScanResults)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("CreateDenyPolicyNavItem/Content"), GlobalVars.Rizz.GetString("ScanResults")],
-			Pages = [typeof(Pages.CreateDenyPolicy), typeof(Pages.CreateDenyPolicyFilesAndFoldersScanResults)]
-		};
+		(
+			titles: [GlobalVars.GetStr("CreateDenyPolicyNavItem/Content"), GlobalVars.GetStr("ScanResults")],
+			pages: [typeof(Pages.CreateDenyPolicy), typeof(Pages.CreateDenyPolicyFilesAndFoldersScanResults)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.ValidatePolicy)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("ValidatePoliciesNavItem/Content")],
-			Pages = [typeof(Pages.ValidatePolicy)]
-		};
+		(
+			titles: [GlobalVars.GetStr("ValidatePoliciesNavItem/Content")],
+			pages: [typeof(Pages.ValidatePolicy)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.ViewFileCertificates)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("ViewFileCertificatesNavItem/Content")],
-			Pages = [typeof(Pages.ViewFileCertificates)]
-		};
+		(
+			titles: [GlobalVars.GetStr("ViewFileCertificatesNavItem/Content")],
+			pages: [typeof(Pages.ViewFileCertificates)]
+		);
 
 		breadCrumbMappingsV2[typeof(Pages.PolicyEditor)] = new PageTitleMap
-		{
-			Titles = [GlobalVars.Rizz.GetString("PolicyEditorNavItem/Content")],
-			Pages = [typeof(Pages.PolicyEditor)]
-		};
+		(
+			titles: [GlobalVars.GetStr("PolicyEditorNavItem/Content")],
+			pages: [typeof(Pages.PolicyEditor)]
+		);
 	}
 
 	// This collection is bound to the BreadCrumbBar's ItemsSource in the XAML
 	// initially adding the default page that loads when the app is loaded to the collection
-	internal readonly ObservableCollection<Crumb> Breadcrumbs = App.IsElevated ? [new Crumb(GlobalVars.Rizz.GetString("CreatePolicyNavItem/Content"), typeof(Pages.CreatePolicy))] :
-		[new Crumb(GlobalVars.Rizz.GetString("PolicyEditorNavItem/Content"), typeof(Pages.PolicyEditor))];
+	internal readonly ObservableCollection<Crumb> Breadcrumbs = App.IsElevated ? [new Crumb(GlobalVars.GetStr("CreatePolicyNavItem/Content"), typeof(Pages.CreatePolicy))] :
+		[new Crumb(GlobalVars.GetStr("PolicyEditorNavItem/Content"), typeof(Pages.PolicyEditor))];
 
 	/// <summary>
 	/// Dictionary of all the main pages in the app, used for the main navigation.
 	/// Keys are the Navigation Item tags (non-localized) and values are the page types.
-	/// Sub-pages should only be added if they don't rely on/access the the instance of any page that might not be initialized.
 	/// </summary>
 	internal readonly Dictionary<string, Type> NavigationPageToItemContentMap = new()
 	{
@@ -283,8 +285,8 @@ internal sealed partial class MainWindowVM : ViewModelBase
 
 
 	/// <summary>
-	/// Dictionary of all the main pages in the app, used for the search bar.
-	/// Keys are page contents which are localized and values are page types.
+	/// Dictionary of all the pages in the app, used for the search bar.
+	/// Keys are page header contents which are localized and values are page types.
 	/// </summary>
 	internal readonly Dictionary<string, Type> NavigationPageToItemContentMapForSearch = [];
 
@@ -292,28 +294,32 @@ internal sealed partial class MainWindowVM : ViewModelBase
 	{
 		NavigationPageToItemContentMapForSearch.Clear();
 
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("CreatePolicyNavItem/Content")] = typeof(Pages.CreatePolicy);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("GetCodeIntegrityHashesNavItem/Content")] = typeof(Pages.GetCIHashes);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("GitHubDocsNavItem/Content")] = typeof(Pages.GitHubDocumentation);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("MSFTDocsNavItem/Content")] = typeof(Pages.MicrosoftDocumentation);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("GetSecurePolicySettingsNavItem/Content")] = typeof(Pages.GetSecurePolicySettings);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("SettingsNavItem/Content")] = typeof(Pages.Settings);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("SystemInformationNavItem/Content")] = typeof(Pages.SystemInformation);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("ConfigurePolicyRuleOptionsNavItem/Content")] = typeof(Pages.ConfigurePolicyRuleOptions);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("LogsNavItem/Content")] = typeof(Pages.Logs);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("SimulationNavItem/Content")] = typeof(Pages.Simulation);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("DeploymentNavItem/Content")] = typeof(Pages.DeploymentPage);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("CreatePolicyFromEventLogsNavItem/Content")] = typeof(Pages.EventLogsPolicyCreation);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("CreatePolicyFromMDEAHNavItem/Content")] = typeof(Pages.MDEAHPolicyCreation);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("AllowNewAppsNavItem/Content")] = typeof(Pages.AllowNewApps);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("BuildNewCertificateNavItem/Content")] = typeof(Pages.BuildNewCertificate);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("CreateSupplementalPolicyNavItem/Content")] = typeof(Pages.CreateSupplementalPolicy);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("MergePoliciesNavItem/Content")] = typeof(Pages.MergePolicies);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("CreateDenyPolicyNavItem/Content")] = typeof(Pages.CreateDenyPolicy);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("ValidatePoliciesNavItem/Content")] = typeof(Pages.ValidatePolicy);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("ViewFileCertificatesNavItem/Content")] = typeof(Pages.ViewFileCertificates);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("PolicyEditorNavItem/Content")] = typeof(Pages.PolicyEditor);
-		NavigationPageToItemContentMapForSearch[GlobalVars.Rizz.GetString("UpdateNavItem/Content")] = typeof(Pages.UpdatePage);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("CreatePolicyNavItem/Content")] = typeof(Pages.CreatePolicy);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("CreateSupplementalPolicyNavItem/Content")] = typeof(Pages.CreateSupplementalPolicy);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("ScanResults")] = typeof(Pages.CreateSupplementalPolicyFilesAndFoldersScanResults);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("ScanResults")] = typeof(Pages.StrictKernelPolicyScanResults);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("CreateDenyPolicyNavItem/Content")] = typeof(Pages.CreateDenyPolicy);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("ScanResults")] = typeof(Pages.CreateDenyPolicyFilesAndFoldersScanResults);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("BuildNewCertificateNavItem/Content")] = typeof(Pages.BuildNewCertificate);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("ViewFileCertificatesNavItem/Content")] = typeof(Pages.ViewFileCertificates);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("CreatePolicyFromEventLogsNavItem/Content")] = typeof(Pages.EventLogsPolicyCreation);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("CreatePolicyFromMDEAHNavItem/Content")] = typeof(Pages.MDEAHPolicyCreation);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("AllowNewAppsNavItem/Content")] = typeof(Pages.AllowNewApps);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("GetCodeIntegrityHashesNavItem/Content")] = typeof(Pages.GetCIHashes);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("GitHubDocsNavItem/Content")] = typeof(Pages.GitHubDocumentation);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("MSFTDocsNavItem/Content")] = typeof(Pages.MicrosoftDocumentation);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("GetSecurePolicySettingsNavItem/Content")] = typeof(Pages.GetSecurePolicySettings);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("SettingsNavItem/Content")] = typeof(Pages.Settings);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("SystemInformationNavItem/Content")] = typeof(Pages.SystemInformation);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("ConfigurePolicyRuleOptionsNavItem/Content")] = typeof(Pages.ConfigurePolicyRuleOptions);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("LogsNavItem/Content")] = typeof(Pages.Logs);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("SimulationNavItem/Content")] = typeof(Pages.Simulation);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("DeploymentNavItem/Content")] = typeof(Pages.DeploymentPage);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("MergePoliciesNavItem/Content")] = typeof(Pages.MergePolicies);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("ValidatePoliciesNavItem/Content")] = typeof(Pages.ValidatePolicy);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("PolicyEditorNavItem/Content")] = typeof(Pages.PolicyEditor);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("UpdateNavItem/Content")] = typeof(Pages.UpdatePage);
+		NavigationPageToItemContentMapForSearch[GlobalVars.GetStr("UpdatePageCustomMSIXPath")] = typeof(Pages.UpdatePageCustomMSIXPath);
 	}
 
 	/// <summary>
@@ -847,7 +853,7 @@ internal sealed partial class MainWindowVM : ViewModelBase
 
 					GetSecurePolicySettingsIcon = new FontIcon
 					{
-						Glyph = "\uEEA3",
+						Glyph = "\uF404",
 						Foreground = accentBrush
 					};
 
@@ -936,7 +942,7 @@ internal sealed partial class MainWindowVM : ViewModelBase
 					CreatePolicyFromEventLogsIcon = new FontIcon { Glyph = "\uEA18" };
 					CreatePolicyFromMDEAHIcon = new FontIcon { Glyph = "\uEB44" };
 					GetCodeIntegrityHashesIcon = new FontIcon { Glyph = "\uE950" };
-					GetSecurePolicySettingsIcon = new FontIcon { Glyph = "\uEEA3" };
+					GetSecurePolicySettingsIcon = new FontIcon { Glyph = "\uF404" };
 					LogsIcon = new FontIcon { Glyph = "\uF5A0" };
 					GitHubDocsIcon = new FontIcon { Glyph = "\uE8A5" };
 					MSFTDocsIcon = new FontIcon { Glyph = "\uE8A5" };
@@ -979,4 +985,87 @@ internal sealed partial class MainWindowVM : ViewModelBase
 		// Save the selected option (using the enum's name)
 		App.Settings.BackDropBackground = selection.ToString();
 	}
+
+	/// <summary>
+	/// Event handler for when the main app window's size changes
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="args"></param>
+	internal void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
+	{
+		double mainWindowWidth = args.Size.Width; // Width of the main window
+
+		// Hide TitleColumn if width is less than 200, Restore the TitleColumn if width is 200 or more
+		TitleColumnWidth = mainWindowWidth < 750 ? new GridLength(0) : GridLength.Auto;
+	}
+
+	/// <summary>
+	/// https://learn.microsoft.com/windows/win32/winmsg/extended-window-styles
+	/// </summary>
+	private const int WS_EX_LAYOUTRTL = 0x00400000;
+
+	/// <summary>
+	/// https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getwindowlonga
+	/// </summary>
+	private const int GWL_EXSTYLE = -20;
+
+	/// <summary>
+	/// Sets the flow direction of the Main Window's title bar and Close/Minimize/Maximize buttons.
+	/// </summary>
+	/// <param name="flowD">The Flow Direction to set.</param>
+	internal static void SetCaptionButtonsFlowDirection(FlowDirection flowD)
+	{
+		IntPtr exStyle = NativeMethods.GetWindowLongPtr(GlobalVars.hWnd, GWL_EXSTYLE);
+
+		if (flowD is FlowDirection.LeftToRight)
+		{
+			exStyle &= ~WS_EX_LAYOUTRTL;
+		}
+		else
+		{
+			exStyle |= WS_EX_LAYOUTRTL;
+		}
+
+		_ = NativeMethods.SetWindowLongPtr(GlobalVars.hWnd, GWL_EXSTYLE, exStyle);
+	}
+
+	/// <summary>
+	/// Checks if the window has RTL layout applied
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static bool IsWindowRTL()
+	{
+		IntPtr exStyle = NativeMethods.GetWindowLongPtr(GlobalVars.hWnd, GWL_EXSTYLE);
+		return (exStyle.ToInt32() & WS_EX_LAYOUTRTL) != 0;
+	}
+
+	/// <summary>
+	/// Transforms a UIElement’s RenderSize to a pixel-based RectInt32.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static RectInt32 CalculatePixelRect(UIElement element, double scale)
+	{
+		GeneralTransform t = element.TransformToVisual(null);
+
+		// Could cast to FrameworkElement and use ActualHeight and ActualWidth instead.
+		Rect bounds = t.TransformBounds(new Rect(0, 0, element.RenderSize.Width, element.RenderSize.Height));
+
+		return new RectInt32(
+			_X: (int)Math.Round(bounds.X * scale),
+			_Y: (int)Math.Round(bounds.Y * scale),
+			_Width: (int)Math.Round(bounds.Width * scale),
+			_Height: (int)Math.Round(bounds.Height * scale)
+		);
+	}
+
+	/// <summary>
+	/// Mirror a pixel-space rect horizontally around the given total width.
+	/// </summary>
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	internal static RectInt32 FlipHorizontally(RectInt32 rect, double totalWidthPx)
+	{
+		rect.X = (int)Math.Round(totalWidthPx - (rect.X + rect.Width));
+		return rect;
+	}
+
 }

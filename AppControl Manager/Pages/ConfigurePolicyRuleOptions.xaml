@@ -10,7 +10,7 @@
     xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:animatedvisuals="using:AnimatedVisuals"
-    FlowDirection="{x:Bind AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
+    FlowDirection="{x:Bind ViewModel.AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
     mc:Ignorable="d">
 
     <ScrollViewer>
@@ -107,7 +107,7 @@
                     </controls:WrapPanel>
 
                     <controls:SettingsExpander.Items>
-                        <customUI:SettingsCardV2 Header="Enabled:UMCI"                                               
+                        <customUI:SettingsCardV2 Header="Enabled:UMCI"
                                                  ToolTipService.ToolTip="{x:Bind ViewModel.RuleOptions['Enabled:UMCI'], Mode=OneTime}"
                                                  Description="{x:Bind ViewModel.RuleOptions['Enabled:UMCI'], Mode=OneTime}">
                             <CheckBox IsChecked="{x:Bind ViewModel.EnabledUMCICheckBox, Mode=TwoWay}"

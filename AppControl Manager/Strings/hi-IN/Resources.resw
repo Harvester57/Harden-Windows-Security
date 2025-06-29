@@ -994,9 +994,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   <data name="NoMSIXBundlePath" xml:space="preserve">
     <value>कोई MSIXBundle पथ चयनित नहीं था</value>
   </data>
-  <data name="DetectingSignTool" xml:space="preserve">
-    <value>Microsoft सर्वरों से SignTool.exe का पता/डाउनलोड किया जा रहा है</value>
-  </data>
   <data name="DownloadsFinished" xml:space="preserve">
     <value>सभी डाउनलोड पूर्ण, नया AppControl Manager संस्करण स्थापित किया जा रहा है</value>
   </data>
@@ -1084,32 +1081,11 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   <data name="CIPDeploymentSuccess" xml:space="preserve">
     <value>सभी चयनित CIP फाइलें सफलतापूर्वक तैनात की गईं</value>
   </data>
-  <data name="SigningIntoIntune" xml:space="preserve">
-    <value>Intune में साइन इन किया जा रहा है</value>
-  </data>
-  <data name="IntuneSignInSuccess" xml:space="preserve">
-    <value>Intune में सफलतापूर्वक साइन इन हुआ</value>
-  </data>
   <data name="CloudDeploymentActive" xml:space="preserve">
     <value>क्लाउड तैनाती वर्तमान में सक्रिय है</value>
   </data>
-  <data name="IntuneSignInCancelled" xml:space="preserve">
-    <value>उपयोगकर्ता द्वारा Intune में साइन इन रद्द किया गया</value>
-  </data>
-  <data name="IntuneSignInError" xml:space="preserve">
-    <value>Intune में साइन इन करते समय एक त्रुटि हुई: </value>
-  </data>
-  <data name="SigningOutOfIntune" xml:space="preserve">
-    <value>Intune से साइन आउट किया जा रहा है</value>
-  </data>
-  <data name="IntuneSignOutSuccess" xml:space="preserve">
-    <value>Intune से सफलतापूर्वक साइन आउट हुआ</value>
-  </data>
   <data name="LocalDeploymentActive" xml:space="preserve">
     <value>लोकल तैनाती वर्तमान में सक्रिय है</value>
-  </data>
-  <data name="IntuneSignOutError" xml:space="preserve">
-    <value>Intune से साइन आउट करते समय एक त्रुटि हुई: </value>
   </data>
   <data name="ProcessingTitle" xml:space="preserve">
     <value>संसाधित किया जा रहा है</value>
@@ -1179,9 +1155,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   </data>
   <data name="CreatingPFNBasedDenyPolicy" xml:space="preserve">
     <value>Package Family Names के आधार पर निषेध नीति बनाई जा रही है</value>
-  </data>
-  <data name="SelectedApps" xml:space="preserve">
-    <value>चयनित ऐप्स: </value>
   </data>
   <data name="DenyPolicyCreated" xml:space="preserve">
     <value>निषेध नीति सफलतापूर्वक बनाई गई</value>
@@ -1339,12 +1312,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>रद्द करें</value>
-  </data>
-  <data name="LastUpdatedLabel" xml:space="preserve">
-    <value>अंतिम अद्यतन: </value>
-  </data>
-  <data name="DriverBlockListError" xml:space="preserve">
-    <value>ड्राइवर ब्लॉक सूची जानकारी प्राप्त करने में त्रुटि हुई।</value>
   </data>
   <data name="ConfiguringAutoUpdate" xml:space="preserve">
     <value>स्वचालित अपडेट के लिए अनुसूचित कार्य कॉन्फ़िगर किया जा रहा है</value>
@@ -1823,15 +1790,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   <data name="PromptForElevationSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>यदि सक्षम है, तो AppControl Manager प्रारंभ पर प्रशासक विशेषाधिकारों के साथ चलाने के लिए एलिवेशन के लिए संकेत करेगा।</value>
   </data>
-  <data name="OpenInPolicyEditorButton.Content" xml:space="preserve">
-    <value>नीति संपादक में खोलें</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>नीति को नीति संपादक में खोलें जहाँ आप नीति का विस्तृत अवलोकन देख सकते हैं और इसे इस ऐप के भीतर और अधिक अनुकूलित कर सकते हैं।</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>नीति को नीति संपादक में खोलें जहाँ आप नीति का विस्तृत अवलोकन देख सकते हैं और इसे इस ऐप के भीतर और अधिक अनुकूलित कर सकते हैं।</value>
-  </data>
   <data name="OnlyIncludeSelectedItemsToggleButton.Content" xml:space="preserve">
     <value>केवल चयनित आइटम शामिल करें</value>
   </data>
@@ -2174,16 +2132,16 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   <data name="UIFlowDirectionSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>UI तत्वों के लिए राइट-टू-लेफ्ट और लेफ्ट-टू-राइट फ्लो दिशाओं के बीच स्विच करें।</value>
   </data>
-  <data name="AppElevationNotice.Main" xml:space="preserve">
+  <data name="AppElevationNoticeMain" xml:space="preserve">
     <value>कृपया इस पृष्ठ तक पहुँचने के लिए AppControl Manager को प्रशासक के रूप में लॉन्च करें</value>
   </data>
-  <data name="AppElevationNotice.Title" xml:space="preserve">
+  <data name="AppElevationNoticeTitle" xml:space="preserve">
     <value>प्रशासक विशेषाधिकार आवश्यक</value>
   </data>
-  <data name="AppElevationNotice.ExtraPrompt" xml:space="preserve">
+  <data name="AppElevationNoticeExtraPrompt" xml:space="preserve">
     <value>हमेशा ऐप शुरू होने पर एलिवेशन के लिए संकेत करें</value>
   </data>
-  <data name="AppElevationNotice.Relaunch" xml:space="preserve">
+  <data name="AppElevationNoticeRelaunch" xml:space="preserve">
     <value>एडमिन के रूप में पुनः लॉन्च करें</value>
   </data>
   <data name="WindowMaximizedMsg" xml:space="preserve">
@@ -2483,15 +2441,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   <data name="CertificatesSearchBox.AutomationProperties.HelpText" xml:space="preserve">
     <value>प्रमाणपत्र विवरण डेटा में खोजें</value>
   </data>
-  <data name="SortingDirectionToggleButton.Text" xml:space="preserve">
-    <value>अवरोही क्रम</value>
-  </data>
-  <data name="SortingDirectionToggleButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>चेक होने पर अवरोही क्रम में सॉर्ट होगा, अचेक होने पर आरोही क्रम में।</value>
-  </data>
-  <data name="SortingDirectionToggleButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>चेक होने पर अवरोही क्रम में सॉर्ट होगा, अचेक होने पर आरोही क्रम में।</value>
-  </data>
   <data name="BrowseForCustomMSIXPathSettingsCard.Description" xml:space="preserve">
     <value>अपने डिवाइस पर AppControl Manager MSIXBundle फ़ाइल पाथ के लिए ब्राउज़ करें और फिर इसे इंस्टॉल करने के लिए अपडेट पेज पर वापस जाएँ।</value>
   </data>
@@ -2671,9 +2620,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   </data>
   <data name="AppearanceSectionSettingsExpander.AutomationProperties.HelpText" xml:space="preserve">
     <value>AppControl Manager के लुक और विजुअल इफेक्ट बदलने के लिए विभिन्न विकल्पों का उपयोग करें</value>
-  </data>
-  <data name="LanguageSectionSettingsExpanderInfoBar.Message" xml:space="preserve">
-    <value>भाषा परिवर्तनों को पूर्ण रूप से लागू करने के लिए कृपया ऐप पुनः लॉन्च करें।</value>
   </data>
   <data name="LanguageTextBlock.Text" xml:space="preserve">
     <value>भाषा</value>
@@ -3562,9 +3508,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   <data name="SelectedAppLockerEvtxForScanning" xml:space="preserve">
     <value>AppLocker EVTX लॉग स्कैनिंग के लिए चयनित: {0}</value>
   </data>
-  <data name="TotalLogsZeroMessage" xml:space="preserve">
-    <value>कुल लॉग्स: 0</value>
-  </data>
   <data name="TotalLogsCountMessage" xml:space="preserve">
     <value>कुल लॉग्स: {0}</value>
   </data>
@@ -4227,9 +4170,6 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
   </data>
   <data name="CommandFailedWithExitCodeErrorMessage" xml:space="preserve">
     <value>कमान्ड '{0} {1}' exit कोड {2} के साथ विफल हुआ। त्रुटि: {3}</value>
-  </data>
-  <data name="CoCreateInstanceFailedHResultMessage" xml:space="preserve">
-    <value>CoCreateInstance HRESULT: 0x{0:X} के साथ विफल हुआ</value>
   </data>
   <data name="ElevationRequestCancelledByUserMessage" xml:space="preserve">
     <value>उच्चरण अनुरोध उपयोगकर्ता द्वारा रद्द किया गया।</value>
@@ -5269,4 +5209,496 @@ NOTE: यदि कोई भी App Control UMCI नीति इसे सक�
 <data name="NoPublisherSignersDetectedDenyMessage" xml:space="preserve">
   <value>अस्वीकृत नियम बनाने के लिए कोई प्रकाशक हस्ताक्षरकर्ता नहीं मिला।</value>
 </data>
+  <data name="RMMBlockingSection.Header" xml:space="preserve">
+    <value>RMM अवरोधन नीति बनाएं</value>
+  </data>
+  <data name="RMMBlockingSection.Description" xml:space="preserve">
+    <value>यह नीति दूरस्थ निगरानी और प्रबंधन सॉफ़्टवेयर की एक बड़ी संख्या को उनके निष्पादन योग्य फ़ाइल नामों और फ़ाइल पथ के आधार पर अवरुद्ध करती है।</value>
+  </data>
+  <data name="RMMBlockingSection.ToolTipService.ToolTip" xml:space="preserve">
+    <value>यह नीति दूरस्थ निगरानी और प्रबंधन सॉफ़्टवेयर की एक बड़ी संख्या को उनके निष्पादन योग्य फ़ाइल नामों और फ़ाइल पथ के आधार पर अवरुद्ध करती है।</value>
+  </data>
+  <data name="RMMBlockingSection.AutomationProperties.HelpText" xml:space="preserve">
+    <value>यह नीति दूरस्थ निगरानी और प्रबंधन सॉफ़्टवेयर की एक बड़ी संख्या को उनके निष्पादन योग्य फ़ाइल नामों और फ़ाइल पथ के आधार पर अवरुद्ध करती है।</value>
+  </data>
+  <data name="RMMBlockingCreateButton.Content" xml:space="preserve">
+    <value>बनाएं</value>
+  </data>
+  <data name="RMMBlockingCreateButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>RMM अवरोधन आधार नीति बनाएं</value>
+  </data>
+  <data name="RMMBlockingCreateButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>RMM अवरोधन आधार नीति बनाएं</value>
+  </data>
+  <data name="RMMBlockingPolicyCreatedSuccessfully" xml:space="preserve">
+    <value>RMM अवरोधन नीति सफलतापूर्वक बनाई गई</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.Description" xml:space="preserve">
+    <value>अन्य एप्लिकेशन जैसे स्क्रीन रिकॉर्डर (Recall सहित) को एप्लिकेशन नियंत्रण प्रबंधक की विंडो को रिकॉर्ड करने या स्क्रीनशॉट लेने से रोकें।</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.Header" xml:space="preserve">
+    <value>स्क्रीन सुरक्षा</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>अन्य एप्लिकेशन जैसे स्क्रीन रिकॉर्डर (Recall सहित) को एप्लिकेशन नियंत्रण प्रबंधक की विंडो को रिकॉर्ड करने या स्क्रीनशॉट लेने से रोकें।</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>अन्य एप्लिकेशन जैसे स्क्रीन रिकॉर्डर (Recall सहित) को एप्लिकेशन नियंत्रण प्रबंधक की विंडो को रिकॉर्ड करने या स्क्रीनशॉट लेने से रोकें।</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OnContent" xml:space="preserve">
+    <value>चालू</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OffContent" xml:space="preserve">
+    <value>बंद</value>
+  </data>
+  <data name="SelectCIPFilesToDeployWarningMsg" xml:space="preserve">
+    <value>आपको तैनाती के लिए CIP फ़ाइलें चुनने की आवश्यकता है।</value>
+  </data>
+  <data name="SelectXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>आपको CIP बाइनरी में परिवर्तित करने के लिए XML फ़ाइलें चुनने की आवश्यकता है।</value>
+  </data>
+  <data name="SuccessfullyCreatedSignedCIPFiles" xml:space="preserve">
+    <value>सभी चयनित XML फ़ाइलों के लिए हस्ताक्षरित CIP फ़ाइलें सफलतापूर्वक बनाई गईं।</value>
+  </data>
+  <data name="CurrentlySigningXMLFile" xml:space="preserve">
+    <value>वर्तमान में XML फ़ाइल पर हस्ताक्षर कर रहे हैं: </value>
+  </data>
+  <data name="SelectXMLFilesToSignAndDeployWarningMsg" xml:space="preserve">
+    <value>आपको हस्ताक्षर और तैनाती के लिए XML फ़ाइलें चुनने की आवश्यकता है।</value>
+  </data>
+  <data name="SelectUnsignedXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>आपको तैनाती के लिए अहस्ताक्षरित XML फ़ाइलें चुनने की आवश्यकता है।</value>
+  </data>
+  <data name="CheckingForFileSignatures" xml:space="preserve">
+  <value>फ़ाइल हस्ताक्षरों की जांच कर रहे हैं</value>
+</data>
+<data name="FileCertificatesScanResultMessage" xml:space="preserve">
+  <value>फ़ाइल '{0}' में {1} हस्ताक्षरकर्ता हैं। सिस्टम पर सुरक्षा कैटलॉग से डेटा स्कैन में {2} था।</value>
+</data>
+<data name="IncludedText" xml:space="preserve">
+  <value>शामिल</value>
+</data>
+<data name="NotIncludedText" xml:space="preserve">
+  <value>शामिल नहीं</value>
+</data>
+<data name="UserActivityNameForFileHashes" xml:space="preserve">
+  <value>उन्नत फ़ाइल हैश की गणना</value>
+</data>
+<data name="UserActivityNameForFileSignature" xml:space="preserve">
+  <value>फ़ाइल प्रमाणपत्र देखना</value>
+</data>
+<data name="UserActivityNameForPolicyEditor" xml:space="preserve">
+  <value>नीति संपादक में ऐप नियंत्रण नीति खोलना</value>
+</data>
+ <data name="PublishUserActivityInTheOSSettingsCard.Description" xml:space="preserve">
+    <value>ऐपकंट्रोल मैनेजर में आपके द्वारा की जाने वाली विभिन्न गतिविधियों को ऑपरेटिंग सिस्टम में प्रकाशित करें, जिससे वे Microsoft Recall में दिखाई दें और आपके लिए उपलब्ध हों ताकि आप अपनी कार्रवाइयों को फिर से ट्रैक कर सकें।</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.Header" xml:space="preserve">
+    <value>ऑपरेटिंग सिस्टम में गतिविधि प्रकाशित करें</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ऐपकंट्रोल मैनेजर में आपके द्वारा की जाने वाली विभिन्न गतिविधियों को ऑपरेटिंग सिस्टम में प्रकाशित करें, जिससे वे Microsoft Recall में दिखाई दें और आपके लिए उपलब्ध हों ताकि आप अपनी कार्रवाइयों को फिर से ट्रैक कर सकें।</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ऐपकंट्रोल मैनेजर में आपके द्वारा की जाने वाली विभिन्न गतिविधियों को ऑपरेटिंग सिस्टम में प्रकाशित करें, जिससे वे Microsoft Recall में दिखाई दें और आपके लिए उपलब्ध हों ताकि आप अपनी कार्रवाइयों को फिर से ट्रैक कर सकें।</value>
+  </data>
+  <data name="OperationCancelledByUser" xml:space="preserve">
+    <value>ऑपरेशन रद्द कर दिया गया।</value>
+  </data>
+    <data name="Cancelling" xml:space="preserve">
+    <value>रद्द कर रहे हैं...</value>
+  </data>
+  <data name="DonationHyperLinkButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>आपका समर्थन मुझे इस प्रोजेक्ट को बनाना और बनाए रखना जारी रखने में मदद करता है।</value>
+  </data>
+  <data name="DonationHyperLinkButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>आपका समर्थन मुझे इस प्रोजेक्ट को बनाना और बनाए रखना जारी रखने में मदद करता है।</value>
+  </data>
+    <data name="DonationHyperLinkButton.Content" xml:space="preserve">
+    <value>दान करें</value>
+  </data>
+    <data name="CopyToClipboard.Content" xml:space="preserve">
+    <value>क्लिपबोर्ड में कॉपी करें</value>
+  </data>
+  <data name="CopyToClipboard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>क्लिपबोर्ड में कॉपी करें</value>
+  </data>
+  <data name="CopyToClipboard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>क्लिपबोर्ड में कॉपी करें</value>
+  </data>
+    <data name="HashCopiedToClipboard" xml:space="preserve">
+    <value>हैश वैल्यू क्लिपबोर्ड में कॉपी हो गया!</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.Content" xml:space="preserve">
+    <value>सभी कर्नेल-मोड लॉग स्कैन करें</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.ToolTipService.ToolTip" xml:space="preserve">
+    <value>सिस्टम पर वर्तमान में उपलब्ध सभी कर्नेल-मोड लॉग स्कैन करें।</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.AutomationProperties.HelpText" xml:space="preserve">
+    <value>सिस्टम पर वर्तमान में उपलब्ध सभी कर्नेल-मोड लॉग स्कैन करें।</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.Content" xml:space="preserve">
+    <value>अंतिम रीबूट के बाद से कर्नेल-मोड लॉग स्कैन करें</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.ToolTipService.ToolTip" xml:space="preserve">
+    <value>सिस्टम के अंतिम रीबूट के बाद से कर्नेल-मोड लॉग स्कैन करें।</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.AutomationProperties.HelpText" xml:space="preserve">
+    <value>सिस्टम के अंतिम रीबूट के बाद से कर्नेल-मोड लॉग स्कैन करें।</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OnContent" xml:space="preserve">
+    <value>टेक्स्ट चयन सक्षम है</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OffContent" xml:space="preserve">
+    <value>टेक्स्ट चयन अक्षम है</value>
+  </data>
+    <data name="TextSelectionStateToggleSwitch.ToolTipService.ToolTip" xml:space="preserve">
+    <value>सूची दृश्य पंक्तियों में टेक्स्ट चुनने की क्षमता को सक्षम या अक्षम करें।</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.AutomationProperties.HelpText" xml:space="preserve">
+    <value>सूची दृश्य पंक्तियों में टेक्स्ट चुनने की क्षमता को सक्षम या अक्षम करें।</value>
+  </data>
+  <data name="PolicyEditorClearAllData.ToolTipService.ToolTip" xml:space="preserve">
+    <value>चयनित नीति से उपयोगकर्ता इंटरफ़ेस पर लोड किए गए सभी डेटा को साफ़ करता है।</value>
+  </data>
+  <data name="PolicyEditorClearAllData.AutomationProperties.HelpText" xml:space="preserve">
+    <value>चयनित नीति से उपयोगकर्ता इंटरफ़ेस पर लोड किए गए सभी डेटा को साफ़ करता है।</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.ToolTipService.ToolTip" xml:space="preserve">
+    <value>डेटा में किए गए परिवर्तनों को नीति XML फ़ाइल में वापस सेव करें।</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.AutomationProperties.HelpText" xml:space="preserve">
+    <value>डेटा में किए गए परिवर्तनों को नीति XML फ़ाइल में वापस सेव करें।</value>
+  </data>
+  <data name="BeginSimulationTextBlock.Text" xml:space="preserve">
+    <value>सिमुलेशन शुरू करें</value>
+  </data>
+  <data name="BeginSimulation.ToolTipService.ToolTip" xml:space="preserve">
+    <value>चयनित कॉन्फ़िगरेशन का उपयोग करके सिमुलेशन शुरू करें।</value>
+  </data>
+  <data name="BeginSimulation.AutomationProperties.HelpText" xml:space="preserve">
+    <value>चयनित कॉन्फ़िगरेशन का उपयोग करके सिमुलेशन शुरू करें।</value>
+  </data>
+  <data name="RetrieveOnlinePoliciesTextBlock.Text" xml:space="preserve">
+    <value>ऑनलाइन नीतियां प्राप्त करें</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.Header" xml:space="preserve">
+    <value>केवल हस्ताक्षर - कोई तैनाती नहीं</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.Description" xml:space="preserve">
+    <value>केवल उपयोगकर्ता कॉन्फ़िग डायरेक्टरी में हस्ताक्षरित CIP फ़ाइलें बनाता है और उन्हें तैनात नहीं करता। यदि आप उन्हें किसी अन्य सिस्टम पर तैनात करना चाहते हैं तो इसे टॉगल करें।</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>केवल उपयोगकर्ता कॉन्फ़िग डायरेक्टरी में हस्ताक्षरित CIP फ़ाइलें बनाता है और उन्हें तैनात नहीं करता। यदि आप उन्हें किसी अन्य सिस्टम पर तैनात करना चाहते हैं तो इसे टॉगल करें।</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>केवल उपयोगकर्ता कॉन्फ़िग डायरेक्टरी में हस्ताक्षरित CIP फ़ाइलें बनाता है और उन्हें तैनात नहीं करता। यदि आप उन्हें किसी अन्य सिस्टम पर तैनात करना चाहते हैं तो इसे टॉगल करें।</value>
+  </data>
+  <data name="ViewSelectedCIPFilesTextBlock.Text" xml:space="preserve">
+    <value>आपके द्वारा चयनित CIP फ़ाइलें देखें।</value>
+  </data>
+  <data name="ConvertTextBlock.Text" xml:space="preserve">
+    <value>कन्वर्ट करें</value>
+  </data>
+  <data name="ViewSelectedXMLFilesTextBlock.Text" xml:space="preserve">
+    <value>आपके द्वारा चयनित XML फ़ाइलें देखें।</value>
+  </data>
+  <data name="RemoveTextBlock.Text" xml:space="preserve">
+    <value>हटाएं</value>
+  </data>
+  <data name="SetAsActiveTextBlock.Text" xml:space="preserve">
+    <value>सक्रिय के रूप में सेट करें</value>
+  </data>
+  <data name="SignInTextBlock.Text" xml:space="preserve">
+    <value>साइन इन करें</value>
+  </data>
+  <data name="CancelSigningInTextBlock.Text" xml:space="preserve">
+    <value>सक्रिय के रूप में सेट करें</value>
+  </data>
+  <data name="CurrentlyInUseAccountDetailsTextBlock.Text" xml:space="preserve">
+    <value>वर्तमान में उपयोग में आने वाले खाते का विवरण</value>
+  </data>
+  <data name="PolicyEditorSuccessfulSaveMessage" xml:space="preserve">
+    <value>नीति फ़ाइल में परिवर्तन सफलतापूर्वक सहेजे गए।</value>
+  </data>
+  <data name="SidebarHelpHyperlinkTextBlock.Text" xml:space="preserve">
+    <value>सहायता - प्रश्न पूछें</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.PlaceholderText" xml:space="preserve">
+    <value>एप्लिकेशन में खोजें</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>सिस्टम पर स्थापित एप्लिकेशन में खोजें।</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>सिस्टम पर स्थापित एप्लिकेशन में खोजें।</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>अस्वीकृति नीति का नाम</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>जो अस्वीकृति नीति बनाई जाएगी उसके लिए एक नाम दर्ज करें।</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>जो अस्वीकृति नीति बनाई जाएगी उसके लिए एक नाम दर्ज करें।</value>
+  </data>
+  <data name="CustomPolicySettingsTabViewItem.Header" xml:space="preserve">
+    <value>कस्टम नीति सेटिंग्स</value>
+  </data>
+  <data name="CustomPolicySettingsTitleTextBlock.Text" xml:space="preserve">
+    <value>कस्टम नीति सेटिंग्स को कॉन्फ़िगर और प्रबंधित करें तथा पूर्वनिर्धारित नीतियों को जोड़ने के लिए प्रीसेट का उपयोग करें।</value>
+  </data>
+  <data name="CustomPolicySettingsPresets.PlaceholderText" xml:space="preserve">
+    <value>एक सेटिंग प्रीसेट चुनें</value>
+  </data>
+  <data name="AddSettingTextBlock.Text" xml:space="preserve">
+    <value>सेटिंग जोड़ें</value>
+  </data>
+  <data name="DeletedSelectedSettingTextBlock.Text" xml:space="preserve">
+    <value>चयनित को हटाएं</value>
+  </data>
+  <data name="ClearAllPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>सब साफ़ करें</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>जोड़ें</value>
+  </data>
+  <data name="NoPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>कोई नीति सेटिंग्स नहीं</value>
+  </data>
+  <data name="NoPolicySettingsLoadedTextBlock.Text" xml:space="preserve">
+    <value>अभी तक कोई कस्टम नीति सेटिंग्स लोड या बनाई नहीं गई हैं।</value>
+  </data>
+  <data name="EnterValueTextBox.PlaceholderText" xml:space="preserve">
+    <value>मान दर्ज करें</value>
+  </data>
+  <data name="ValueNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>मान का नाम</value>
+  </data>
+  <data name="KeyIdentifierTextBox.PlaceholderText" xml:space="preserve">
+    <value>कुंजी पहचानकर्ता</value>
+  </data>
+  <data name="ProviderNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>प्रदाता का नाम</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>सभी नीति सेटिंग्स साफ़ करें</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>सभी नीति सेटिंग्स साफ़ करें</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>चयनित नीति सेटिंग हटाएं</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>चयनित नीति सेटिंग हटाएं</value>
+  </data>
+  <data name="AddSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>एक नई खाली नीति सेटिंग जोड़ें</value>
+  </data>
+  <data name="AddSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>एक नई खाली नीति सेटिंग जोड़ें</value>
+  </data>
+  <data name="DeployTextBlock.Text" xml:space="preserve">
+    <value>तैनात करें</value>
+  </data>
+  <data name="SignInSegmentedItem.Content" xml:space="preserve">
+    <value>साइन इन करें</value>
+  </data>
+  <data name="SignedInAccountsSegmentedItem.Content" xml:space="preserve">
+    <value>साइन इन खाते</value>
+  </data>
+  <data name="ActiveAccountSegmentedItem.Content" xml:space="preserve">
+    <value>सक्रिय खाता</value>
+  </data>
+  <data name="FilterTextBlock.Text" xml:space="preserve">
+    <value>फ़िल्टर</value>
+  </data>
+  <data name="BrowseForMDELogsTextBlock.Text" xml:space="preserve">
+    <value>MDE उन्नत शिकार लॉग्स ब्राउज़ करें</value>
+  </data>
+  <data name="BrowseForMDELogsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>MDE उन्नत शिकार लॉग्स ब्राउज़ करें</value>
+  </data>
+  <data name="BrowseForMDELogsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>MDE उन्नत शिकार लॉग्स ब्राउज़ करें</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.Content" xml:space="preserve">
+    <value>चरण 2 पर जाएं</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ऑडिट मोड में चयनित नीति की तैनाती शुरू करें और चरण 2 पर जाएं</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ऑडिट मोड में चयनित नीति की तैनाती शुरू करें और चरण 2 पर जाएं</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.Content" xml:space="preserve">
+    <value>चरण 3 पर जाएं</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>इवेंट लॉग्स और चयनित निर्देशिकाओं (यदि कोई हो) की स्कैनिंग शुरू करें और चरण 3 पर जाएं</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>इवेंट लॉग्स और चयनित निर्देशिकाओं (यदि कोई हो) की स्कैनिंग शुरू करें और चरण 3 पर जाएं</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.Content" xml:space="preserve">
+    <value>फ़ोल्डर ब्राउज़ करें</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>आपके नए या मौजूदा एप्लिकेशन के फ़ोल्डर ब्राउज़ करें जो स्थापित हैं और ब्लॉक हो रहे हैं</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>आपके नए या मौजूदा एप्लिकेशन के फ़ोल्डर ब्राउज़ करें जो स्थापित हैं और ब्लॉक हो रहे हैं</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.Header" xml:space="preserve">
+    <value>पूरक नीति का नाम</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.PlaceholderText" xml:space="preserve">
+    <value>पूरक नीति के लिए एक नाम दर्ज करें</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>जो पूरक नीति बनाई जाएगी उसके लिए एक नाम दर्ज करें।</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>जो पूरक नीति बनाई जाएगी उसके लिए एक नाम दर्ज करें।</value>
+  </data>
+  <data name="Step1TextBlock.Text" xml:space="preserve">
+    <value>चरण 1</value>
+  </data>
+    <data name="Step2TextBlock.Text" xml:space="preserve">
+    <value>चरण 2</value>
+  </data>
+    <data name="Step3TextBlock.Text" xml:space="preserve">
+    <value>चरण 3</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherLevelsMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: WHQLFilePublisher -&gt; FilePublisher -&gt; Publisher -&gt; Hash स्तरों का उपयोग।</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherRulesCountMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: {0} WHQLFilePublisher नियम।</value>
+  </data>
+  <data name="BuildSignerProcessingWHQLFilePublisherMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: WHQLFilePublisher डेटा प्रसंस्करण।</value>
+  </data>
+  <data name="WHQLFilePublisherSignersToAddMessage" xml:space="preserve">
+    <value>XML फ़ाइल में जोड़े जाने वाले {0} WHQL File Publisher हस्ताक्षरकर्ता हैं</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedAllowMessage" xml:space="preserve">
+    <value>अनुमति नियम बनाने के लिए कोई WHQLFilePublisher हस्ताक्षरकर्ता नहीं मिले।</value>
+  </data>
+    <data name="EKUsNodeNotFoundMessage" xml:space="preserve">
+    <value>EKUs नोड नहीं मिला</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedDenyMessage" xml:space="preserve">
+    <value>अस्वीकार नियम बनाने के लिए कोई WHQLFilePublisher हस्ताक्षरकर्ता नहीं मिले।</value>
+  </data>
+  <data name="WHQLFilePublisherRuleTypeFriendlyName" xml:space="preserve">
+    <value>WHQL File Publisher नियम प्रकार</value>
+  </data>
+  <data name="AllowNewApps_SidebarButtonContent" xml:space="preserve">
+    <value>नए ऐप्स को अनुमति देने की आधार नीति</value>
+  </data>
+  <data name="CustomPatternBasedSupplementalPolicyLabel" xml:space="preserve">
+    <value>कस्टम पैटर्न आधारित पूरक नीति</value>
+  </data>
+  <data name="CloudTextBlock.Text" xml:space="preserve">
+    <value>क्लाउड</value>
+  </data>
+  <data name="LocalTextBlock.Text" xml:space="preserve">
+    <value>स्थानीय</value>
+  </data>
+  <data name="CreateTextBlock.Text" xml:space="preserve">
+    <value>बनाएं</value>
+  </data>
+  <data name="UpdatePageCustomMSIXPath" xml:space="preserve">
+    <value>कस्टम MSIXBundle पथ</value>
+  </data>
+  <data name="OpenInFileExplorer.Text" xml:space="preserve">
+    <value>फ़ाइल एक्सप्लोरर में खोलें</value>
+  </data>
+  <data name="OpenInFileExplorer.ToolTipService.ToolTip" xml:space="preserve">
+    <value>फ़ाइल एक्सप्लोरर में उस फ़ोल्डर को खोलें जहाँ फ़ाइल स्थित है।</value>
+  </data>
+  <data name="OpenInFileExplorer.AutomationProperties.HelpText" xml:space="preserve">
+    <value>फ़ाइल एक्सप्लोरर में उस फ़ोल्डर को खोलें जहाँ फ़ाइल स्थित है।</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>नीति संपादक में खोलें</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>नीति संपादक में नीति खोलें जहाँ आप नीति का विस्तृत अवलोकन देख सकते हैं और इस एप्लिकेशन के भीतर ही इसे और भी अधिक अनुकूलित करने का विकल्प रख सकते हैं।</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>नीति संपादक में नीति खोलें जहाँ आप नीति का विस्तृत अवलोकन देख सकते हैं और इस एप्लिकेशन के भीतर ही इसे और भी अधिक अनुकूलित करने का विकल्प रख सकते हैं।</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.Text" xml:space="preserve">
+    <value>फ़ाइल खोलें</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ऑपरेटिंग सिस्टम में कॉन्फ़िगर किए गए डिफ़ॉल्ट फ़ाइल हैंडलर का उपयोग करके बनाई गई फ़ाइल को खोलें।</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ऑपरेटिंग सिस्टम में कॉन्फ़िगर किए गए डिफ़ॉल्ट फ़ाइल हैंडलर का उपयोग करके बनाई गई फ़ाइल को खोलें।</value>
+  </data>
+  <data name="AdditionalActionsTextBlock.Text" xml:space="preserve">
+    <value>अतिरिक्त कार्य</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>नीति संपादक में नीति खोलें या सूची से कोई अन्य कार्य चुनें।</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>नीति संपादक में नीति खोलें या सूची से कोई अन्य कार्य चुनें।</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.Text" xml:space="preserve">
+    <value>नियम विकल्प कॉन्फ़िगर करें</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>नीति को दूसरे पृष्ठ में खोलें ताकि इसके नियम विकल्पों को और भी अधिक कॉन्फ़िगर कर सकें।</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>नीति को दूसरे पृष्ठ में खोलें ताकि इसके नियम विकल्पों को और भी अधिक कॉन्फ़िगर कर सकें।</value>
+  </data>
+  <data name="AddToPolicySegmentedItem.Content" xml:space="preserve">
+    <value>नीति में जोड़ें</value>
+  </data>
+  <data name="BasePolicyFileSegmentedItem.Content" xml:space="preserve">
+    <value>आधार नीति फ़ाइल</value>
+  </data>
+  <data name="BasePolicyGUIDSegmentedItem.Content" xml:space="preserve">
+    <value>आधार नीति GUID</value>
+  </data>
+  <data name="AddToPolicyDescription.Text" xml:space="preserve">
+    <value>लॉग जोड़ने के लिए नीति फ़ाइल ब्राउज़ करें। नए नियम किसी भी मौजूदा नियम के साथ मिला दिए जाएंगे।</value>
+  </data>
+  <data name="BasePolicyFileDescription.Text" xml:space="preserve">
+    <value>आधार नीति फ़ाइल ब्राउज़ करें जिससे बनने वाली पूरक नीति को जोड़ा जाएगा।</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.PlaceholderText" xml:space="preserve">
+    <value>आधार नीति GUID दर्ज करें</value>
+  </data>
+    <data name="BasePolicyGUIDDescription.AutomationProperties.HelpText" xml:space="preserve">
+  <value>आधार नीति फ़ाइल का GUID दर्ज करें जिससे बनने वाली पूरक नीति को जोड़ा जाएगा।</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.ToolTipService.ToolTip" xml:space="preserve">
+    <value>आधार नीति फ़ाइल का GUID दर्ज करें जिससे बनने वाली पूरक नीति को जोड़ा जाएगा।</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.PlaceholderText" xml:space="preserve">
+    <value>दिनांक के अनुसार फ़िल्टर करें</value>
+  </data>
+    <data name="FilterByDateCalendarDatePicker.AutomationProperties.HelpText" xml:space="preserve">
+  <value>केवल उन डेटा को दिखाएगा जो चयनित दिनांक के बराबर या नए हैं।</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.ToolTipService.ToolTip" xml:space="preserve">
+    <value>केवल उन डेटा को दिखाएगा जो चयनित दिनांक के बराबर या नए हैं।</value>
+  </data>
+  <data name="SubmitButton.Content" xml:space="preserve">
+    <value>सबमिट करें</value>
+  </data>
+  <data name="SubmitButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>सबमिट करें</value>
+  </data>
+  <data name="SubmitButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>सबमिट करें</value>
+  </data>
 </root>

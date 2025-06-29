@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AppControlManager.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 using Windows.Services.Store;
 
 namespace AppControlManager.Others;
@@ -36,7 +35,7 @@ internal static class AppUpdate
 	/// </summary>
 	internal static event EventHandler<UpdateAvailableEventArgs>? UpdateAvailable;
 
-	private static UpdateVM UpdateVM { get; } = App.AppHost.Services.GetRequiredService<ViewModels.UpdateVM>();
+	private static UpdateVM UpdateVM { get; } = ViewModelProvider.UpdateVM;
 
 	internal static StoreContext? _StoreContext;
 
@@ -65,12 +64,12 @@ internal static class AppUpdate
 		{
 			// Set the text for the button in the update page
 			UpdateVM.UpdateButtonContent = string.Format(
-				GlobalVars.Rizz.GetString("InstallVersionMessage"),
+				GlobalVars.GetStr("InstallVersionMessage"),
 				onlineAvailableVersion);
 		}
 		else
 		{
-			Logger.Write(GlobalVars.Rizz.GetString("TheAppIsUpToDate"));
+			Logger.Write(GlobalVars.GetStr("TheAppIsUpToDate"));
 		}
 
 		return new UpdateCheckResponse(
@@ -98,7 +97,7 @@ internal static class AppUpdate
 
 		if (updates.Count is 0)
 		{
-			Logger.Write(GlobalVars.Rizz.GetString("TheAppIsUpToDate"));
+			Logger.Write(GlobalVars.GetStr("TheAppIsUpToDate"));
 		}
 		else
 		{
@@ -111,7 +110,7 @@ internal static class AppUpdate
 			);
 
 			// Set the text for the button in the update page
-			UpdateVM.UpdateButtonContent = GlobalVars.Rizz.GetString("InstallLatestVer");
+			UpdateVM.UpdateButtonContent = GlobalVars.GetStr("InstallLatestVer");
 		}
 
 		return new UpdateCheckResponse(

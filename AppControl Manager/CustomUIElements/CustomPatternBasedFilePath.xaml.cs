@@ -18,7 +18,6 @@
 using System;
 using System.Collections.ObjectModel;
 using AppControlManager.Others;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -27,8 +26,7 @@ namespace AppControlManager.CustomUIElements;
 // https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.contentdialog
 internal sealed partial class CustomPatternBasedFilePath : ContentDialog
 {
-
-	private AppSettings.Main AppSettings { get; } = App.AppHost.Services.GetRequiredService<AppSettings.Main>();
+	private AppSettings.Main AppSettings => App.Settings;
 
 	internal static readonly ObservableCollection<FilePathPatternExample> FilePathPatternExamplesCollection = [];
 
@@ -39,31 +37,31 @@ internal sealed partial class CustomPatternBasedFilePath : ContentDialog
 		FilePathPatternExamplesCollection.Add(new FilePathPatternExample
 		{
 			Example = "C:\\Windows\\*",
-			Description = GlobalVars.Rizz.GetString("CustomPatternBasedFilePathExampleDescription1")
+			Description = GlobalVars.GetStr("CustomPatternBasedFilePathExampleDescription1")
 		});
 
 		FilePathPatternExamplesCollection.Add(new FilePathPatternExample
 		{
 			Example = "D:\\EnterpriseApps\\MyApp\\*",
-			Description = GlobalVars.Rizz.GetString("CustomPatternBasedFilePathExampleDescription2")
+			Description = GlobalVars.GetStr("CustomPatternBasedFilePathExampleDescription2")
 		});
 
 		FilePathPatternExamplesCollection.Add(new FilePathPatternExample
 		{
 			Example = "*\\Bing.exe",
-			Description = GlobalVars.Rizz.GetString("CustomPatternBasedFilePathExampleDescription3")
+			Description = GlobalVars.GetStr("CustomPatternBasedFilePathExampleDescription3")
 		});
 
 		FilePathPatternExamplesCollection.Add(new FilePathPatternExample
 		{
 			Example = "C:\\*\\CCMCACHE\\*\\7z????-x64.exe",
-			Description = GlobalVars.Rizz.GetString("CustomPatternBasedFilePathExampleDescription4")
+			Description = GlobalVars.GetStr("CustomPatternBasedFilePathExampleDescription4")
 		});
 
 		FilePathPatternExamplesCollection.Add(new FilePathPatternExample
 		{
 			Example = "C:\\Users\\UserName\\AppData\\Local\\Temp\\????????-????-????-????-????????????.tmp.node",
-			Description = GlobalVars.Rizz.GetString("CustomPatternBasedFilePathExampleDescription5")
+			Description = GlobalVars.GetStr("CustomPatternBasedFilePathExampleDescription5")
 		});
 	}
 

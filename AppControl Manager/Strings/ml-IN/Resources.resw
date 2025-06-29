@@ -994,9 +994,6 @@
   <data name="NoMSIXBundlePath" xml:space="preserve">
     <value>MSIXBundle പാതയൊന്നും തിരഞ്ഞെടുത്തിട്ടില്ല</value>
   </data>
-  <data name="DetectingSignTool" xml:space="preserve">
-    <value>Microsoft സെർവറുകളിൽ നിന്ന് SignTool.exe കണ്ടെത്തുന്നു/ഡൗൺലോഡ് ചെയ്യുന്നു</value>
-  </data>
   <data name="DownloadsFinished" xml:space="preserve">
     <value>എല്ലാ ഡൗൺലോഡുകളും പൂർത്തിയായി, പുതിയ ആപ്പ്കൺട്രോൾ മാനേജർ പതിപ്പ് ഇൻസ്റ്റാൾ ചെയ്യുന്നു</value>
   </data>
@@ -1084,32 +1081,11 @@
   <data name="CIPDeploymentSuccess" xml:space="preserve">
     <value>തിരഞ്ഞെടുത്ത എല്ലാ CIP ഫയലുകളും വിജയകരമായി വിന്യസിച്ചു</value>
   </data>
-  <data name="SigningIntoIntune" xml:space="preserve">
-    <value>Intune-ലേക്ക് സൈൻ ഇൻ ചെയ്യുന്നു</value>
-  </data>
-  <data name="IntuneSignInSuccess" xml:space="preserve">
-    <value>Intune-ലേക്ക് വിജയകരമായി സൈൻ ഇൻ ചെയ്തു</value>
-  </data>
   <data name="CloudDeploymentActive" xml:space="preserve">
     <value>ക്ലൗഡ് വിന്യാസം നിലവിൽ സജീവമാണ്</value>
   </data>
-  <data name="IntuneSignInCancelled" xml:space="preserve">
-    <value>ഉപയോക്താവ് Intune-ലേക്കുള്ള സൈൻ ഇൻ റദ്ദാക്കി</value>
-  </data>
-  <data name="IntuneSignInError" xml:space="preserve">
-    <value>Intune-ലേക്ക് സൈൻ ഇൻ ചെയ്യുന്നതിൽ ഒരു പിശകുണ്ടായി: </value>
-  </data>
-  <data name="SigningOutOfIntune" xml:space="preserve">
-    <value>Intune-ൽ നിന്ന് സൈൻ ഔട്ട് ചെയ്യുന്നു</value>
-  </data>
-  <data name="IntuneSignOutSuccess" xml:space="preserve">
-    <value>Intune-ൽ നിന്ന് വിജയകരമായി സൈൻ ഔട്ട് ചെയ്തു</value>
-  </data>
   <data name="LocalDeploymentActive" xml:space="preserve">
     <value>പ്രാദേശിക വിന്യാസം നിലവിൽ സജീവമാണ്</value>
-  </data>
-  <data name="IntuneSignOutError" xml:space="preserve">
-    <value>Intune-ൽ നിന്ന് സൈൻ ഔട്ട് ചെയ്യുന്നതിൽ ഒരു പിശകുണ്ടായി: </value>
   </data>
   <data name="ProcessingTitle" xml:space="preserve">
     <value>പ്രോസസ്സ് ചെയ്യുന്നു</value>
@@ -1179,9 +1155,6 @@
   </data>
   <data name="CreatingPFNBasedDenyPolicy" xml:space="preserve">
     <value>പാക്കേജ് ഫാമിലി നെയിമുകളെ അടിസ്ഥാനമാക്കി നിഷേധിക്കൽ നയം സൃഷ്ടിക്കുന്നു</value>
-  </data>
-  <data name="SelectedApps" xml:space="preserve">
-    <value>തിരഞ്ഞെടുത്ത ആപ്പുകൾ: </value>
   </data>
   <data name="DenyPolicyCreated" xml:space="preserve">
     <value>നിഷേധിക്കൽ നയം വിജയകരമായി സൃഷ്ടിച്ചു</value>
@@ -1339,12 +1312,6 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>റദ്ദാക്കുക</value>
-  </data>
-  <data name="LastUpdatedLabel" xml:space="preserve">
-    <value>അവസാനം അപ്ഡേറ്റ് ചെയ്തത്: </value>
-  </data>
-  <data name="DriverBlockListError" xml:space="preserve">
-    <value>ഡ്രൈവർ ബ്ലോക്ക് ലിസ്റ്റ് വിവരങ്ങൾ വീണ്ടെടുക്കുന്നതിൽ പിശക്.</value>
   </data>
   <data name="ConfiguringAutoUpdate" xml:space="preserve">
     <value>യാന്ത്രിക അപ്‌ഡേറ്റിനായി ഷെഡ്യൂൾഡ് ടാസ്‌ക് ക്രമീകരിക്കുന്നു</value>
@@ -1823,15 +1790,6 @@
   <data name="PromptForElevationSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>ഇത് പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ, സ്റ്റാർട്ടപ്പിൽ അഡ്മിനിസ്ട്രേറ്റർ പ്രത്യേകാനുമതികളോടെ പ്രവർത്തിക്കാൻ ആപ്പ്കൺട്രോൾ മാനേജർ എലിവേഷനായി ആവശ്യപ്പെടും.</value>
   </data>
-  <data name="OpenInPolicyEditorButton.Content" xml:space="preserve">
-    <value>നയ എഡിറ്ററിൽ തുറക്കുക</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>നയ എഡിറ്ററിൽ നയം തുറക്കുക, അവിടെ നിങ്ങൾക്ക് നയത്തിന്റെ വിശദമായ അവലോകനം കാണാനും ഈ ആപ്പിനുള്ളിൽ തന്നെ അത് കൂടുതൽ ഇഷ്ടാനുസൃതമാക്കാനുള്ള ഓപ്ഷനും ലഭിക്കും.</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>നയ എഡിറ്ററിൽ നയം തുറക്കുക, അവിടെ നിങ്ങൾക്ക് നയത്തിന്റെ വിശദമായ അവലോകനം കാണാനും ഈ ആപ്പിനുള്ളിൽ തന്നെ അത് കൂടുതൽ ഇഷ്ടാനുസൃതമാക്കാനുള്ള ഓപ്ഷനും ലഭിക്കും.</value>
-  </data>
   <data name="OnlyIncludeSelectedItemsToggleButton.Content" xml:space="preserve">
     <value>തിരഞ്ഞെടുത്ത ഇനങ്ങൾ മാത്രം ഉപയോഗിക്കുക</value>
   </data>
@@ -2174,16 +2132,16 @@
   <data name="UIFlowDirectionSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>ഉപയോക്തൃ ഇന്റർഫേസ് ഘടകങ്ങൾക്കായി വലത്തുനിന്ന് ഇടത്തോട്ടും ഇടത്തുനിന്ന് വലത്തോട്ടുമുള്ള ഫ്ലോ ദിശകൾക്കിടയിൽ മാറുക.</value>
   </data>
-  <data name="AppElevationNotice.Main" xml:space="preserve">
+  <data name="AppElevationNoticeMain" xml:space="preserve">
     <value>ഈ പേജ് ആക്‌സസ് ചെയ്യുന്നതിന് ദയവായി ആപ്പ്കൺട്രോൾ മാനേജർ അഡ്മിനിസ്ട്രേറ്ററായി ലോഞ്ച് ചെയ്യുക</value>
   </data>
-  <data name="AppElevationNotice.Title" xml:space="preserve">
+  <data name="AppElevationNoticeTitle" xml:space="preserve">
     <value>അഡ്മിനിസ്ട്രേറ്റർ പ്രത്യേകാനുമതികൾ ആവശ്യമാണ്</value>
   </data>
-  <data name="AppElevationNotice.ExtraPrompt" xml:space="preserve">
+  <data name="AppElevationNoticeExtraPrompt" xml:space="preserve">
     <value>ആപ്പ് സ്റ്റാർട്ടപ്പിൽ എല്ലായ്പ്പോഴും എലിവേഷനായി ആവശ്യപ്പെടുക</value>
   </data>
-  <data name="AppElevationNotice.Relaunch" xml:space="preserve">
+  <data name="AppElevationNoticeRelaunch" xml:space="preserve">
     <value>അഡ്മിനായി വീണ്ടും ലോഞ്ച് ചെയ്യുക</value>
   </data>
   <data name="WindowMaximizedMsg" xml:space="preserve">
@@ -2483,15 +2441,6 @@
   <data name="CertificatesSearchBox.AutomationProperties.HelpText" xml:space="preserve">
     <value>സർട്ടിഫിക്കറ്റ് വിശദാംശ ഡാറ്റയിൽ തിരയുക</value>
   </data>
-  <data name="SortingDirectionToggleButton.Text" xml:space="preserve">
-    <value>അവരോഹണ ക്രമത്തിൽ അടുക്കുക</value>
-  </data>
-  <data name="SortingDirectionToggleButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>ചെക്ക് ചെയ്യുമ്പോൾ, അടുക്കൽ അവരോഹണ ക്രമത്തിൽ നടത്തും, ചെക്ക് ചെയ്തിട്ടില്ലെങ്കിൽ ആരോഹണ ക്രമത്തിൽ നടത്തും.</value>
-  </data>
-  <data name="SortingDirectionToggleButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>ചെക്ക് ചെയ്യുമ്പോൾ, അടുക്കൽ അവരോഹണ ക്രമത്തിൽ നടത്തും, ചെക്ക് ചെയ്തിട്ടില്ലെങ്കിൽ ആരോഹണ ക്രമത്തിൽ നടത്തും.</value>
-  </data>
   <data name="BrowseForCustomMSIXPathSettingsCard.Description" xml:space="preserve">
     <value>നിങ്ങളുടെ ഉപകരണത്തിലെ ആപ്പ്കൺട്രോൾ മാനേജർ MSIXBundle ഫയൽ പാതയ്ക്കായി ബ്രൗസ് ചെയ്യുക, തുടർന്ന് അത് ഇൻസ്റ്റാൾ ചെയ്യുന്നതിന് അപ്‌ഡേറ്റ് പേജിലേക്ക് മടങ്ങുക.</value>
   </data>
@@ -2671,9 +2620,6 @@
   </data>
   <data name="AppearanceSectionSettingsExpander.AutomationProperties.HelpText" xml:space="preserve">
     <value>ആപ്പ്കൺട്രോൾ മാനേജറിന്റെ രൂപവും ദൃശ്യപരമായ ഫലങ്ങളും മാറ്റുന്നതിന് ലഭ്യമായ വിവിധ ഓപ്ഷനുകൾ ഉപയോഗിക്കുക</value>
-  </data>
-  <data name="LanguageSectionSettingsExpanderInfoBar.Message" xml:space="preserve">
-    <value>ഭാഷാ മാറ്റങ്ങൾ ഉപയോക്തൃ ഇന്റർഫേസിൽ പൂർണ്ണമായി പ്രയോഗിക്കുന്നതിന് ദയവായി ആപ്പ് പുനരാരംഭിക്കുക.</value>
   </data>
   <data name="LanguageTextBlock.Text" xml:space="preserve">
     <value>ഭാഷ</value>
@@ -3562,9 +3508,6 @@
   <data name="SelectedAppLockerEvtxForScanning" xml:space="preserve">
     <value>ആപ്പ്ലോക്കർ EVTX ലോഗ് സ്കാനിംഗിനായി {0} തിരഞ്ഞെടുത്തു</value>
   </data>
-  <data name="TotalLogsZeroMessage" xml:space="preserve">
-    <value>ആകെ ലോഗുകൾ: 0</value>
-  </data>
   <data name="TotalLogsCountMessage" xml:space="preserve">
     <value>ആകെ ലോഗുകൾ: {0}</value>
   </data>
@@ -4227,9 +4170,6 @@
   </data>
   <data name="CommandFailedWithExitCodeErrorMessage" xml:space="preserve">
     <value>'{0} {1}' കമാൻഡ് {2} എക്സിറ്റ് കോഡ് ഉപയോഗിച്ച് പരാജയപ്പെട്ടു. പിശക്: {3}</value>
-  </data>
-  <data name="CoCreateInstanceFailedHResultMessage" xml:space="preserve">
-    <value>CoCreateInstance 0x{0:X} HRESULT ഉപയോഗിച്ച് പരാജയപ്പെട്ടു</value>
   </data>
   <data name="ElevationRequestCancelledByUserMessage" xml:space="preserve">
     <value>ഉയർന്ന അനുമതി അഭ്യർത്ഥന ഉപയോക്താവ് റദ്ദാക്കി.</value>
@@ -5269,4 +5209,496 @@
 <data name="NoPublisherSignersDetectedDenyMessage" xml:space="preserve">
   <value>നിഷേധിക്കൽ നിയമങ്ങൾ സൃഷ്ടിക്കുന്നതിനായി പ്രസാധക സൈനർമാരൊന്നും കണ്ടെത്തിയില്ല.</value>
 </data>
+  <data name="RMMBlockingSection.Header" xml:space="preserve">
+    <value>RMM തടയൽ നയം സൃഷ്ടിക്കുക</value>
+  </data>
+  <data name="RMMBlockingSection.Description" xml:space="preserve">
+    <value>ഈ നയം വിദൂര നിരീക്ഷണവും മാനേജ്മെന്റ് സോഫ്റ്റ്‌വെയറുകളുടെയും വലിയ എണ്ണത്തെ അവയുടെ എക്സിക്യൂട്ടബിൾ ഫയൽ നാമങ്ങളും ഫയൽ പാത്തിന്റെയും അടിസ്ഥാനത്തിൽ തടയുന്നു.</value>
+  </data>
+  <data name="RMMBlockingSection.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഈ നയം വിദൂര നിരീക്ഷണവും മാനേജ്മെന്റ് സോഫ്റ്റ്‌വെയറുകളുടെയും വലിയ എണ്ണത്തെ അവയുടെ എക്സിക്യൂട്ടബിൾ ഫയൽ നാമങ്ങളും ഫയൽ പാത്തിന്റെയും അടിസ്ഥാനത്തിൽ തടയുന്നു.</value>
+  </data>
+  <data name="RMMBlockingSection.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഈ നയം വിദൂര നിരീക്ഷണവും മാനേജ്മെന്റ് സോഫ്റ്റ്‌വെയറുകളുടെയും വലിയ എണ്ണത്തെ അവയുടെ എക്സിക്യൂട്ടബിൾ ഫയൽ നാമങ്ങളും ഫയൽ പാത്തിന്റെയും അടിസ്ഥാനത്തിൽ തടയുന്നു.</value>
+  </data>
+  <data name="RMMBlockingCreateButton.Content" xml:space="preserve">
+    <value>സൃഷ്ടിക്കുക</value>
+  </data>
+  <data name="RMMBlockingCreateButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>RMM തടയൽ അടിസ്ഥാന നയം സൃഷ്ടിക്കുക</value>
+  </data>
+  <data name="RMMBlockingCreateButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>RMM തടയൽ അടിസ്ഥാന നയം സൃഷ്ടിക്കുക</value>
+  </data>
+  <data name="RMMBlockingPolicyCreatedSuccessfully" xml:space="preserve">
+    <value>RMM തടയൽ നയം വിജയകരമായി സൃഷ്ടിച്ചു</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.Description" xml:space="preserve">
+    <value>സ്ക്രീൻ റെക്കോർഡറുകൾ (Recall ഉൾപ്പെടെ) പോലുള്ള മറ്റ് ആപ്ലിക്കേഷനുകൾ ആപ്ലിക്കേഷൻ കൺട്രോൾ മാനേജറിന്റെ വിൻഡോ റെക്കോർഡ് ചെയ്യുന്നതോ സ്ക്രീൻഷോട്ടുകൾ എടുക്കുന്നതോ തടയുക.</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.Header" xml:space="preserve">
+    <value>സ്ക്രീൻ കവചം</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സ്ക്രീൻ റെക്കോർഡറുകൾ (Recall ഉൾപ്പെടെ) പോലുള്ള മറ്റ് ആപ്ലിക്കേഷനുകൾ ആപ്ലിക്കേഷൻ കൺട്രോൾ മാനേജറിന്റെ വിൻഡോ റെക്കോർഡ് ചെയ്യുന്നതോ സ്ക്രീൻഷോട്ടുകൾ എടുക്കുന്നതോ തടയുക.</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>സ്ക്രീൻ റെക്കോർഡറുകൾ (Recall ഉൾപ്പെടെ) പോലുള്ള മറ്റ് ആപ്ലിക്കേഷനുകൾ ആപ്ലിക്കേഷൻ കൺട്രോൾ മാനേജറിന്റെ വിൻഡോ റെക്കോർഡ് ചെയ്യുന്നതോ സ്ക്രീൻഷോട്ടുകൾ എടുക്കുന്നതോ തടയുക.</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OnContent" xml:space="preserve">
+    <value>ഓൺ</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OffContent" xml:space="preserve">
+    <value>ഓഫ്</value>
+  </data>
+  <data name="SelectCIPFilesToDeployWarningMsg" xml:space="preserve">
+    <value>വിന്യാസത്തിനായി നിങ്ങൾ CIP ഫയലുകൾ തിരഞ്ഞെടുക്കേണ്ടതുണ്ട്.</value>
+  </data>
+  <data name="SelectXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>CIP ബൈനറിയിലേക്ക് പരിവർത്തനം ചെയ്യാൻ നിങ്ങൾ XML ഫയലുകൾ തിരഞ്ഞെടുക്കേണ്ടതുണ്ട്.</value>
+  </data>
+  <data name="SuccessfullyCreatedSignedCIPFiles" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത എല്ലാ XML ഫയലുകൾക്കുമായി ഒപ്പിട്ട CIP ഫയലുകൾ വിജയകരമായി സൃഷ്ടിച്ചു.</value>
+  </data>
+  <data name="CurrentlySigningXMLFile" xml:space="preserve">
+    <value>നിലവിൽ XML ഫയൽ ഒപ്പിടുന്നു: </value>
+  </data>
+  <data name="SelectXMLFilesToSignAndDeployWarningMsg" xml:space="preserve">
+    <value>ഒപ്പിടാനും വിന്യസിക്കാനും നിങ്ങൾ XML ഫയലുകൾ തിരഞ്ഞെടുക്കേണ്ടതുണ്ട്.</value>
+  </data>
+  <data name="SelectUnsignedXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>വിന്യാസത്തിനായി നിങ്ങൾ ഒപ്പിടാത്ത XML ഫയലുകൾ തിരഞ്ഞെടുക്കേണ്ടതുണ്ട്.</value>
+  </data>
+  <data name="CheckingForFileSignatures" xml:space="preserve">
+  <value>ഫയൽ ഒപ്പുകൾ പരിശോധിക്കുന്നു</value>
+</data>
+<data name="FileCertificatesScanResultMessage" xml:space="preserve">
+  <value>ഫയൽ '{0}'-ന് {1} ഒപ്പിടുന്നവരുണ്ട്. സിസ്റ്റത്തിലെ സുരക്ഷാ കാറ്റലോഗുകളിൽ നിന്നുള്ള ഡാറ്റ സ്കാനിൽ {2}.</value>
+</data>
+<data name="IncludedText" xml:space="preserve">
+  <value>ഉൾപ്പെടുത്തി</value>
+</data>
+<data name="NotIncludedText" xml:space="preserve">
+  <value>ഉൾപ്പെടുത്തിയില്ല</value>
+</data>
+<data name="UserActivityNameForFileHashes" xml:space="preserve">
+  <value>വിപുലമായ ഫയൽ ഹാഷുകൾ കണക്കാക്കുന്നു</value>
+</data>
+<data name="UserActivityNameForFileSignature" xml:space="preserve">
+  <value>ഫയൽ സർട്ടിഫിക്കറ്റുകൾ കാണുന്നു</value>
+</data>
+<data name="UserActivityNameForPolicyEditor" xml:space="preserve">
+  <value>പോളിസി എഡിറ്ററിൽ ആപ്പ് കൺട്രോൾ പോളിസി തുറക്കുന്നു</value>
+</data>
+ <data name="PublishUserActivityInTheOSSettingsCard.Description" xml:space="preserve">
+    <value>ആപ്പ്കൺട്രോൾ മാനേജറിൽ നിങ്ങൾ നടത്തുന്ന വിവിധ പ്രവർത്തനങ്ങൾ ഓപ്പറേറ്റിംഗ് സിസ്റ്റത്തിൽ പ്രസിദ്ധീകരിക്കുക, അവ Microsoft Recall-ൽ പ്രത്യക്ഷപ്പെടാനും നിങ്ങൾക്ക് ലഭ്യമാകാനും അനുവദിക്കുന്നതിലൂടെ നിങ്ങളുടെ പ്രവർത്തനങ്ങൾ വീണ്ടും ട്രാക്ക് ചെയ്യാൻ കഴിയും.</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.Header" xml:space="preserve">
+    <value>ഓപ്പറേറ്റിംഗ് സിസ്റ്റത്തിൽ പ്രവർത്തനം പ്രസിദ്ധീകരിക്കുക</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ആപ്പ്കൺട്രോൾ മാനേജറിൽ നിങ്ങൾ നടത്തുന്ന വിവിധ പ്രവർത്തനങ്ങൾ ഓപ്പറേറ്റിംഗ് സിസ്റ്റത്തിൽ പ്രസിദ്ധീകരിക്കുക, അവ Microsoft Recall-ൽ പ്രത്യക്ഷപ്പെടാനും നിങ്ങൾക്ക് ലഭ്യമാകാനും അനുവദിക്കുന്നതിലൂടെ നിങ്ങളുടെ പ്രവർത്തനങ്ങൾ വീണ്ടും ട്രാക്ക് ചെയ്യാൻ കഴിയും.</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ആപ്പ്കൺട്രോൾ മാനേജറിൽ നിങ്ങൾ നടത്തുന്ന വിവിധ പ്രവർത്തനങ്ങൾ ഓപ്പറേറ്റിംഗ് സിസ്റ്റത്തിൽ പ്രസിദ്ധീകരിക്കുക, അവ Microsoft Recall-ൽ പ്രത്യക്ഷപ്പെടാനും നിങ്ങൾക്ക് ലഭ്യമാകാനും അനുവദിക്കുന്നതിലൂടെ നിങ്ങളുടെ പ്രവർത്തനങ്ങൾ വീണ്ടും ട്രാക്ക് ചെയ്യാൻ കഴിയും.</value>
+  </data>
+  <data name="OperationCancelledByUser" xml:space="preserve">
+    <value>പ്രവർത്തനം റദ്ദാക്കപ്പെട്ടു.</value>
+  </data>
+    <data name="Cancelling" xml:space="preserve">
+    <value>റദ്ദാക്കുന്നു...</value>
+  </data>
+  <data name="DonationHyperLinkButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>നിങ്ങളുടെ പിന്തുണ ഈ പ്രോജക്റ്റ് സൃഷ്ടിക്കുന്നതും പരിപാലിക്കുന്നതും തുടരാൻ എന്നെ സഹായിക്കുന്നു.</value>
+  </data>
+  <data name="DonationHyperLinkButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>നിങ്ങളുടെ പിന്തുണ ഈ പ്രോജക്റ്റ് സൃഷ്ടിക്കുന്നതും പരിപാലിക്കുന്നതും തുടരാൻ എന്നെ സഹായിക്കുന്നു.</value>
+  </data>
+    <data name="DonationHyperLinkButton.Content" xml:space="preserve">
+    <value>സംഭാവന നൽകുക</value>
+  </data>
+    <data name="CopyToClipboard.Content" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തുക</value>
+  </data>
+  <data name="CopyToClipboard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തുക</value>
+  </data>
+  <data name="CopyToClipboard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തുക</value>
+  </data>
+    <data name="HashCopiedToClipboard" xml:space="preserve">
+    <value>ഹാഷ് മൂല്യം ക്ലിപ്പ്ബോർഡിലേക്ക് പകർത്തി!</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.Content" xml:space="preserve">
+    <value>എല്ലാ കേർണൽ-മോഡ് ലോഗുകൾക്കായി സ്കാൻ ചെയ്യുക</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സിസ്റ്റത്തിൽ നിലവിൽ ലഭ്യമായ എല്ലാ കേർണൽ-മോഡ് ലോഗുകൾക്കായി സ്കാൻ ചെയ്യുക.</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.AutomationProperties.HelpText" xml:space="preserve">
+    <value>സിസ്റ്റത്തിൽ നിലവിൽ ലഭ്യമായ എല്ലാ കേർണൽ-മോഡ് ലോഗുകൾക്കായി സ്കാൻ ചെയ്യുക.</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.Content" xml:space="preserve">
+    <value>അവസാന റീബൂട്ട് മുതൽ കേർണൽ-മോഡ് ലോഗുകൾക്കായി സ്കാൻ ചെയ്യുക</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സിസ്റ്റം അവസാനമായി റീബൂട്ട് ചെയ്തത് മുതലുള്ള കേർണൽ-മോഡ് ലോഗുകൾക്കായി സ്കാൻ ചെയ്യുക.</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.AutomationProperties.HelpText" xml:space="preserve">
+    <value>സിസ്റ്റം അവസാനമായി റീബൂട്ട് ചെയ്തത് മുതലുള്ള കേർണൽ-മോഡ് ലോഗുകൾക്കായി സ്കാൻ ചെയ്യുക.</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OnContent" xml:space="preserve">
+    <value>ടെക്സ്റ്റ് സെലക്ഷൻ പ്രവർത്തനക്ഷമമാണ്</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OffContent" xml:space="preserve">
+    <value>ടെക്സ്റ്റ് സെലക്ഷൻ നിർജ്ജീവമാണ്</value>
+  </data>
+    <data name="TextSelectionStateToggleSwitch.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ലിസ്റ്റ് വ്യൂ വരികളിലെ ടെക്സ്റ്റുകൾ തിരഞ്ഞെടുക്കാനുള്ള കഴിവ് പ്രവർത്തനക്ഷമമാക്കുകയോ നിർജ്ജീവമാക്കുകയോ ചെയ്യുക.</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ലിസ്റ്റ് വ്യൂ വരികളിലെ ടെക്സ്റ്റുകൾ തിരഞ്ഞെടുക്കാനുള്ള കഴിവ് പ്രവർത്തനക്ഷമമാക്കുകയോ നിർജ്ജീവമാക്കുകയോ ചെയ്യുക.</value>
+  </data>
+  <data name="PolicyEditorClearAllData.ToolTipService.ToolTip" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത പോളിസിയിൽ നിന്ന് ഉപയോക്തൃ ഇന്റർഫേസിൽ ലോഡ് ചെയ്ത എല്ലാ ഡാറ്റയും മായ്ക്കുന്നു.</value>
+  </data>
+  <data name="PolicyEditorClearAllData.AutomationProperties.HelpText" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത പോളിസിയിൽ നിന്ന് ഉപയോക്തൃ ഇന്റർഫേസിൽ ലോഡ് ചെയ്ത എല്ലാ ഡാറ്റയും മായ്ക്കുന്നു.</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഡാറ്റയിൽ വരുത്തിയ മാറ്റങ്ങൾ പോളിസി XML ഫയലിലേക്ക് തിരികെ സേവ് ചെയ്യുക.</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഡാറ്റയിൽ വരുത്തിയ മാറ്റങ്ങൾ പോളിസി XML ഫയലിലേക്ക് തിരികെ സേവ് ചെയ്യുക.</value>
+  </data>
+  <data name="BeginSimulationTextBlock.Text" xml:space="preserve">
+    <value>സിമുലേഷൻ ആരംഭിക്കുക</value>
+  </data>
+  <data name="BeginSimulation.ToolTipService.ToolTip" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത കോൺഫിഗറേഷനുകൾ ഉപയോഗിച്ച് സിമുലേഷൻ ആരംഭിക്കുക.</value>
+  </data>
+  <data name="BeginSimulation.AutomationProperties.HelpText" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത കോൺഫിഗറേഷനുകൾ ഉപയോഗിച്ച് സിമുലേഷൻ ആരംഭിക്കുക.</value>
+  </data>
+  <data name="RetrieveOnlinePoliciesTextBlock.Text" xml:space="preserve">
+    <value>ഓൺലൈൻ പോളിസികൾ വീണ്ടെടുക്കുക</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.Header" xml:space="preserve">
+    <value>സൈൻ മാത്രം - വിന്യാസമില്ല</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.Description" xml:space="preserve">
+    <value>ഉപയോക്തൃ കോൺഫിഗ് ഡയറക്ടറിയിൽ സൈൻ ചെയ്ത CIP ഫയലുകൾ മാത്രം സൃഷ്ടിക്കുന്നു, അവ വിന്യസിക്കാതെ. നിങ്ങൾ അവ മറ്റൊരു സിസ്റ്റത്തിൽ വിന്യസിക്കാൻ ആഗ്രഹിക്കുന്നുവെങ്കിൽ ഇത് ടോഗിൾ ചെയ്യുക.</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഉപയോക്തൃ കോൺഫിഗ് ഡയറക്ടറിയിൽ സൈൻ ചെയ്ത CIP ഫയലുകൾ മാത്രം സൃഷ്ടിക്കുന്നു, അവ വിന്യസിക്കാതെ. നിങ്ങൾ അവ മറ്റൊരു സിസ്റ്റത്തിൽ വിന്യസിക്കാൻ ആഗ്രഹിക്കുന്നുവെങ്കിൽ ഇത് ടോഗിൾ ചെയ്യുക.</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഉപയോക്തൃ കോൺഫിഗ് ഡയറക്ടറിയിൽ സൈൻ ചെയ്ത CIP ഫയലുകൾ മാത്രം സൃഷ്ടിക്കുന്നു, അവ വിന്യസിക്കാതെ. നിങ്ങൾ അവ മറ്റൊരു സിസ്റ്റത്തിൽ വിന്യസിക്കാൻ ആഗ്രഹിക്കുന്നുവെങ്കിൽ ഇത് ടോഗിൾ ചെയ്യുക.</value>
+  </data>
+  <data name="ViewSelectedCIPFilesTextBlock.Text" xml:space="preserve">
+    <value>നിങ്ങൾ തിരഞ്ഞെടുത്ത CIP ഫയലുകൾ കാണുക.</value>
+  </data>
+  <data name="ConvertTextBlock.Text" xml:space="preserve">
+    <value>പരിവർത്തനം ചെയ്യുക</value>
+  </data>
+  <data name="ViewSelectedXMLFilesTextBlock.Text" xml:space="preserve">
+    <value>നിങ്ങൾ തിരഞ്ഞെടുത്ത XML ഫയലുകൾ കാണുക.</value>
+  </data>
+  <data name="RemoveTextBlock.Text" xml:space="preserve">
+    <value>നീക്കം ചെയ്യുക</value>
+  </data>
+  <data name="SetAsActiveTextBlock.Text" xml:space="preserve">
+    <value>സജീവമായി സജ്ജീകരിക്കുക</value>
+  </data>
+  <data name="SignInTextBlock.Text" xml:space="preserve">
+    <value>സൈൻ ഇൻ ചെയ്യുക</value>
+  </data>
+  <data name="CancelSigningInTextBlock.Text" xml:space="preserve">
+    <value>സജീവമായി സജ്ജീകരിക്കുക</value>
+  </data>
+  <data name="CurrentlyInUseAccountDetailsTextBlock.Text" xml:space="preserve">
+    <value>നിലവിൽ ഉപയോഗത്തിലുള്ള അക്കൗണ്ടിന്റെ വിശദാംശങ്ങൾ</value>
+  </data>
+  <data name="PolicyEditorSuccessfulSaveMessage" xml:space="preserve">
+    <value>നയ ഫയലിലേക്കുള്ള മാറ്റങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു.</value>
+  </data>
+  <data name="SidebarHelpHyperlinkTextBlock.Text" xml:space="preserve">
+    <value>സപ്പോർട്ട് - ചോദ്യങ്ങൾ ചോദിക്കുക</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.PlaceholderText" xml:space="preserve">
+    <value>ആപ്പുകളിൽ തിരയുക</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സിസ്റ്റത്തിൽ ഇൻസ്റ്റാൾ ചെയ്ത ആപ്പുകളിൽ തിരയുക.</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>സിസ്റ്റത്തിൽ ഇൻസ്റ്റാൾ ചെയ്ത ആപ്പുകളിൽ തിരയുക.</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>നിരസിക്കൽ നയത്തിന്റെ പേര്</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സൃഷ്ടിക്കപ്പെടുന്ന നിരസിക്കൽ നയത്തിന് ഒരു പേര് നൽകുക.</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>സൃഷ്ടിക്കപ്പെടുന്ന നിരസിക്കൽ നയത്തിന് ഒരു പേര് നൽകുക.</value>
+  </data>
+  <data name="CustomPolicySettingsTabViewItem.Header" xml:space="preserve">
+    <value>കസ്റ്റം നയ ക്രമീകരണങ്ങൾ</value>
+  </data>
+  <data name="CustomPolicySettingsTitleTextBlock.Text" xml:space="preserve">
+    <value>കസ്റ്റം നയ ക്രമീകരണങ്ങൾ കോൺഫിഗർ ചെയ്യുകയും പരിപാലിക്കുകയും പൂർവ്വനിർവ്വചിത നയങ്ങൾ ചേർക്കാൻ പ്രീസെറ്റുകൾ ഉപയോഗിക്കുകയും ചെയ്യുക.</value>
+  </data>
+  <data name="CustomPolicySettingsPresets.PlaceholderText" xml:space="preserve">
+    <value>ഒരു ക്രമീകരണ പ്രീസെറ്റ് തിരഞ്ഞെടുക്കുക</value>
+  </data>
+  <data name="AddSettingTextBlock.Text" xml:space="preserve">
+    <value>ക്രമീകരണം ചേർക്കുക</value>
+  </data>
+  <data name="DeletedSelectedSettingTextBlock.Text" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്തത് ഇല്ലാതാക്കുക</value>
+  </data>
+  <data name="ClearAllPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>എല്ലാം മായ്ക്കുക</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>ചേർക്കുക</value>
+  </data>
+  <data name="NoPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>നയ ക്രമീകരണങ്ങൾ ഇല്ല</value>
+  </data>
+  <data name="NoPolicySettingsLoadedTextBlock.Text" xml:space="preserve">
+    <value>ഇതുവരെ കസ്റ്റം നയ ക്രമീകരണങ്ങൾ ലോഡ് ചെയ്യപ്പെടുകയോ സൃഷ്ടിക്കപ്പെടുകയോ ചെയ്തിട്ടില്ല.</value>
+  </data>
+  <data name="EnterValueTextBox.PlaceholderText" xml:space="preserve">
+    <value>മൂല്യം നൽകുക</value>
+  </data>
+  <data name="ValueNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>മൂല്യത്തിന്റെ പേര്</value>
+  </data>
+  <data name="KeyIdentifierTextBox.PlaceholderText" xml:space="preserve">
+    <value>കീ ഐഡന്റിഫയർ</value>
+  </data>
+  <data name="ProviderNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>പ്രൊവൈഡറിന്റെ പേര്</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>എല്ലാ നയ ക്രമീകരണങ്ങളും മായ്ക്കുക</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>എല്ലാ നയ ക്രമീകരണങ്ങളും മായ്ക്കുക</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത നയ ക്രമീകരണം ഇല്ലാതാക്കുക</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത നയ ക്രമീകരണം ഇല്ലാതാക്കുക</value>
+  </data>
+  <data name="AddSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>പുതിയ ശൂന്യമായ നയ ക്രമീകരണം ചേർക്കുക</value>
+  </data>
+  <data name="AddSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>പുതിയ ശൂന്യമായ നയ ക്രമീകരണം ചേർക്കുക</value>
+  </data>
+  <data name="DeployTextBlock.Text" xml:space="preserve">
+    <value>വിന്യസിക്കുക</value>
+  </data>
+  <data name="SignInSegmentedItem.Content" xml:space="preserve">
+    <value>സൈൻ ഇൻ ചെയ്യുക</value>
+  </data>
+  <data name="SignedInAccountsSegmentedItem.Content" xml:space="preserve">
+    <value>സൈൻ ഇൻ ചെയ്ത അക്കൗണ്ടുകൾ</value>
+  </data>
+  <data name="ActiveAccountSegmentedItem.Content" xml:space="preserve">
+    <value>സജീവ അക്കൗണ്ട്</value>
+  </data>
+  <data name="FilterTextBlock.Text" xml:space="preserve">
+    <value>ഫിൽട്ടർ</value>
+  </data>
+  <data name="BrowseForMDELogsTextBlock.Text" xml:space="preserve">
+    <value>MDE അഡ്വാൻസ്ഡ് ഹണ്ടിംഗ് ലോഗുകൾക്കായി ബ്രൗസ് ചെയ്യുക</value>
+  </data>
+  <data name="BrowseForMDELogsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>MDE അഡ്വാൻസ്ഡ് ഹണ്ടിംഗ് ലോഗുകൾക്കായി ബ്രൗസ് ചെയ്യുക</value>
+  </data>
+  <data name="BrowseForMDELogsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>MDE അഡ്വാൻസ്ഡ് ഹണ്ടിംഗ് ലോഗുകൾക്കായി ബ്രൗസ് ചെയ്യുക</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.Content" xml:space="preserve">
+    <value>ഘട്ടം 2-ലേക്ക് പോകുക</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഓഡിറ്റ് മോഡിൽ തിരഞ്ഞെടുത്ത നയത്തിന്റെ വിന്യാസം ആരംഭിക്കുകയും ഘട്ടം 2-ലേക്ക് പോകുകയും ചെയ്യുക</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഓഡിറ്റ് മോഡിൽ തിരഞ്ഞെടുത്ത നയത്തിന്റെ വിന്യാസം ആരംഭിക്കുകയും ഘട്ടം 2-ലേക്ക് പോകുകയും ചെയ്യുക</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.Content" xml:space="preserve">
+    <value>ഘട്ടം 3-ലേക്ക് പോകുക</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഇവന്റ് ലോഗുകളുടെയും തിരഞ്ഞെടുത്ത ഡയറക്ടറികളുടെയും (എന്തെങ്കിലും ഉണ്ടെങ്കിൽ) സ്കാനിംഗ് ആരംഭിക്കുകയും ഘട്ടം 3-ലേക്ക് പോകുകയും ചെയ്യുക</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഇവന്റ് ലോഗുകളുടെയും തിരഞ്ഞെടുത്ത ഡയറക്ടറികളുടെയും (എന്തെങ്കിലും ഉണ്ടെങ്കിൽ) സ്കാനിംഗ് ആരംഭിക്കുകയും ഘട്ടം 3-ലേക്ക് പോകുകയും ചെയ്യുക</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.Content" xml:space="preserve">
+    <value>ഫോൾഡറുകൾക്കായി ബ്രൗസ് ചെയ്യുക</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഇൻസ്റ്റാൾ ചെയ്തതും ബ്ലോക്ക് ചെയ്യപ്പെടുന്നതുമായ നിങ്ങളുടെ പുതിയ അല്ലെങ്കിൽ നിലവിലുള്ള ആപ്പുകളുടെ ഫോൾഡറുകൾക്കായി ബ്രൗസ് ചെയ്യുക</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഇൻസ്റ്റാൾ ചെയ്തതും ബ്ലോക്ക് ചെയ്യപ്പെടുന്നതുമായ നിങ്ങളുടെ പുതിയ അല്ലെങ്കിൽ നിലവിലുള്ള ആപ്പുകളുടെ ഫോൾഡറുകൾക്കായി ബ്രൗസ് ചെയ്യുക</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.Header" xml:space="preserve">
+    <value>അനുബന്ധ നയത്തിന്റെ പേര്</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.PlaceholderText" xml:space="preserve">
+    <value>അനുബന്ധ നയത്തിന് ഒരു പേര് നൽകുക</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സൃഷ്ടിക്കപ്പെടുന്ന അനുബന്ധ നയത്തിന് ഒരു പേര് നൽകുക.</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>സൃഷ്ടിക്കപ്പെടുന്ന അനുബന്ധ നയത്തിന് ഒരു പേര് നൽകുക.</value>
+  </data>
+  <data name="Step1TextBlock.Text" xml:space="preserve">
+    <value>ഘട്ടം 1</value>
+  </data>
+    <data name="Step2TextBlock.Text" xml:space="preserve">
+    <value>ഘട്ടം 2</value>
+  </data>
+    <data name="Step3TextBlock.Text" xml:space="preserve">
+    <value>ഘട്ടം 3</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherLevelsMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: WHQLFilePublisher -&gt; FilePublisher -&gt; Publisher -&gt; Hash ലെവലുകൾ ഉപയോഗിക്കുന്നു।</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherRulesCountMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: {0} WHQLFilePublisher നിയമങ്ങൾ।</value>
+  </data>
+  <data name="BuildSignerProcessingWHQLFilePublisherMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: WHQLFilePublisher ഡാറ്റ പ്രോസസ്സിംഗ്।</value>
+  </data>
+  <data name="WHQLFilePublisherSignersToAddMessage" xml:space="preserve">
+    <value>XML ഫയലിൽ ചേർക്കേണ്ട {0} WHQL File Publisher ഒപ്പിടുന്നവർ ഉണ്ട്</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedAllowMessage" xml:space="preserve">
+    <value>അനുമതി നിയമങ്ങൾ സൃഷ്ടിക്കുന്നതിനായി WHQLFilePublisher ഒപ്പിടുന്നവരെ കണ്ടെത്തിയില്ല।</value>
+  </data>
+    <data name="EKUsNodeNotFoundMessage" xml:space="preserve">
+    <value>EKUs നോഡ് കണ്ടെത്തിയില്ല</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedDenyMessage" xml:space="preserve">
+    <value>നിഷേധ നിയമങ്ങൾ സൃഷ്ടിക്കുന്നതിനായി WHQLFilePublisher ഒപ്പിടുന്നവരെ കണ്ടെത്തിയില്ല।</value>
+  </data>
+  <data name="WHQLFilePublisherRuleTypeFriendlyName" xml:space="preserve">
+    <value>WHQL File Publisher നിയമ തരം</value>
+  </data>
+  <data name="AllowNewApps_SidebarButtonContent" xml:space="preserve">
+    <value>പുതിയ ആപ്പുകൾക്ക് അനുമതി നൽകുന്ന അടിസ്ഥാന നയം</value>
+  </data>
+  <data name="CustomPatternBasedSupplementalPolicyLabel" xml:space="preserve">
+    <value>ഇഷ്ടാനുസൃത പാറ്റേൺ അടിസ്ഥാനമാക്കിയുള്ള സപ്ലിമെന്റൽ നയം</value>
+  </data>
+  <data name="CloudTextBlock.Text" xml:space="preserve">
+    <value>ക്ലൗഡ്</value>
+  </data>
+  <data name="LocalTextBlock.Text" xml:space="preserve">
+    <value>ലോക്കൽ</value>
+  </data>
+  <data name="CreateTextBlock.Text" xml:space="preserve">
+    <value>സൃഷ്ടിക്കുക</value>
+  </data>
+  <data name="UpdatePageCustomMSIXPath" xml:space="preserve">
+    <value>കസ്റ്റം MSIXBundle പാത്ത്</value>
+  </data>
+  <data name="OpenInFileExplorer.Text" xml:space="preserve">
+    <value>ഫയൽ എക്സ്പ്ലോററിൽ തുറക്കുക</value>
+  </data>
+  <data name="OpenInFileExplorer.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഫയൽ എക്സ്പ്ലോററിൽ ഫയൽ സ്ഥിതി ചെയ്യുന്ന ഫോൾഡർ തുറക്കുക.</value>
+  </data>
+  <data name="OpenInFileExplorer.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഫയൽ എക്സ്പ്ലോററിൽ ഫയൽ സ്ഥിതി ചെയ്യുന്ന ഫോൾഡർ തുറക്കുക.</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>പോളിസി എഡിറ്ററിൽ തുറക്കുക</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>പോളിസി എഡിറ്ററിൽ പോളിസി തുറക്കുക, അവിടെ നിങ്ങൾക്ക് പോളിസിയുടെ വിശദമായ അവലോകനം കാണാനും ഈ ആപ്ലിക്കേഷന്റെ ഉള്ളിൽ തന്നെ അത് കൂടുതൽ ഇഷ്ടാനുസൃതമാക്കാനുമുള്ള ഓപ്ഷൻ ഉണ്ട്.</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>പോളിസി എഡിറ്ററിൽ പോളിസി തുറക്കുക, അവിടെ നിങ്ങൾക്ക് പോളിസിയുടെ വിശദമായ അവലോകനം കാണാനും ഈ ആപ്ലിക്കേഷന്റെ ഉള്ളിൽ തന്നെ അത് കൂടുതൽ ഇഷ്ടാനുസൃതമാക്കാനുമുള്ള ഓപ്ഷൻ ഉണ്ട്.</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.Text" xml:space="preserve">
+    <value>ഫയൽ തുറക്കുക</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>ഓപ്പറേറ്റിംഗ് സിസ്റ്റത്തിൽ കോൺഫിഗർ ചെയ്ത ഡിഫോൾട്ട് ഫയൽ ഹാൻഡ്ലർ ഉപയോഗിച്ച് സൃഷ്ടിച്ച ഫയൽ തുറക്കുക.</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>ഓപ്പറേറ്റിംഗ് സിസ്റ്റത്തിൽ കോൺഫിഗർ ചെയ്ത ഡിഫോൾട്ട് ഫയൽ ഹാൻഡ്ലർ ഉപയോഗിച്ച് സൃഷ്ടിച്ച ഫയൽ തുറക്കുക.</value>
+  </data>
+  <data name="AdditionalActionsTextBlock.Text" xml:space="preserve">
+    <value>അധിക പ്രവർത്തനങ്ങൾ</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>പോളിസി എഡിറ്ററിൽ പോളിസി തുറക്കുക അല്ലെങ്കിൽ ലിസ്റ്റിൽ നിന്ന് മറ്റൊരു പ്രവർത്തനം തിരഞ്ഞെടുക്കുക.</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>പോളിസി എഡിറ്ററിൽ പോളിസി തുറക്കുക അല്ലെങ്കിൽ ലിസ്റ്റിൽ നിന്ന് മറ്റൊരു പ്രവർത്തനം തിരഞ്ഞെടുക്കുക.</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.Text" xml:space="preserve">
+    <value>റൂൾ ഓപ്ഷനുകൾ കോൺഫിഗർ ചെയ്യുക</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>പോളിസി മറ്റൊരു പേജിൽ തുറക്കുക, അതിന്റെ റൂൾ ഓപ്ഷനുകൾ കൂടുതൽ കോൺഫിഗർ ചെയ്യാൻ.</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>പോളിസി മറ്റൊരു പേജിൽ തുറക്കുക, അതിന്റെ റൂൾ ഓപ്ഷനുകൾ കൂടുതൽ കോൺഫിഗർ ചെയ്യാൻ.</value>
+  </data>
+  <data name="AddToPolicySegmentedItem.Content" xml:space="preserve">
+    <value>പോളിസിയിൽ ചേർക്കുക</value>
+  </data>
+  <data name="BasePolicyFileSegmentedItem.Content" xml:space="preserve">
+    <value>ബേസ് പോളിസി ഫയൽ</value>
+  </data>
+  <data name="BasePolicyGUIDSegmentedItem.Content" xml:space="preserve">
+    <value>ബേസ് പോളിസി GUID</value>
+  </data>
+  <data name="AddToPolicyDescription.Text" xml:space="preserve">
+    <value>ലോഗുകൾ ചേർക്കാൻ പോളിസി ഫയൽ ബ്രൗസ് ചെയ്യുക. പുതിയ നിയമങ്ങൾ നിലവിലുള്ള ഏതെങ്കിലും നിയമങ്ങളുമായി ലയിപ്പിക്കപ്പെടും.</value>
+  </data>
+  <data name="BasePolicyFileDescription.Text" xml:space="preserve">
+    <value>സൃഷ്ടിക്കപ്പെടാൻ പോകുന്ന സപ്ലിമെന്റൽ പോളിസി ബന്ധപ്പെടുത്തേണ്ട ബേസ് പോളിസി ഫയൽ ബ്രൗസ് ചെയ്യുക.</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.PlaceholderText" xml:space="preserve">
+    <value>ബേസ് പോളിസി GUID നൽകുക</value>
+  </data>
+    <data name="BasePolicyGUIDDescription.AutomationProperties.HelpText" xml:space="preserve">
+  <value>സൃഷ്ടിക്കപ്പെടാൻ പോകുന്ന സപ്ലിമെന്റൽ പോളിസി ബന്ധപ്പെടുത്തേണ്ട ബേസ് പോളിസി ഫയലിന്റെ GUID നൽകുക.</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സൃഷ്ടിക്കപ്പെടാൻ പോകുന്ന സപ്ലിമെന്റൽ പോളിസി ബന്ധപ്പെടുത്തേണ്ട ബേസ് പോളിസി ഫയലിന്റെ GUID നൽകുക.</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.PlaceholderText" xml:space="preserve">
+    <value>തീയതി അനുസരിച്ച് ഫിൽട്ടർ ചെയ്യുക</value>
+  </data>
+    <data name="FilterByDateCalendarDatePicker.AutomationProperties.HelpText" xml:space="preserve">
+  <value>തിരഞ്ഞെടുത്ത തീയതിക്ക് തുല്യമായതോ പുതിയതോ ആയ ഡാറ്റ മാത്രം കാണിക്കും.</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.ToolTipService.ToolTip" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത തീയതിക്ക് തുല്യമായതോ പുതിയതോ ആയ ഡാറ്റ മാത്രം കാണിക്കും.</value>
+  </data>
+  <data name="SubmitButton.Content" xml:space="preserve">
+    <value>സമർപ്പിക്കുക</value>
+  </data>
+  <data name="SubmitButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>സമർപ്പിക്കുക</value>
+  </data>
+  <data name="SubmitButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>സമർപ്പിക്കുക</value>
+  </data>
 </root>

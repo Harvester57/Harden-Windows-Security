@@ -74,6 +74,21 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 	internal readonly ObservableCollection<PolicyEditor.SignatureBasedRulesForListView> SignatureRulesCollection = [];
 	internal readonly List<PolicyEditor.SignatureBasedRulesForListView> SignatureRulesCollectionList = [];
 
+	/// <summary>
+	/// To store Policy Settings, bound to the UI List View.
+	/// </summary>
+	internal readonly ObservableCollection<PolicyEditor.PolicySettings> PolicySettingsCollection = [];
+
+	internal Visibility PolicySettingsEmptyStateVisibility =>
+		PolicySettingsCollection.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+
+	internal PolicyEditor.PolicySettings? PolicySettingsSelectedItem { get; set => SP(ref field, value); }
+
+	/// <summary>
+	/// array for type mapping - index corresponds to the Type property value and should match the GetValueType method in the PolicySettingsManager method.
+	/// </summary>
+	internal readonly string[] TypeOptions = ["Binary", "Boolean", "DWord", "String"];
+
 	// Don't need getters/setters via OnPropertyChanged for the collections above since it is an observable collection and we don't replace it completely
 	// We just use the .Add(), .Remove() etc. methods
 
@@ -116,7 +131,27 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 			() => MainInfoBarSeverity, value => MainInfoBarSeverity = value,
 			() => MainInfoBarIsClosable, value => MainInfoBarIsClosable = value,
 			() => MainInfoBarTitle, value => MainInfoBarTitle = value);
+
+
+		PolicySettingsCollection.CollectionChanged += (s, e) =>
+		{
+			OnPropertyChanged(nameof(PolicySettingsEmptyStateVisibility));
+		};
+
+		// Initialize preset policy settings
+		PresetPolicySettings = [
+			new(
+			parentViewModel: this,
+			provider: "AllHostIds",
+			key: "AllKeys",
+			value: true,
+			valueStr: "true",
+			valueName: "EnterpriseDefinedClsId",
+			type: 1 // Boolean
+		)
+		];
 	}
+
 
 	private readonly InfoBarSettings MainInfoBar;
 
@@ -241,15 +276,15 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 
 
 	private static string GetHVCIOptionKey(uint value) =>
-	value switch
-	{
-		2 => "Enabled - Strict",
-		1 => "Enabled",
-		4 => "Debug Mode",
-		8 => "Disable is Allowed",
-		0 => "None",
-		_ => throw new ArgumentException($"Invalid HVCI option value: {value}", nameof(value))
-	};
+		value switch
+		{
+			2 => "Enabled - Strict",
+			1 => "Enabled",
+			4 => "Debug Mode",
+			8 => "Disable is Allowed",
+			0 => "None",
+			_ => throw new ArgumentException($"Invalid HVCI option value: {value}", nameof(value))
+		};
 
 
 	// All of these must be nullified/emptied during policy load
@@ -275,18 +310,18 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 	{
 
 		// Measure header text widths first.
-		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("IDHeader/Text"));
-		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FriendlyNameHeader/Text"));
+		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.GetStr("IDHeader/Text"));
+		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.GetStr("FriendlyNameHeader/Text"));
 		double maxWidth3 = ListViewHelper.MeasureText("Hash");
-		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileNameHeader/Text"));
-		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("InternalNameHeader/Text"));
-		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileDescriptionHeader/Text"));
-		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("ProductNameHeader/Text"));
-		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FilePathHeader/Text"));
-		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("MinimumFileVersionHeader/Text"));
-		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("MaximumFileVersionHeader/Text"));
-		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("PackageFamilyNameHeader/Text"));
-		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("PackageVersionHeader/Text"));
+		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileNameHeader/Text"));
+		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.GetStr("InternalNameHeader/Text"));
+		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileDescriptionHeader/Text"));
+		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.GetStr("ProductNameHeader/Text"));
+		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.GetStr("FilePathHeader/Text"));
+		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.GetStr("MinimumFileVersionHeader/Text"));
+		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.GetStr("MaximumFileVersionHeader/Text"));
+		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.GetStr("PackageFamilyNameHeader/Text"));
+		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.GetStr("PackageVersionHeader/Text"));
 		double maxWidth13 = ListViewHelper.MeasureText("App IDs");
 		double maxWidth14 = ListViewHelper.MeasureText("Type");
 
@@ -338,7 +373,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 	{
 
 		// Measure header text widths first.
-		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("IDHeader/Text"));
+		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.GetStr("IDHeader/Text"));
 		double maxWidth2 = ListViewHelper.MeasureText("Name");
 		double maxWidth3 = ListViewHelper.MeasureText("Cert Root");
 		double maxWidth4 = ListViewHelper.MeasureText("Cert Publisher");
@@ -382,7 +417,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 	{
 		if (SelectedPolicyFile is null)
 		{
-			MainInfoBar.WriteWarning(GlobalVars.Rizz.GetString("SelectAppControlPolicyFirstMessage"));
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("SelectAppControlPolicyFirstMessage"));
 			return;
 		}
 
@@ -398,7 +433,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		}
 		else
 		{
-			MainInfoBar.WriteWarning(GlobalVars.Rizz.GetString("OnlyXmlCipSupportedMessage"));
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("OnlyXmlCipSupportedMessage"));
 			return;
 		}
 
@@ -413,7 +448,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 				ProgressBarVisibility = Visibility.Visible;
 				UIElementsEnabledState = false;
 
-				MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("LoadingPolicyMessage"));
+				MainInfoBar.WriteInfo(GlobalVars.GetStr("LoadingPolicyMessage"));
 
 				// Clear the class variables
 				PolicyObj = null;
@@ -425,6 +460,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 				FileRulesCollectionList.Clear();
 				SignatureRulesCollection.Clear();
 				SignatureRulesCollectionList.Clear();
+				PolicySettingsCollection.Clear();
 			});
 
 			// Collections to deserialize the policy object into
@@ -460,50 +496,18 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 
 				#region Extract policy details
 
-				foreach (Setting item in PolicyObj.Settings)
-				{
-					if (string.Equals(item.ValueName, "Name", StringComparison.OrdinalIgnoreCase) &&
-						string.Equals(item.Provider, "PolicyInfo", StringComparison.OrdinalIgnoreCase) &&
-						string.Equals(item.Key, "Information", StringComparison.OrdinalIgnoreCase))
-					{
-						if (item.Value.Item is not null)
-							_ = Dispatcher.TryEnqueue(() =>
-							{
-								PolicyNameTextBox = (string)item.Value.Item;
-							});
-
-						break;
-					}
-				}
-
+				string? policyName = PolicySettingsManager.GetPolicyName(PolicyObj, null);
+				string? policyIDInfo = PolicySettingsManager.GetPolicyIDInfo(PolicyObj, null);
 
 				_ = Dispatcher.TryEnqueue(() =>
 				{
+					PolicyNameTextBox = policyName ?? string.Empty;
 					PolicyIDTextBox = PolicyObj.PolicyID;
 					PolicyBaseIDTextBox = PolicyObj.BasePolicyID;
 					PolicyVersionTextBox = PolicyObj.VersionEx;
 					PolicyTypeComboBox = PolicyObj.PolicyType;
+					PolicyInfoIDTextBox = policyIDInfo;
 				});
-
-
-				foreach (Setting item in PolicyObj.Settings)
-				{
-					if (string.Equals(item.ValueName, "Id", StringComparison.OrdinalIgnoreCase) &&
-						string.Equals(item.Provider, "PolicyInfo", StringComparison.OrdinalIgnoreCase) &&
-						string.Equals(item.Key, "Information", StringComparison.OrdinalIgnoreCase))
-					{
-
-						if (item.Value.Item is not null)
-
-							_ = Dispatcher.TryEnqueue(() =>
-							{
-								PolicyInfoIDTextBox = (string)item.Value.Item;
-							});
-
-						break;
-					}
-				}
-
 
 				if (PolicyObj.HvciOptionsSpecified)
 				{
@@ -809,6 +813,13 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 					CalculateSignatureBasedListViewColumnWidths();
 				}
 
+
+				if (PolicyObj is not null)
+					foreach (PolicyEditor.PolicySettings item in PolicySettingsManager.GetPolicySettings(PolicyObj.Settings, this))
+					{
+						PolicySettingsCollection.Add(item);
+					}
+
 			});
 
 			await Dispatcher.EnqueueAsync(() =>
@@ -820,13 +831,17 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 				}
 				catch { }
 			});
+
+			await PublishUserActivityAsync(LaunchProtocolActions.PolicyEditor,
+				SelectedPolicyFile,
+				GlobalVars.GetStr("UserActivityNameForPolicyEditor"));
 		}
 		catch (Exception ex)
 		{
 			error = true;
 			await Dispatcher.EnqueueAsync(() =>
 			{
-				MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorLoadingPolicyFileMessage"));
+				MainInfoBar.WriteError(ex, GlobalVars.GetStr("ErrorLoadingPolicyFileMessage"));
 			});
 		}
 		finally
@@ -840,7 +855,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 
 				if (!error)
 				{
-					MainInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("SuccessLoadedPolicyMessage"));
+					MainInfoBar.WriteSuccess(GlobalVars.GetStr("SuccessLoadedPolicyMessage"));
 				}
 
 				MainInfoBarIsClosable = true;
@@ -858,7 +873,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		if (!FileRulesCollection.Remove(item))
 		{
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("CouldNotRemoveFileRuleMessage"),
+				GlobalVars.GetStr("CouldNotRemoveFileRuleMessage"),
 				item.Id));
 		}
 
@@ -876,7 +891,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		if (!SignatureRulesCollection.Remove(item))
 		{
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("CouldNotRemoveSignatureRuleMessage"),
+				GlobalVars.GetStr("CouldNotRemoveSignatureRuleMessage"),
 				item.Id));
 		}
 
@@ -1019,7 +1034,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 
 			if (SelectedPolicyFile is null || PolicyObj is null)
 			{
-				MainInfoBar.WriteWarning(GlobalVars.Rizz.GetString("SelectPolicyBeforeLoad"));
+				MainInfoBar.WriteWarning(GlobalVars.GetStr("SelectPolicyBeforeLoad"));
 				return;
 			}
 
@@ -1304,43 +1319,6 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 
 				#region Policy details
 
-				bool nameSettingFound = false;
-
-				// Set the policy name
-				foreach (Setting item in PolicyObj.Settings)
-				{
-					if (string.Equals(item.ValueName, "Name", StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(item.Provider, "PolicyInfo", StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(item.Key, "Information", StringComparison.OrdinalIgnoreCase))
-					{
-						item.Value.Item = PolicyNameTextBox;
-
-						nameSettingFound = true;
-
-						break;
-					}
-				}
-
-				// If the Setting node with ValueName="Name" does not exist, create it
-				if (!nameSettingFound)
-				{
-					Setting newNameSetting = new()
-					{
-						Provider = "PolicyInfo",
-						Key = "Information",
-						ValueName = "Name",
-						Value = new SettingValueType()
-						{
-							Item = PolicyNameTextBox
-						}
-					};
-
-					List<Setting> settings = [.. PolicyObj.Settings];
-					settings.Add(newNameSetting);
-					PolicyObj.Settings = [.. settings];
-				}
-
-
 				// Validate User Inputs
 
 				(bool, string) policyIDCheckResult = SetCiPolicyInfo.ValidatePolicyID(PolicyIDTextBox);
@@ -1370,7 +1348,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 				{
 					_ = Dispatcher.TryEnqueue(() =>
 					{
-						MainInfoBar.WriteWarning(GlobalVars.Rizz.GetString("EnterPolicyVersion"));
+						MainInfoBar.WriteWarning(GlobalVars.GetStr("EnterPolicyVersion"));
 					});
 					return;
 				}
@@ -1382,44 +1360,6 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 
 				if (PolicyTypeComboBox is not null)
 					PolicyObj.PolicyType = (PolicyType)PolicyTypeComboBox;
-
-
-				bool policyInfoIDSettingFound = false;
-
-				// Set the PolicyInfoID if the setting for it exist
-				foreach (Setting item in PolicyObj.Settings)
-				{
-					if (string.Equals(item.ValueName, "Id", StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(item.Provider, "PolicyInfo", StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(item.Key, "Information", StringComparison.OrdinalIgnoreCase))
-					{
-						item.Value.Item = PolicyInfoIDTextBox;
-
-						policyInfoIDSettingFound = true;
-
-						break;
-					}
-				}
-
-				// If the setting for PolicyInfoID does not exist, create it
-
-				if (!policyInfoIDSettingFound)
-				{
-					Setting newPolicyInfoIDSetting = new()
-					{
-						Provider = "PolicyInfo",
-						Key = "Information",
-						ValueName = "Id",
-						Value = new SettingValueType()
-						{
-							Item = PolicyInfoIDTextBox
-						}
-					};
-					List<Setting> settings = [.. PolicyObj.Settings];
-					settings.Add(newPolicyInfoIDSetting);
-					PolicyObj.Settings = [.. settings];
-				}
-
 
 				// If the user selected an HVCI option, set it in the policy
 				if (!string.IsNullOrEmpty(HVCIOptionComboBox))
@@ -1455,6 +1395,10 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 					fileToSaveTheChangesTo = SelectedPolicyFile;
 				}
 
+
+				// Anything that has to do with Settings must be applied by this method because it always overwrites any other changes as it writes the final settings block to the policy.
+				Setting[] _policySettings = PolicySettingsManager.ConvertPolicyEditorSettingToSiPolicySetting(PolicySettingsCollection, PolicyNameTextBox, PolicyInfoIDTextBox);
+
 				// Generate the policy
 				Merger.PolicyGenerator(
 				   fileToSaveTheChangesTo, // The user selected XML file path
@@ -1470,17 +1414,33 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 				   supplementalPolicySignersCol,
 				   updatePolicySignersCol,
 				   kernelModeFileRulesRefs,
-				   userModeFileRulesRefs);
+				   userModeFileRulesRefs,
+				   _policySettings
+				   );
 
 
 				await Dispatcher.EnqueueAsync(async () =>
 				{
 
+					// Update the Policy Settings again to reflect the newest changes when something is removed from their UI-bound collection.
+					if (PolicyObj is not null)
+					{
+						PolicySettingsCollection.Clear();
+
+						foreach (PolicyEditor.PolicySettings item in PolicySettingsManager.GetPolicySettings(_policySettings, this))
+						{
+							PolicySettingsCollection.Add(item);
+						}
+					}
+
+
+					MainInfoBar.WriteSuccess(GlobalVars.GetStr("PolicyEditorSuccessfulSaveMessage"));
+
 					if (fileType == 0)
 					{
 						using ContentDialogV2 dialog = new()
 						{
-							Title = GlobalVars.Rizz.GetString("DialogTitleSuccess"),
+							Title = GlobalVars.GetStr("DialogTitleSuccess"),
 							Content = new WrapPanel
 							{
 								Orientation = Orientation.Vertical,
@@ -1491,7 +1451,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 								{
 									new TextBlock
 									{
-										Text = GlobalVars.Rizz.GetString("DialogContentCIPConvertedToXML"),
+										Text = GlobalVars.GetStr("DialogContentCIPConvertedToXML"),
 										HorizontalAlignment = HorizontalAlignment.Center,
 										TextWrapping = TextWrapping.WrapWholeWords
 									},
@@ -1504,7 +1464,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 									}
 								}
 							},
-							CloseButtonText = GlobalVars.Rizz.GetString("Ok"),
+							CloseButtonText = GlobalVars.GetStr("Ok"),
 						};
 
 						_ = await dialog.ShowAsync();
@@ -1534,6 +1494,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		FileRulesCollectionList.Clear();
 		SignatureRulesCollection.Clear();
 		SignatureRulesCollectionList.Clear();
+		PolicySettingsCollection.Clear();
 
 		ekusToUse = [];
 		PolicyObj = null;
@@ -1563,7 +1524,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		UpdatePolicySignersCount = "• Update Policy Signer Rules count: 0";
 		SupplementalPolicySignersCount = "• Supplemental Policy Signer Rules count: 0";
 
-		MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("AllDataClearedMsg"));
+		MainInfoBar.WriteInfo(GlobalVars.GetStr("AllDataClearedMsg"));
 		MainInfoBarIsClosable = true;
 	}
 
@@ -1602,17 +1563,17 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 			await Task.Run(() =>
 			{
 				// Perform a case-insensitive search in all relevant fields
-				filteredResults = [.. FileRulesCollectionList.Where(p =>
-			(p.Id?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.FriendlyName?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.FileDescription?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.FileName?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.FilePath?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.InternalName?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.PackageFamilyName?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.ProductName?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.Hash?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)
-			)];
+				filteredResults = FileRulesCollectionList.Where(p =>
+				(p.Id?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.FriendlyName?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.FileDescription?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.FileName?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.FilePath?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.InternalName?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.PackageFamilyName?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.ProductName?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.Hash?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)
+				).ToList();
 			});
 
 			FileRulesCollection.Clear();
@@ -1637,14 +1598,14 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 			{
 				// Perform a case-insensitive search in all relevant fields
 				filteredResults2 = [.. SignatureRulesCollectionList.Where(p =>
-			(p.Id?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.CertIssuer?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.CertificateEKU?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.CertOemID?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.CertPublisher?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.CertRoot?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-			(p.Name?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)
-			)];
+				(p.Id?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.CertIssuer?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.CertificateEKU?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.CertOemID?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.CertPublisher?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.CertRoot?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+				(p.Name?.ToString().Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ?? false)
+				)];
 			});
 
 			SignatureRulesCollection.Clear();
@@ -1729,6 +1690,83 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		foreach (PolicyEditor.SignatureBasedRulesForListView item in itemsToDelete)
 		{
 			RemoveSignatureRuleFromCollection(item);
+		}
+	}
+
+	/// <summary>
+	/// Clears all of the Policy Settings in the collection.
+	/// </summary>
+	internal void ClearAllPolicySettings() => PolicySettingsCollection.Clear();
+
+	/// <summary>
+	/// Removes the selected Policy Setting item from the collection.
+	/// </summary>
+	internal void RemoveSelectedPolicySetting()
+	{
+		if (PolicySettingsSelectedItem is null)
+			return;
+
+		_ = PolicySettingsCollection.Remove(PolicySettingsSelectedItem);
+	}
+
+	/// <summary>
+	/// Adds a new empty policy setting to the collection.
+	/// </summary>
+	internal void AddNewPolicySetting()
+	{
+		PolicyEditor.PolicySettings newSetting = new(
+			provider: string.Empty,
+			key: string.Empty,
+			value: string.Empty,
+			valueName: string.Empty,
+			valueStr: string.Empty,
+			type: 0,
+			parentViewModel: this
+		);
+
+		PolicySettingsCollection.Add(newSetting);
+	}
+
+	/// <summary>
+	/// Collection of preset policy settings that users can choose from
+	/// </summary>
+	internal List<PolicyEditor.PolicySettings> PresetPolicySettings { get; private set; }
+
+	/// <summary>
+	/// Adds the selected preset policy setting to the collection
+	/// </summary>
+	internal void AddPresetPolicySetting()
+	{
+		if (SelectedPresetPolicySetting is null) return;
+
+		// Create a copy of the setting so that their properties won't be tied to each other
+		PolicyEditor.PolicySettings newSetting = new(
+			parentViewModel: this,
+			provider: SelectedPresetPolicySetting.Provider,
+			key: SelectedPresetPolicySetting.Key,
+			value: SelectedPresetPolicySetting.Value,
+			valueStr: SelectedPresetPolicySetting.ValueStr,
+			valueName: SelectedPresetPolicySetting.ValueName,
+			type: SelectedPresetPolicySetting.Type
+		);
+
+		PolicySettingsCollection.Add(newSetting);
+	}
+
+	/// <summary>
+	/// Visibility property for the preset setting add button
+	/// </summary>
+	internal Visibility PresetAddButtonVisibility { get; set => SP(ref field, value); }
+
+	internal PolicyEditor.PolicySettings? SelectedPresetPolicySetting
+	{
+		get => field;
+		set
+		{
+			if (SP(ref field, value))
+			{
+				PresetAddButtonVisibility = field is null ? Visibility.Collapsed : Visibility.Visible;
+			}
 		}
 	}
 

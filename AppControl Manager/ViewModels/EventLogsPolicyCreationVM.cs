@@ -25,16 +25,16 @@ using AppControlManager.IntelGathering;
 using AppControlManager.Main;
 using AppControlManager.Others;
 using AppControlManager.XMLOps;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace AppControlManager.ViewModels;
 
 internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 {
 
-	private PolicyEditorVM PolicyEditorViewModel { get; } = App.AppHost.Services.GetRequiredService<PolicyEditorVM>();
+	private PolicyEditorVM PolicyEditorViewModel { get; } = ViewModelProvider.PolicyEditorVM;
 
 	internal EventLogsPolicyCreationVM()
 	{
@@ -76,20 +76,9 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 	/// </summary>
 	internal bool AreElementsEnabled { get; set => SP(ref field, value); } = true;
 
-	internal string TotalCountOfTheFilesTextBox { get; set => SP(ref field, value); } = "Total logs: 0";
+	internal string TotalCountOfTheFilesTextBox { get; set => SP(ref field, value); } = GlobalVars.GetStr("TotalLogsTextBlock/PlaceholderText");
 
-	// The default selected scan level
-	internal ScanLevels ScanLevel = ScanLevels.FilePublisher;
-	internal string ScanLevelComboBoxSelectedItem
-	{
-		get; set
-		{
-			if (SP(ref field, value))
-			{
-				ScanLevel = StringToScanLevel[field];
-			}
-		}
-	} = ScanLevelToString[ScanLevels.FilePublisher];
+	internal ScanLevelsComboBoxType ScanLevelComboBoxSelectedItem { get; set => SP(ref field, value); } = DefaultScanLevel;
 
 	/// <summary>
 	/// Bound to the Date Picker on the UI.
@@ -169,27 +158,27 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 	{
 
 		// Measure header text widths first.
-		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileNameHeader/Text"));
-		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("TimeCreatedHeader/Text"));
-		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignatureStatusHeader/Text"));
-		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("ActionHeader/Text"));
-		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("OriginalFileNameHeader/Text"));
-		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("InternalNameHeader/Text"));
-		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileDescriptionHeader/Text"));
-		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("ProductNameHeader/Text"));
-		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileVersionHeader/Text"));
-		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("PackageFamilyNameHeader/Text"));
-		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA256HashHeader/Text"));
-		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA1HashHeader/Text"));
-		double maxWidth13 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SigningScenarioHeader/Text"));
-		double maxWidth14 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FilePathHeader/Text"));
-		double maxWidth15 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA1FlatHashHeader/Text"));
-		double maxWidth16 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA256FlatHashHeader/Text"));
-		double maxWidth17 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FilePublishersHeader/Text"));
-		double maxWidth18 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("OpusDataHeader/Text"));
-		double maxWidth19 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("PolicyGUIDHeader/Text"));
-		double maxWidth20 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("PolicyNameHeader/Text"));
-		double maxWidth21 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("ComputerNameHeader/Text"));
+		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileNameHeader/Text"));
+		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.GetStr("TimeCreatedHeader/Text"));
+		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignatureStatusHeader/Text"));
+		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.GetStr("ActionHeader/Text"));
+		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.GetStr("OriginalFileNameHeader/Text"));
+		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.GetStr("InternalNameHeader/Text"));
+		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileDescriptionHeader/Text"));
+		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.GetStr("ProductNameHeader/Text"));
+		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileVersionHeader/Text"));
+		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.GetStr("PackageFamilyNameHeader/Text"));
+		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA256HashHeader/Text"));
+		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA1HashHeader/Text"));
+		double maxWidth13 = ListViewHelper.MeasureText(GlobalVars.GetStr("SigningScenarioHeader/Text"));
+		double maxWidth14 = ListViewHelper.MeasureText(GlobalVars.GetStr("FilePathHeader/Text"));
+		double maxWidth15 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA1FlatHashHeader/Text"));
+		double maxWidth16 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA256FlatHashHeader/Text"));
+		double maxWidth17 = ListViewHelper.MeasureText(GlobalVars.GetStr("FilePublishersHeader/Text"));
+		double maxWidth18 = ListViewHelper.MeasureText(GlobalVars.GetStr("OpusDataHeader/Text"));
+		double maxWidth19 = ListViewHelper.MeasureText(GlobalVars.GetStr("PolicyGUIDHeader/Text"));
+		double maxWidth20 = ListViewHelper.MeasureText(GlobalVars.GetStr("PolicyNameHeader/Text"));
+		double maxWidth21 = ListViewHelper.MeasureText(GlobalVars.GetStr("ComputerNameHeader/Text"));
 
 		// Iterate over all items to determine the widest string for each column.
 		foreach (FileIdentity item in FileIdentities)
@@ -244,7 +233,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 	#endregion
 
 
-	internal string CreatePolicyButtonContent { get; set => SP(ref field, value); } = GlobalVars.Rizz.GetString("CreatePolicyForSelectedBase");
+	internal string CreatePolicyButtonContent { get; set => SP(ref field, value); } = GlobalVars.GetStr("CreatePolicyForSelectedBase");
 
 	internal int SelectedCreationMethod
 	{
@@ -254,10 +243,10 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 			{
 				CreatePolicyButtonContent = field switch
 				{
-					0 => GlobalVars.Rizz.GetString("AddLogsToSelectedPolicyMessage"),
-					1 => GlobalVars.Rizz.GetString("CreatePolicyForSelectedBase"),
-					2 => GlobalVars.Rizz.GetString("CreatePolicyForBaseGUIDMessage"),
-					_ => GlobalVars.Rizz.GetString("DefaultCreatePolicy")
+					0 => GlobalVars.GetStr("AddLogsToSelectedPolicyMessage"),
+					1 => GlobalVars.GetStr("CreatePolicyForSelectedBase"),
+					2 => GlobalVars.GetStr("CreatePolicyForBaseGUIDMessage"),
+					_ => GlobalVars.GetStr("DefaultCreatePolicy")
 				};
 			}
 		}
@@ -297,15 +286,14 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 	{
 		if (Zero == true)
 		{
-			TotalCountOfTheFilesTextBox = GlobalVars.Rizz.GetString("TotalLogsZeroMessage");
+			TotalCountOfTheFilesTextBox = GlobalVars.GetStr("TotalLogsTextBlock/PlaceholderText");
 		}
 		else
 		{
 			TotalCountOfTheFilesTextBox = string.Format(
-				GlobalVars.Rizz.GetString("TotalLogsCountMessage"), FileIdentities.Count);
+				GlobalVars.GetStr("TotalLogsCountMessage"), FileIdentities.Count);
 		}
 	}
-
 
 
 	/// <summary>
@@ -396,10 +384,9 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 	/// <summary>
 	/// Event handler to open the supplemental policy in the Policy Editor
 	/// </summary>
-	internal async void OpenInPolicyEditor()
-	{
-		await PolicyEditorViewModel.OpenInPolicyEditor(finalSupplementalPolicyPath);
-	}
+	internal async void OpenInPolicyEditor() => await PolicyEditorViewModel.OpenInPolicyEditor(finalSupplementalPolicyPath);
+
+	internal async void OpenInDefaultFileHandler_Internal() => await OpenInDefaultFileHandler(finalSupplementalPolicyPath);
 
 	/// <summary>
 	/// Event handler for the select Code Integrity EVTX file path button
@@ -415,7 +402,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 
 			// Log the selection with a localized message
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("SelectedCodeIntegrityEvtxForScanning"),
+				GlobalVars.GetStr("SelectedCodeIntegrityEvtxForScanning"),
 				selectedFile
 			));
 		}
@@ -436,7 +423,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 
 			// Log the selection with a localized message
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("SelectedAppLockerEvtxForScanning"),
+				GlobalVars.GetStr("SelectedAppLockerEvtxForScanning"),
 				selectedFile
 			));
 		}
@@ -455,7 +442,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 			PolicyToAddLogsTo = selectedFile;
 
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("SelectedFileToAddLogsToMessage"),
+				GlobalVars.GetStr("SelectedFileToAddLogsToMessage"),
 				PolicyToAddLogsTo));
 		}
 	}
@@ -473,7 +460,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 			BasePolicyXMLFile = selectedFile;
 
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("SelectedBasePolicyFileMessage"),
+				GlobalVars.GetStr("SelectedBasePolicyFileMessage"),
 				BasePolicyXMLFile));
 		}
 	}
@@ -488,7 +475,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 		if (!Guid.TryParse(BasePolicyGUID, out _))
 		{
 			throw new ArgumentException(
-				GlobalVars.Rizz.GetString("InvalidGuidMessage"));
+				GlobalVars.GetStr("InvalidGuidMessage"));
 		}
 	}
 
@@ -508,7 +495,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 
 			ClearDataButton_Click();
 
-			MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("ScanningEventLogsMessage"));
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("ScanningEventLogsMessage"));
 
 			// Display the progress ring on the ScanLogs button
 			ScanLogsProgressRingIsActive = true;
@@ -539,7 +526,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 		catch (Exception ex)
 		{
 			error = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorDuringLogsScanMessage"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("ErrorDuringLogsScanMessage"));
 		}
 		finally
 		{
@@ -556,7 +543,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 			if (!error)
 			{
 				MainInfoBar.WriteSuccess(string.Format(
-					GlobalVars.Rizz.GetString("ScanCompleteLogsFoundMessage"),
+					GlobalVars.GetStr("ScanCompleteLogsFoundMessage"),
 					AllFileIdentities.Count
 				));
 			}
@@ -584,18 +571,18 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 
 			MainInfoBar.IsClosable = false;
 
-			MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("ProcessingLogsMessage"));
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("ProcessingLogsMessage"));
 
 			if (FileIdentities.Count is 0)
 			{
 				throw new InvalidOperationException(
-					GlobalVars.Rizz.GetString("NoLogsUseScanButtonMessage"));
+					GlobalVars.GetStr("NoLogsUseScanButtonMessage"));
 			}
 
 			if (PolicyToAddLogsTo is null && BasePolicyXMLFile is null && BasePolicyGUID is null)
 			{
 				throw new InvalidOperationException(
-					GlobalVars.Rizz.GetString("MustSelectOptionMessage"));
+					GlobalVars.GetStr("MustSelectOptionMessage"));
 			}
 
 			// Create a policy name if it wasn't provided
@@ -609,7 +596,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 			if (string.IsNullOrWhiteSpace(policyName))
 			{
 				policyName = string.Format(
-					GlobalVars.Rizz.GetString("DefaultPolicyNameFormat"),
+					GlobalVars.GetStr("DefaultPolicyNameFormat"),
 					formattedDate);
 			}
 
@@ -648,7 +635,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 				string EmptyPolicyPath = PrepareEmptyPolicy.Prepare(stagingArea.FullName);
 
 				// Separate the signed and unsigned data
-				FileBasedInfoPackage DataPackage = SignerAndHashBuilder.BuildSignerAndHashObjects(data: SelectedLogs, level: ScanLevel);
+				FileBasedInfoPackage DataPackage = SignerAndHashBuilder.BuildSignerAndHashObjects(data: SelectedLogs, level: ScanLevelComboBoxSelectedItem.Level);
 
 				// Insert the data into the empty policy file
 				Master.Initiate(DataPackage, EmptyPolicyPath, SiPolicyIntel.Authorization.Allow);
@@ -680,7 +667,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 							else
 							{
 								throw new InvalidOperationException(
-									GlobalVars.Rizz.GetString("NoPolicySelectedToAddLogsMessage"));
+									GlobalVars.GetStr("NoPolicySelectedToAddLogsMessage"));
 							}
 
 							break;
@@ -719,7 +706,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 							else
 							{
 								throw new InvalidOperationException(
-									GlobalVars.Rizz.GetString("NoPolicyFileSelectedToAssociateErrorMessage"));
+									GlobalVars.GetStr("NoPolicyFileSelectedToAssociateErrorMessage"));
 							}
 
 							break;
@@ -758,7 +745,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 							else
 							{
 								throw new InvalidOperationException(
-									GlobalVars.Rizz.GetString("NoBasePolicyGuidProvidedMessage"));
+									GlobalVars.GetStr("NoBasePolicyGuidProvidedMessage"));
 							}
 
 							break;
@@ -773,7 +760,7 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 		catch (Exception ex)
 		{
 			error = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorProcessingLogsMessage"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("ErrorProcessingLogsMessage"));
 		}
 		finally
 		{
@@ -787,11 +774,39 @@ internal sealed partial class EventLogsPolicyCreationVM : ViewModelBase
 
 			if (!error)
 			{
-				MainInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("SuccessProcessedLogsMessage"));
+				MainInfoBar.WriteSuccess(GlobalVars.GetStr("SuccessProcessedLogsMessage"));
 
 				OpenInPolicyEditorInfoBarActionButtonVisibility = Visibility.Visible;
 			}
 		}
 	}
 
+	/// <summary>
+	/// CTRL + C shortcuts event handler
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="args"></param>
+	internal void CtrlC_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+	{
+		ListViewFlyoutMenuCopy_Click();
+		args.Handled = true;
+	}
+
+	internal void HeaderColumnSortingButton_Click(object sender, RoutedEventArgs e)
+	{
+		if (sender is Button button && button.Tag is string key)
+		{
+			if (ListViewHelper.PropertyMappings.TryGetValue(key, out (string Label, Func<FileIdentity, object?> Getter) mapping))
+			{
+				ListViewHelper.SortColumn(
+					mapping.Getter,
+					SearchBoxText,
+					AllFileIdentities,
+					FileIdentities,
+					SortState,
+					key,
+					regKey: ListViewHelper.ListViewsRegistry.Event_Logs);
+			}
+		}
+	}
 }

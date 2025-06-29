@@ -19,16 +19,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using AppControlManager.MicrosoftGraph;
 using AppControlManager.Others;
 using AppControlManager.Taskbar;
 using AppControlManager.ViewModels;
 using AppControlManager.WindowComponents;
 using CommunityToolkit.WinUI;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Windows.ApplicationModel.WindowsAppRuntime;
@@ -66,6 +64,11 @@ public partial class App : Application
 	internal static readonly string AUMID = AppInfo.Current.AppUserModelId;
 
 	/// <summary>
+	/// To determine whether the app has Administrator privileges
+	/// </summary>
+	internal static readonly bool IsElevated = Environment.IsPrivilegedProcess;
+
+	/// <summary>
 	/// Detects the source of the application.
 	/// GitHub => 0
 	/// Microsoft Store => 1
@@ -74,9 +77,10 @@ public partial class App : Application
 	internal static readonly int PackageSource = string.Equals(PFN, "AppControlManager_sadt7br7jpt02", StringComparison.OrdinalIgnoreCase) ? 0 : (string.Equals(PFN, "VioletHansen.AppControlManager_ea7andspwdn10", StringComparison.OrdinalIgnoreCase) ? 1 : 2);
 
 	/// <summary>
-	/// The application settings for AppControl Manager
+	/// The application settings for AppControl Manager. Retrieved early in a Non-ThreadSafe manner.
+	/// Any references (instance or static) throughout the app to App settings use this property.
 	/// </summary>
-	internal static AppSettings.Main Settings { get; private set; } = null!;
+	internal static AppSettings.Main Settings => ViewModelProvider.AppSettings;
 
 	// Semaphore to ensure only one error dialog is shown at a time
 	// Exceptions will stack up and wait in line to be shown to the user
@@ -101,11 +105,6 @@ public partial class App : Application
 	private const string MutexName = "AppControlManagerRunning";
 
 	/// <summary>
-	/// To determine whether the app has Administrator privileges
-	/// </summary>
-	internal static readonly bool IsElevated = Environment.IsPrivilegedProcess;
-
-	/// <summary>
 	/// The directory where the logs will be stored
 	/// </summary>
 	internal static readonly string LogsDirectory = IsElevated ?
@@ -116,16 +115,9 @@ public partial class App : Application
 	// to this variable before using ShowAsync() method to display it.
 	internal static ContentDialog? CurrentlyOpenContentDialog;
 
-	/// <summary>
-	/// Provides a static host for the dependency injection container used throughout the application. It configures and
-	/// registers various view models as singletons.
-	/// </summary>
-	internal static IHost AppHost { get; private set; } = null!;
+	internal static NavigationService _nav => ViewModelProvider.NavigationService;
 
-	internal static NavigationService _nav { get; private set; } = null!;
-
-	private static MainWindowVM ViewModelForMainWindow { get; set; } = null!;
-	private static PolicyEditorVM PolicyEditorViewModel { get; set; } = null!;
+	private static PolicyEditorVM PolicyEditorViewModel => ViewModelProvider.PolicyEditorVM;
 
 	/// <summary>
 	/// Initializes the singleton application object. This is the first line of authored code
@@ -133,57 +125,7 @@ public partial class App : Application
 	/// </summary>
 	internal App()
 	{
-		// Retrieve the app settings early on to check for elevation at startup and to pass it to DI container for the constructor of the Main app settings class
-		ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
-
 		this.InitializeComponent();
-
-		HostApplicationBuilderSettings builderSettings = new()
-		{
-			DisableDefaults = true
-		};
-
-		// https://learn.microsoft.com/dotnet/api/microsoft.extensions.hosting.host.createemptyapplicationbuilder
-		HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(builderSettings);
-
-		// https://learn.microsoft.com/dotnet/api/microsoft.extensions.hosting.hostapplicationbuilder.services
-		IServiceCollection services = builder.Services;
-
-		// https://learn.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection
-
-		// If a type has a constructor it must either be public so DI can automatically resolve its parameters,
-		// or it can be internal but the value must be supplied to it via lambda factory method.
-		_ = services.AddSingleton(sp => new AppSettings.Main(_localSettings));
-		_ = services.AddSingleton<SidebarVM>();
-		_ = services.AddSingleton(sp => new ViewCurrentPoliciesVM());
-		_ = services.AddSingleton(sp => new SettingsVM());
-		_ = services.AddSingleton(sp => new MergePoliciesVM());
-		_ = services.AddSingleton(sp => new ConfigurePolicyRuleOptionsVM());
-		_ = services.AddSingleton<AllowNewAppsVM>(sp => new(sp.GetRequiredService<EventLogUtility>(), sp.GetRequiredService<PolicyEditorVM>()));
-		_ = services.AddSingleton(sp => new CreateDenyPolicyVM());
-		_ = services.AddSingleton(sp => new CreateSupplementalPolicyVM());
-		_ = services.AddSingleton(sp => new EventLogsPolicyCreationVM());
-		_ = services.AddSingleton(sp => new SimulationVM());
-		_ = services.AddSingleton(sp => new MDEAHPolicyCreationVM());
-		_ = services.AddSingleton(sp => new ViewFileCertificatesVM());
-		_ = services.AddSingleton(sp => new MainWindowVM());
-		_ = services.AddSingleton(sp => new CreatePolicyVM());
-		_ = services.AddSingleton(sp => new DeploymentVM());
-		_ = services.AddSingleton(sp => new UpdateVM());
-		_ = services.AddSingleton(sp => new ValidatePolicyVM());
-		_ = services.AddSingleton(sp => new CodeIntegrityInfoVM());
-		_ = services.AddSingleton(sp => new GetCIHashesVM());
-		_ = services.AddSingleton(sp => new EventLogUtility());
-		_ = services.AddSingleton<NavigationService>(sp => new(sp.GetRequiredService<MainWindowVM>(), sp.GetRequiredService<SidebarVM>()));
-		_ = services.AddSingleton<ViewModelForMSGraph>();
-		_ = services.AddSingleton<ViewOnlinePoliciesVM>(sp => new(sp.GetRequiredService<ViewModelForMSGraph>()));
-		_ = services.AddSingleton(sp => new PolicyEditorVM());
-		_ = services.AddSingleton(sp => new BuildNewCertificateVM());
-		_ = services.AddSingleton(sp => new GetSecurePolicySettingsVM());
-
-		AppHost = builder.Build();
-
-		Settings = AppHost.Services.GetRequiredService<AppSettings.Main>();
 
 		// Set the language of the application to the user's preferred language
 		ApplicationLanguages.PrimaryLanguageOverride = Settings.ApplicationGlobalLanguage;
@@ -202,7 +144,7 @@ public partial class App : Application
 		// Subscribe to UnobservedTaskException events
 		TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
-		Logger.Write(string.Format(GlobalVars.Rizz.GetString("AppStartupMessage"), Environment.Version));
+		Logger.Write(string.Format(GlobalVars.GetStr("AppStartupMessage"), Environment.Version));
 
 		// https://github.com/microsoft/WindowsAppSDK/blob/main/specs/VersionInfo/VersionInfo.md
 		Logger.Write($"Built with Windows App SDK: {ReleaseInfo.AsString} - Runtime Info: {RuntimeInfo.AsString}");
@@ -282,7 +224,7 @@ public partial class App : Application
 
 		if (!IsUniqueAppInstance)
 		{
-			Logger.Write(GlobalVars.Rizz.GetString("AnotherInstanceRunningMessage"));
+			Logger.Write(GlobalVars.GetStr("AnotherInstanceRunningMessage"));
 		}
 
 		// Determines whether the session must prompt for UAC to elevate or not
@@ -296,7 +238,7 @@ public partial class App : Application
 
 			if (activatedEventArgs.Kind is ExtendedActivationKind.File)
 			{
-				Logger.Write(GlobalVars.Rizz.GetString("FileActivationDetectedMessage"));
+				Logger.Write(GlobalVars.GetStr("FileActivationDetectedMessage"));
 
 				IFileActivatedEventArgs? fileActivatedArgs = activatedEventArgs.Data as IFileActivatedEventArgs;
 
@@ -322,12 +264,46 @@ public partial class App : Application
 					}
 					else
 					{
-						Logger.Write(GlobalVars.Rizz.GetString("FileActivationNoObjectsMessage"));
+						Logger.Write(GlobalVars.GetStr("FileActivationNoObjectsMessage"));
 					}
 				}
 				else
 				{
-					Logger.Write(GlobalVars.Rizz.GetString("FileActivationNoArgumentsMessage"));
+					Logger.Write(GlobalVars.GetStr("FileActivationNoArgumentsMessage"));
+				}
+			}
+			else if (activatedEventArgs.Kind is ExtendedActivationKind.Protocol)
+			{
+				ProtocolActivatedEventArgs? eventArgs = activatedEventArgs.Data as ProtocolActivatedEventArgs;
+
+				string? protocolName = eventArgs?.Uri?.OriginalString;
+
+				if (protocolName is not null)
+				{
+
+					Logger.Write($"Protocol Activation Detected: {protocolName}");
+
+
+					Match match = ProtocolDetailsExtraction.Match(protocolName);
+
+					string? action = null;
+					string? filePath = null;
+
+					if (match.Success)
+					{
+						action = match.Groups[1].Value;
+						filePath = match.Groups[2].Value;
+
+						Logger.Write($"Action: {action}");
+						Logger.Write($"File Path: {filePath}");
+					}
+
+					if (filePath is not null && action is not null)
+					{
+
+						Settings.LaunchActivationFilePath = filePath;
+						Settings.LaunchActivationAction = action;
+					}
 				}
 			}
 			else
@@ -398,7 +374,7 @@ public partial class App : Application
 			catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 1223)
 			{
 				// Do nothing if the user cancels the UAC prompt.
-				Logger.Write("User canceled the UAC prompt.");
+				Logger.Write(GlobalVars.GetStr("UserCanceledUACMessage"));
 			}
 			catch (System.ComponentModel.Win32Exception ex)
 			{
@@ -424,31 +400,32 @@ public partial class App : Application
 			}
 			*/
 
-			if (ReLaunch.Action())
+			if (Relaunch.Action())
 			{
 				// Exit the process
 				Environment.Exit(0);
 			}
 			else if (requireAdminPrivilege)
 			{
-				Logger.Write(GlobalVars.Rizz.GetString("ElevationRequiredButDeniedMessage"));
+				Logger.Write(GlobalVars.GetStr("ElevationRequiredButDeniedMessage"));
 
 				// Exit the process anyway since admin privileges were required but user didn't successfully elevate
 				Environment.Exit(0);
 			}
 			else
 			{
-				Logger.Write(GlobalVars.Rizz.GetString("ElevationDeniedMessage"));
+				Logger.Write(GlobalVars.GetStr("ElevationDeniedMessage"));
 			}
 		}
 
 		m_window = new MainWindow();
+
+		MainWindowVM.SetCaptionButtonsFlowDirection(string.Equals(Settings.ApplicationGlobalFlowDirection, "LeftToRight", StringComparison.OrdinalIgnoreCase) ? FlowDirection.LeftToRight : FlowDirection.RightToLeft);
+
+		NavigationService.RestoreWindowSize(m_window.AppWindow); // Restore window size on startup		
+		_nav.mainWindowVM.OnIconsStylesChanged(Settings.IconsStyle); // Set the initial Icons styles based on the user's settings
 		m_window.Closed += Window_Closed;  // Assign event handler for the window closed event
 		m_window.Activate();
-		_nav = AppHost.Services.GetRequiredService<NavigationService>(); // Retrieve the navigation instance
-
-		ViewModelForMainWindow = AppHost.Services.GetRequiredService<MainWindowVM>();
-		PolicyEditorViewModel = AppHost.Services.GetRequiredService<PolicyEditorVM>();
 
 		// If the app was forcefully exited previously while there was a badge being displayed on the taskbar icon we have to remove it on app startup otherwise it will be there!
 		Badge.ClearBadge();
@@ -457,11 +434,7 @@ public partial class App : Application
 
 		if (!string.IsNullOrWhiteSpace(Settings.FileActivatedLaunchArg))
 		{
-			Logger.Write(string.Format(GlobalVars.Rizz.GetString("FileActivationLaunchMessage"), Settings.FileActivatedLaunchArg));
-
-			// Set the "Policy Editor" item as selected in the NavigationView
-			ViewModelForMainWindow.NavViewSelectedItem = ViewModelForMainWindow.allNavigationItems
-				.First(item => string.Equals(item.Tag.ToString(), "PolicyEditor", StringComparison.OrdinalIgnoreCase));
+			Logger.Write(string.Format(GlobalVars.GetStr("FileActivationLaunchMessage"), Settings.FileActivatedLaunchArg));
 
 			try
 			{
@@ -469,7 +442,7 @@ public partial class App : Application
 			}
 			catch (Exception ex)
 			{
-				Logger.Write(string.Format(GlobalVars.Rizz.GetString("PolicyEditorLaunchErrorMessage"), ex.Message));
+				Logger.Write(string.Format(GlobalVars.GetStr("PolicyEditorLaunchErrorMessage"), ex.Message));
 
 				// Continue doing the normal navigation if there was a problem
 				InitialNav();
@@ -485,30 +458,35 @@ public partial class App : Application
 		{
 			try
 			{
-				if (string.Equals(Settings.LaunchActivationAction, "PolicyEditor", StringComparison.OrdinalIgnoreCase))
+				if (Enum.TryParse(Settings.LaunchActivationAction, true, out ViewModelBase.LaunchProtocolActions parsedAction))
 				{
-					ViewModelForMainWindow.NavViewSelectedItem = ViewModelForMainWindow.allNavigationItems
-					.First(item => string.Equals(item.Tag.ToString(), "PolicyEditor", StringComparison.OrdinalIgnoreCase));
+					switch (parsedAction)
+					{
+						case ViewModelBase.LaunchProtocolActions.PolicyEditor:
+							{
+								await PolicyEditorViewModel.OpenInPolicyEditor(Settings.LaunchActivationFilePath);
+								break;
+							}
+						case ViewModelBase.LaunchProtocolActions.FileSignature:
+							{
+								ViewFileCertificatesVM vm = ViewModelProvider.ViewFileCertificatesVM;
 
-					await PolicyEditorViewModel.OpenInPolicyEditor(Settings.LaunchActivationFilePath);
-				}
-				else if (string.Equals(Settings.LaunchActivationAction, "FileSignature", StringComparison.OrdinalIgnoreCase))
-				{
-					ViewFileCertificatesVM vm = AppHost.Services.GetRequiredService<ViewFileCertificatesVM>();
+								await vm.OpenInViewFileCertificatesVM(Settings.LaunchActivationFilePath);
+								break;
+							}
+						case ViewModelBase.LaunchProtocolActions.FileHashes:
+							{
+								GetCIHashesVM vm = ViewModelProvider.GetCIHashesVM;
 
-					ViewModelForMainWindow.NavViewSelectedItem = ViewModelForMainWindow.allNavigationItems
-					.First(item => string.Equals(item.Tag.ToString(), "ViewFileCertificates", StringComparison.OrdinalIgnoreCase));
-
-					await vm.OpenInViewFileCertificatesVM(Settings.LaunchActivationFilePath);
-				}
-				else if (string.Equals(Settings.LaunchActivationAction, "FileHashes", StringComparison.OrdinalIgnoreCase))
-				{
-					GetCIHashesVM vm = AppHost.Services.GetRequiredService<GetCIHashesVM>();
-
-					ViewModelForMainWindow.NavViewSelectedItem = ViewModelForMainWindow.allNavigationItems
-					.First(item => string.Equals(item.Tag.ToString(), "GetCodeIntegrityHashes", StringComparison.OrdinalIgnoreCase));
-
-					await vm.OpenInGetCIHashes(Settings.LaunchActivationFilePath);
+								await vm.OpenInGetCIHashes(Settings.LaunchActivationFilePath);
+								break;
+							}
+						default:
+							{
+								InitialNav();
+								break;
+							}
+					}
 				}
 				else
 				{
@@ -547,23 +525,8 @@ public partial class App : Application
 	/// </summary>
 	private static void InitialNav()
 	{
-		if (IsElevated)
-		{
-			// Navigate to the CreatePolicy page when the window is loaded
-			_nav.Navigate(typeof(Pages.CreatePolicy));
-
-			// Set the "Create Policy" item as selected in the NavigationView
-			ViewModelForMainWindow.NavViewSelectedItem = ViewModelForMainWindow.allNavigationItems
-				.First(item => string.Equals(item.Tag.ToString(), "CreatePolicy", StringComparison.OrdinalIgnoreCase));
-		}
-		else
-		{
-			_nav.Navigate(typeof(Pages.PolicyEditor));
-
-			// Set the "Policy Editor" item as selected in the NavigationView
-			ViewModelForMainWindow.NavViewSelectedItem = ViewModelForMainWindow.allNavigationItems
-				.First(item => string.Equals(item.Tag.ToString(), "PolicyEditor", StringComparison.OrdinalIgnoreCase));
-		}
+		// Navigate to the CreatePolicy page when the window is loaded and is Admin, else Policy Editor
+		_nav.Navigate(IsElevated ? typeof(Pages.CreatePolicy) : typeof(Pages.PolicyEditor));
 	}
 
 	/// <summary>
@@ -629,14 +592,12 @@ public partial class App : Application
 			}
 			catch (Exception ex)
 			{
-				Logger.Write(string.Format(GlobalVars.Rizz.GetString("WindowSizeSaveErrorMessage"), ex.Message));
+				Logger.Write(string.Format(GlobalVars.GetStr("WindowSizeSaveErrorMessage"), ex.Message));
 			}
 		}
 
 		// Release the Mutex
 		_mutex?.Dispose();
-
-		_nav.DisposeUserActivitySession();
 	}
 
 	/// <summary>
@@ -666,9 +627,9 @@ public partial class App : Application
 
 					using CustomUIElements.ContentDialogV2 errorDialog = new()
 					{
-						Title = GlobalVars.Rizz.GetString("ErrorDialogTitle"),
-						Content = string.Format(GlobalVars.Rizz.GetString("ErrorDialogContent"), ex.Message),
-						CloseButtonText = GlobalVars.Rizz.GetString("OK"),
+						Title = GlobalVars.GetStr("ErrorDialogTitle"),
+						Content = string.Format(GlobalVars.GetStr("ErrorDialogContent"), ex.Message),
+						CloseButtonText = GlobalVars.GetStr("OK"),
 					};
 
 					// Show the dialog
@@ -682,4 +643,13 @@ public partial class App : Application
 			}
 		}
 	}
+
+
+	private const string Pattern = @"^appcontrol-manager:--action=([^-]+(?:--(?!file=).*?)*)--file=(.+)$";
+
+	private static readonly Regex ProtocolDetailsExtraction = Regex1();
+
+	[GeneratedRegex(Pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant)]
+	private static partial Regex Regex1();
+
 }

@@ -9,7 +9,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:animatedvisuals="using:AnimatedVisuals"
-    FlowDirection="{x:Bind AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
+    xmlns:intelgathering="using:AppControlManager.IntelGathering"
+    FlowDirection="{x:Bind ViewModel.AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
     mc:Ignorable="d">
 
     <ScrollView>
@@ -56,7 +57,9 @@
                     <controls:WrapPanel Grid.Row="0" Orientation="Vertical" VerticalSpacing="8" HorizontalSpacing="8" Margin="0,0,0,15">
 
                         <controls:WrapPanel Orientation="Horizontal" HorizontalSpacing="10" VerticalSpacing="10">
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Step 1" Foreground="{ThemeResource SystemAccentColor}" />
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                                       x:Uid="Step1TextBlock"
+                                       Foreground="{ThemeResource SystemAccentColor}" />
                             <ProgressRing IsActive="{x:Bind ViewModel.Step1ProgressRingIsActive, Mode=OneWay}" Margin="0,0,15,0"/>
                         </controls:WrapPanel>
 
@@ -65,17 +68,15 @@
 
                     <controls:WrapPanel Grid.Row="1" Orientation="Horizontal" VerticalSpacing="15" HorizontalSpacing="15">
 
-                        <TextBox
-                            Text="{x:Bind ViewModel.selectedSupplementalPolicyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Header="Supplemental Policy Name"
-                            PlaceholderText="Enter a name for the Supplemental Policy"
-                            IsEnabled="{x:Bind ViewModel.SupplementalPolicyNameTextBoxIsEnabled, Mode=OneWay}" />
+                        <TextBox Text="{x:Bind ViewModel.selectedSupplementalPolicyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 x:Uid="SupplementalPolicyNameAllowNewAppsTextBox"
+                                 IsEnabled="{x:Bind ViewModel.SupplementalPolicyNameTextBoxIsEnabled, Mode=OneWay}" />
 
                         <customUI:ButtonV2 x:Name="BrowseForXMLPolicyButton"
-                               IsEnabled="{x:Bind ViewModel.BrowseForXMLPolicyButtonIsEnabled, Mode=OneWay}"
-                               Click="{x:Bind ViewModel.BrowseForXMLPolicyButton_Click}"
-                               Margin="0,27,0,0"
-                               ToolTipService.ToolTip="Click/Tap to choose a Base policy XML file from your device.">
+                                           IsEnabled="{x:Bind ViewModel.BrowseForXMLPolicyButtonIsEnabled, Mode=OneWay}"
+                                           Click="{x:Bind ViewModel.BrowseForXMLPolicyButton_Click}"
+                                           Margin="0,27,0,0"
+                                           ToolTipService.ToolTip="Click/Tap to choose a Base policy XML file from your device.">
 
                             <customUI:ButtonV2.Flyout>
                                 <Flyout x:Name="BrowseForXMLPolicyButton_FlyOut">
@@ -111,38 +112,40 @@
 
                         </customUI:ButtonV2>
 
-                        <NumberBox
-                            x:Uid="LogSizeNumberBox"
-                            IsEnabled="{x:Bind ViewModel.LogSizeNumberBoxIsEnabled, Mode=OneWay}"
-                            Value="{x:Bind ViewModel.EventLogsUtil.MaxSizeMB, Mode=TwoWay}"
-                            SpinButtonPlacementMode="Inline"
-                            SmallChange="1"
-                            LargeChange="10" Minimum="2" Maximum="{x:Bind ViewModel.EventLogsUtil.MaxNumberBoxValue, Mode=OneTime}" />
+                        <NumberBox x:Uid="LogSizeNumberBox"
+                                   IsEnabled="{x:Bind ViewModel.LogSizeNumberBoxIsEnabled, Mode=OneWay}"
+                                   Value="{x:Bind ViewModel.EventLogsUtil.MaxSizeMB, Mode=TwoWay}"
+                                   SpinButtonPlacementMode="Inline"
+                                   SmallChange="1"
+                                   LargeChange="10"
+                                   Minimum="2"
+                                   Maximum="{x:Bind ViewModel.EventLogsUtil.MaxNumberBoxValue, Mode=OneTime}" />
 
                         <Button IsEnabled="{x:Bind ViewModel.GoToStep2ButtonIsEnabled, Mode=OneWay}"
                                 Click="{x:Bind ViewModel.GoToStep2Button_Click}"
                                 Margin="0,27,0,0"
-                                Content="Go to step 2"
-                                ToolTipService.ToolTip="Start deploying the selected policy in Audit mode and go to step 2"
+                                x:Uid="GoToStep2AllowNewAppsButton"
                                 Style="{StaticResource AccentButtonStyle}"/>
 
                     </controls:WrapPanel>
 
                     <customUI:InfoBarV2 Severity="{x:Bind ViewModel.Step1InfoBar_Severity, Mode=OneWay}"
-                             IsOpen="{x:Bind ViewModel.Step1InfoBar_IsOpen, Mode=TwoWay}"
-                             IsClosable='{x:Bind ViewModel.Step1InfoBar_IsClosable, Mode=OneWay}'
-                             Message="{x:Bind ViewModel.Step1InfoBar_Message, Mode=OneWay}"
-                             Margin="0,20,0,0" Grid.Row="2"/>
+                                        IsOpen="{x:Bind ViewModel.Step1InfoBar_IsOpen, Mode=TwoWay}"
+                                        IsClosable='{x:Bind ViewModel.Step1InfoBar_IsClosable, Mode=OneWay}'
+                                        Message="{x:Bind ViewModel.Step1InfoBar_Message, Mode=OneWay}"
+                                        Margin="0,20,0,0" Grid.Row="2"/>
 
                 </Grid>
             </Border>
 
-            <Border
-                BorderBrush="{x:Bind ViewModel.Step2Border_Brush, Mode=OneWay}"
-                BorderThickness="{x:Bind ViewModel.Step2Border_Thickness, Mode=OneWay}"
-                Translation="{x:Bind ViewModel.Step2Border_Translation, Mode=OneWay}"
-                Shadow="{x:Bind ViewModel.Step2Border_Shadow, Mode=OneWay}"
-                Grid.Row="2" Style="{StaticResource GridCardStyle}" Padding="8" Margin="6,0,10,20">
+            <Border BorderBrush="{x:Bind ViewModel.Step2Border_Brush, Mode=OneWay}"
+                    BorderThickness="{x:Bind ViewModel.Step2Border_Thickness, Mode=OneWay}"
+                    Translation="{x:Bind ViewModel.Step2Border_Translation, Mode=OneWay}"
+                    Shadow="{x:Bind ViewModel.Step2Border_Shadow, Mode=OneWay}"
+                    Grid.Row="2"
+                    Style="{StaticResource GridCardStyle}"
+                    Padding="8"
+                    Margin="6,0,10,20">
 
                 <Grid Opacity="{x:Bind ViewModel.Step2GridOpacity, Mode=OneWay}">
                     <Grid.RowDefinitions>
@@ -154,7 +157,9 @@
                     <controls:WrapPanel Grid.Row="0" Orientation="Vertical" VerticalSpacing="8" HorizontalSpacing="8" Margin="0,0,0,15">
 
                         <controls:WrapPanel Orientation="Horizontal" HorizontalSpacing="10" VerticalSpacing="10">
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Step 2" Foreground="{ThemeResource SystemAccentColor}" />
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                                       x:Uid="Step2TextBlock"
+                                       Foreground="{ThemeResource SystemAccentColor}" />
                             <ProgressRing
                                 Value="{x:Bind ViewModel.Step2ProgressRingValue,Mode=OneWay}"
                                 IsActive="{x:Bind ViewModel.Step2ProgressRingIsActive, Mode=OneWay}"
@@ -167,11 +172,9 @@
 
                     <controls:WrapPanel Grid.Row="1" Orientation="Horizontal" VerticalSpacing="8" HorizontalSpacing="8">
 
-                        <customUI:ButtonV2
-                                IsEnabled="{x:Bind ViewModel.BrowseForFoldersButtonIsEnabled, Mode=OneWay}"
-                                Click="{x:Bind ViewModel.BrowseForFoldersButton_Click}"
-                                Content="Browse for folders"
-                                ToolTipService.ToolTip="Browse for folders of your new or existing apps that are installed and are getting blocked">
+                        <customUI:ButtonV2 IsEnabled="{x:Bind ViewModel.BrowseForFoldersButtonIsEnabled, Mode=OneWay}"
+                                           Click="{x:Bind ViewModel.BrowseForFoldersButton_Click}"
+                                           x:Uid="BrowseForFoldersAllowNewAppsButton">
 
                             <customUI:ButtonV2.Flyout>
                                 <Flyout>
@@ -191,30 +194,27 @@
 
                         </customUI:ButtonV2>
 
-                        <Button
-                            Click="{x:Bind ViewModel.GoToStep3Button_Click}"
-                            IsEnabled="{x:Bind ViewModel.GoToStep3ButtonIsEnabled, Mode=OneWay}"
-                            Content="Go to step 3"
-                            ToolTipService.ToolTip="Start scanning the event logs and the selected directories (if any) and go to step 3"
-                            Style="{StaticResource AccentButtonStyle}"/>
+                        <Button Click="{x:Bind ViewModel.GoToStep3Button_Click}"
+                                IsEnabled="{x:Bind ViewModel.GoToStep3ButtonIsEnabled, Mode=OneWay}"
+                                x:Uid="GoToStep3AllowNewAppsButton"
+                                Style="{StaticResource AccentButtonStyle}"/>
 
                     </controls:WrapPanel>
 
                     <customUI:InfoBarV2 Severity="{x:Bind ViewModel.Step2InfoBar_Severity, Mode=OneWay}"
-                        IsOpen="{x:Bind ViewModel.Step2InfoBar_IsOpen, Mode=TwoWay}"
-                        IsClosable='{x:Bind ViewModel.Step2InfoBar_IsClosable, Mode=OneWay}'
-                        Message="{x:Bind ViewModel.Step2InfoBar_Message, Mode=OneWay}"
-                        Margin="0,20,0,0" Grid.Row="2"/>
+                                        IsOpen="{x:Bind ViewModel.Step2InfoBar_IsOpen, Mode=TwoWay}"
+                                        IsClosable='{x:Bind ViewModel.Step2InfoBar_IsClosable, Mode=OneWay}'
+                                        Message="{x:Bind ViewModel.Step2InfoBar_Message, Mode=OneWay}"
+                                        Margin="0,20,0,0" Grid.Row="2"/>
 
                 </Grid>
             </Border>
 
-            <Border
-                BorderBrush="{x:Bind ViewModel.Step3Border_Brush, Mode=OneWay}"
-                BorderThickness="{x:Bind ViewModel.Step3Border_Thickness, Mode=OneWay}"
-                Translation="{x:Bind ViewModel.Step3Border_Translation, Mode=OneWay}"
-                Shadow="{x:Bind ViewModel.Step3Border_Shadow, Mode=OneWay}"
-                Grid.Row="3" Style="{StaticResource GridCardStyle}" Padding="8" Margin="6,0,10,20">
+            <Border BorderBrush="{x:Bind ViewModel.Step3Border_Brush, Mode=OneWay}"
+                    BorderThickness="{x:Bind ViewModel.Step3Border_Thickness, Mode=OneWay}"
+                    Translation="{x:Bind ViewModel.Step3Border_Translation, Mode=OneWay}"
+                    Shadow="{x:Bind ViewModel.Step3Border_Shadow, Mode=OneWay}"
+                    Grid.Row="3" Style="{StaticResource GridCardStyle}" Padding="8" Margin="6,0,10,20">
 
                 <Grid Opacity="{x:Bind ViewModel.Step3GridOpacity, Mode=OneWay}">
                     <Grid.RowDefinitions>
@@ -226,7 +226,9 @@
                     <controls:WrapPanel Grid.Row="0" Orientation="Vertical" VerticalSpacing="8" HorizontalSpacing="8" Margin="0,0,0,15">
 
                         <controls:WrapPanel Orientation="Horizontal" HorizontalSpacing="10" VerticalSpacing="10">
-                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="Step 3" Foreground="{ThemeResource SystemAccentColor}" />
+                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}"
+                                       x:Uid="Step3TextBlock"
+                                       Foreground="{ThemeResource SystemAccentColor}" />
                         </controls:WrapPanel>
 
                         <TextBlock x:Uid="AllowNewAppsStep3Text" TextWrapping="WrapWholeWords" />
@@ -236,17 +238,21 @@
 
                         <ToggleButton IsChecked="{x:Bind ViewModel.DeployPolicy, Mode=TwoWay}" IsEnabled="{x:Bind ViewModel.DeployPolicyState, Mode=OneWay}" x:Uid="DeployAfterCreationButton" />
 
-                        <ComboBox
-                            IsEnabled="{x:Bind ViewModel.ScanLevelComboBoxIsEnabled, Mode=OneWay}"
-                            SelectedIndex="{x:Bind ViewModel.ScanLevelComboBoxSelectedIndex, Mode=TwoWay}"
-                            SelectionChanged="ScanLevelComboBox_SelectionChanged"
-                            x:Name="ScanLevelComboBox"
-                            x:Uid="ScanLevelComboBox"
-                            Header="Scan level"
-                            Margin="0,0,0,27">
-                            <x:String>FilePublisher</x:String>
-                            <x:String>Publisher</x:String>
-                            <x:String>Hash</x:String>
+                        <ComboBox IsEnabled="{x:Bind ViewModel.ScanLevelComboBoxIsEnabled, Mode=OneWay}"
+                                  SelectedItem="{x:Bind ViewModel.ScanLevelComboBoxSelectedItem, Mode=TwoWay}"
+                                  ItemsSource="{x:Bind ViewModel.ScanLevelsSource}"
+                                  SelectedIndex="0"
+                                  x:Uid="ScanLevelComboBox"
+                                  Header="Scan level"
+                                  Margin="0,0,0,27">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="intelgathering:ScanLevelsComboBoxType">
+                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                        <TextBlock Text="{x:Bind FriendlyName}" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                        <RatingControl IsReadOnly="True" Value="{x:Bind Rating}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                         </ComboBox>
 
                         <Button
@@ -262,7 +268,25 @@
                             Message="{x:Bind ViewModel.Step3InfoBar_Message, Mode=OneWay}"
                             Margin="0,20,0,0" Grid.Row="2">
                         <customUI:InfoBarV2.ActionButton>
-                            <Button x:Uid="OpenInPolicyEditorButton" Visibility="{x:Bind ViewModel.OpenInPolicyEditorInfoBarActionButtonVisibility, Mode=OneWay}" Click="{x:Bind ViewModel.OpenInPolicyEditor}" />
+                            <DropDownButton x:Uid="AdditionalActionsDropDownButton"
+                                            Visibility="{x:Bind ViewModel.OpenInPolicyEditorInfoBarActionButtonVisibility, Mode=OneWay}">
+                                <DropDownButton.Content>
+                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                        <FontIcon Glyph="&#xE712;" Foreground="Chartreuse" />
+                                        <TextBlock x:Uid="AdditionalActionsTextBlock" />
+                                    </StackPanel>
+                                </DropDownButton.Content>
+                                <DropDownButton.Flyout>
+                                    <MenuFlyout Placement="Bottom">
+                                        <MenuFlyoutItem x:Uid="OpenInPolicyEditorMenuFlyoutItem"
+                                                        Icon="Edit"
+                                                        Click="{x:Bind ViewModel.OpenInPolicyEditor}"/>
+                                        <MenuFlyoutItem x:Uid="OpenTheFileMenuFlyoutItem"
+                                                        Icon="OpenWith"
+                                                        Click="{x:Bind ViewModel.OpenInDefaultFileHandler_Internal}"/>
+                                    </MenuFlyout>
+                                </DropDownButton.Flyout>
+                            </DropDownButton>
                         </customUI:InfoBarV2.ActionButton>
                     </customUI:InfoBarV2>
                 </Grid>

@@ -19,7 +19,6 @@ using System;
 using AppControlManager.Others;
 using AppControlManager.ViewModels;
 using AppControlManager.WindowComponents;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -32,9 +31,8 @@ namespace AppControlManager.Pages;
 /// </summary>
 internal sealed partial class ConfigurePolicyRuleOptions : Page, IAnimatedIconsManager
 {
-	private ConfigurePolicyRuleOptionsVM ViewModel { get; } = App.AppHost.Services.GetRequiredService<ConfigurePolicyRuleOptionsVM>();
-	private AppSettings.Main AppSettings { get; } = App.AppHost.Services.GetRequiredService<AppSettings.Main>();
-	private SidebarVM sideBarVM { get; } = App.AppHost.Services.GetRequiredService<SidebarVM>();
+	private ConfigurePolicyRuleOptionsVM ViewModel { get; } = ViewModelProvider.ConfigurePolicyRuleOptionsVM;
+	private SidebarVM sideBarVM { get; } = ViewModelProvider.SidebarVM;
 
 	internal ConfigurePolicyRuleOptions()
 	{
@@ -51,8 +49,7 @@ internal sealed partial class ConfigurePolicyRuleOptions : Page, IAnimatedIconsM
 		ViewModel.BrowseForXMLPolicyButtonLightAnimatedIconVisibility = visibility;
 
 		sideBarVM.AssignActionPacks(
-		(param => LightUp1(), GlobalVars.Rizz.GetString("ConfigurePolicyRuleOptions_ButtonContent")),
-		null, null, null, null);
+			actionPack1: (param => LightUp1(), GlobalVars.GetStr("ConfigurePolicyRuleOptions_ButtonContent")));
 	}
 
 	/// <summary>
@@ -65,10 +62,7 @@ internal sealed partial class ConfigurePolicyRuleOptions : Page, IAnimatedIconsM
 			PickPolicyFileButton_FlyOut.ShowAt(PickPolicyFileButton);
 			ViewModel.SelectedFilePath = MainWindowVM.SidebarBasePolicyPathTextBoxTextStatic;
 
-			await ViewModel.LoadPolicyOptionsFromXML(ViewModel.SelectedFilePath);
-
-			// Expand the settings expander when user selects a policy
-			ViewModel.SettingsExpanderIsExpanded = true;
+			await ViewModel.LoadPolicyOptionsFromXML();
 		}
 		catch (Exception ex)
 		{

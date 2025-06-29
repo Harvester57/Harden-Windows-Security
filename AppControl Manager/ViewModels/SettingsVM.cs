@@ -25,7 +25,8 @@ using AppControlManager.IntelGathering;
 using AppControlManager.Main;
 using AppControlManager.Others;
 using AppControlManager.WindowComponents;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Windows.Globalization;
 
@@ -34,7 +35,7 @@ namespace AppControlManager.ViewModels;
 internal sealed partial class SettingsVM : ViewModelBase
 {
 
-	private NavigationService nav { get; } = App.AppHost.Services.GetRequiredService<NavigationService>();
+	private NavigationService Nav { get; } = ViewModelProvider.NavigationService;
 
 	internal SettingsVM()
 	{
@@ -71,9 +72,7 @@ internal sealed partial class SettingsVM : ViewModelBase
 	internal InfoBarSeverity MainInfoBarSeverity { get; set => SP(ref field, value); } = InfoBarSeverity.Informational;
 	internal bool MainInfoBarIsClosable { get; set => SP(ref field, value); }
 
-	private MainWindowVM ViewModelMainWindow { get; } = App.AppHost.Services.GetRequiredService<MainWindowVM>();
-
-	internal bool IsElevated => App.IsElevated;
+	private MainWindowVM ViewModelMainWindow { get; } = ViewModelProvider.MainWindowVM;
 
 	/// <summary>
 	/// Opens a file picker for Code Integrity Schema path.
@@ -131,17 +130,16 @@ internal sealed partial class SettingsVM : ViewModelBase
 		{ "ml", 7 }
 	};
 
-	private static readonly Dictionary<int, string> SupportedLanguagesReverse = new()
-	{
-		{ 0, "en-US" },
-		{ 1, "he" },
-		{ 2, "el" },
-		{ 3, "hi" },
-		{ 4, "pl" },
-		{ 5, "ar" },
-		{ 6, "es" },
-		{ 7, "ml" }
-	};
+	private static readonly string[] SupportedLanguagesReverse = [
+		 "en-US",
+		 "he",
+		 "el",
+		 "hi",
+		 "pl",
+		 "ar",
+		 "es",
+		 "ml"
+	];
 
 	internal int LanguageComboBoxSelectedIndex
 	{
@@ -149,24 +147,19 @@ internal sealed partial class SettingsVM : ViewModelBase
 		{
 			if (SP(ref field, value))
 			{
-				if (SupportedLanguagesReverse.TryGetValue(field, out string? x))
-				{
-					ApplicationLanguages.PrimaryLanguageOverride = x;
-					App.Settings.ApplicationGlobalLanguage = x;
+				string x = SupportedLanguagesReverse[field];
 
-					// Refresh this page.
-					nav.RefreshSettingsPage();
+				ApplicationLanguages.PrimaryLanguageOverride = x;
+				App.Settings.ApplicationGlobalLanguage = x;
 
-					// Get reference to the MainWindow and refresh the localized content
-					if (App.MainWindow is MainWindow mainWindow)
-					{
-						mainWindow.RefreshLocalizedContent();
-					}
-				}
-				else
+				// Get reference to the MainWindow and refresh the localized content
+				if (App.MainWindow is MainWindow mainWindow)
 				{
-					Logger.Write($"Unknown language Index: {field}");
+					mainWindow.RefreshLocalizedContent();
 				}
+
+				// Refresh this page.
+				Nav.RefreshSettingsPage();
 			}
 		}
 	} = SupportedLanguages.TryGetValue(App.Settings.ApplicationGlobalLanguage, out int x) ? x : 0;
@@ -182,12 +175,11 @@ internal sealed partial class SettingsVM : ViewModelBase
 		{"Dark", 1 },
 		{"Light", 2 }
 	};
-	private static readonly Dictionary<int, string> AppThemesReverse = new()
-	{
-		{ 0, "Use System Setting" },
-		{ 1, "Dark" },
-		{ 2, "Light" }
-	};
+	private static readonly string[] AppThemesReverse = [
+		"Use System Setting",
+		"Dark" ,
+		"Light"
+	];
 
 	internal int AppThemeComboBoxSelectedIndex
 	{
@@ -195,17 +187,10 @@ internal sealed partial class SettingsVM : ViewModelBase
 		{
 			if (SP(ref field, value))
 			{
-				if (AppThemesReverse.TryGetValue(field, out string? x))
-				{
-					// Raise the global BackgroundChanged event
-					AppThemeManager.OnAppThemeChanged(x);
+				// Raise the global BackgroundChanged event
+				AppThemeManager.OnAppThemeChanged(AppThemesReverse[field]);
 
-					App.Settings.AppTheme = x;
-				}
-				else
-				{
-					Logger.Write($"Unknown theme Index: {field}");
-				}
+				App.Settings.AppTheme = AppThemesReverse[field];
 			}
 		}
 	} = AppThemes.TryGetValue(App.Settings.AppTheme, out int x) ? x : 0;
@@ -273,6 +258,26 @@ internal sealed partial class SettingsVM : ViewModelBase
 
 		// Expand the settings expander to make the configurations visible
 		MainUserConfigurationsSettingsExpanderIsExpanded = true;
+	}
+
+	/// <summary>
+	/// Executed when flow direction toggle is changed.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	internal void FlowDirectionToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+	{
+		MainWindowVM.SetCaptionButtonsFlowDirection(((ToggleSwitch)sender).IsOn ? FlowDirection.LeftToRight : FlowDirection.RightToLeft);
+
+		// Needs to run via Dispatcher, otherwise the 1st double-click on the UI elements register as pass-through, meaning they will resize the window as if we clicked on an empty area on the TitleBar.
+		_ = Dispatcher.TryEnqueue(DispatcherQueuePriority.Normal, () =>
+		{
+			// Get reference to the MainWindow and refresh the localized content
+			if (App.MainWindow is MainWindow mainWindow)
+			{
+				mainWindow.SetRegionsForCustomTitleBar();
+			}
+		});
 	}
 
 	#region Signed Policy Path

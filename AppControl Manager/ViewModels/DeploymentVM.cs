@@ -26,16 +26,16 @@ using AppControlManager.MicrosoftGraph;
 using AppControlManager.Others;
 using AppControlManager.SiPolicy;
 using AppControlManager.SiPolicyIntel;
+using AppControlManager.XMLOps;
 using CommunityToolkit.WinUI;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace AppControlManager.ViewModels;
 
-internal sealed partial class DeploymentVM : ViewModelBase
+internal sealed partial class DeploymentVM : ViewModelBase, IDisposable
 {
-	internal ViewModelForMSGraph ViewModelMSGraph { get; } = App.AppHost.Services.GetRequiredService<ViewModelForMSGraph>();
+	internal ViewModelForMSGraph ViewModelMSGraph { get; } = ViewModelProvider.ViewModelForMSGraph;
 
 	internal DeploymentVM()
 	{
@@ -57,7 +57,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 		if (GlobalVars.IsOlderThan24H2)
 		{
 			DeploySignedXMLButtonIsEnabled = false;
-			DeploySignedXMLButtonContentTextBlock = GlobalVars.Rizz.GetString("RequiresWindows1124H2");
+			DeploySignedXMLButtonContentTextBlock = GlobalVars.GetStr("RequiresWindows1124H2");
 		}
 		else
 		{
@@ -75,12 +75,12 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	internal InfoBarSeverity MainInfoBarSeverity { get; set => SP(ref field, value); } = InfoBarSeverity.Informational;
 	internal bool MainInfoBarIsClosable { get; set => SP(ref field, value); }
 
-	internal string LocalOnlineStatusText { get; set => SP(ref field, value); } = "Local Deployment is Currently Active";
+	internal string LocalOnlineStatusText { get; set => SP(ref field, value); } = GlobalVars.GetStr("LocalDeploymentActive");
 
 	/// <summary>
 	/// Bound to the UI ListView and holds the Intune group Names/IDs
 	/// </summary>
-	internal readonly ObservableCollection<MicrosoftGraph.IntuneGroupItemListView> GroupNamesCollection = [];
+	internal readonly ObservableCollection<IntuneGroupItemListView> GroupNamesCollection = [];
 
 	internal readonly UniqueStringObservableCollection XMLFiles = [];
 	internal readonly UniqueStringObservableCollection SignedXMLFiles = [];
@@ -106,7 +106,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	/// </summary>
 	internal bool AreOnlineFeaturesEnabled { get; set => SP(ref field, value); }
 
-	internal string DeploySignedXMLButtonContentTextBlock { get; set => SP(ref field, value); } = GlobalVars.Rizz.GetString("ButtonContentDeploy");
+	internal string DeploySignedXMLButtonContentTextBlock { get; set => SP(ref field, value); } = GlobalVars.GetStr("ButtonContentDeploy");
 	internal string DeploySignedXMLButtonFontIcon { get; set => SP(ref field, value); } = "\uE8B6";
 
 	internal bool SignOnlyNoDeployToggleSwitch
@@ -115,7 +115,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 		{
 			if (SP(ref field, value))
 			{
-				DeploySignedXMLButtonContentTextBlock = field ? GlobalVars.Rizz.GetString("ButtonContentSignOnly") : GlobalVars.Rizz.GetString("ButtonContentDeploy");
+				DeploySignedXMLButtonContentTextBlock = field ? GlobalVars.GetStr("ButtonContentSignOnly") : GlobalVars.GetStr("ButtonContentDeploy");
 
 				DeploySignedXMLButtonFontIcon = field ? "\uF572" : "\uE8B6";
 			}
@@ -140,9 +140,9 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	/// </summary>
 	internal void BrowseForXMLPolicyFilesButton_Click()
 	{
-		List<string>? selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
+		List<string> selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
 
-		if (selectedFiles is { Count: > 0 })
+		if (selectedFiles.Count > 0)
 		{
 			foreach (string file in selectedFiles)
 			{
@@ -158,9 +158,9 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	{
 		const string filter = "CIP file|*.cip";
 
-		List<string>? selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(filter);
+		List<string> selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(filter);
 
-		if (selectedFiles is { Count: > 0 })
+		if (selectedFiles.Count > 0)
 		{
 			foreach (string file in selectedFiles)
 			{
@@ -199,9 +199,9 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	internal void BrowseForSignedXMLPolicyFilesButton_Click()
 	{
 
-		List<string>? selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
+		List<string> selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
 
-		if (selectedFiles is { Count: > 0 })
+		if (selectedFiles.Count > 0)
 		{
 			foreach (string file in selectedFiles)
 			{
@@ -215,9 +215,9 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	/// </summary>
 	internal void BrowseForXMLPolicesButton_Click()
 	{
-		List<string>? selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
+		List<string> selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
 
-		if (selectedFiles is { Count: > 0 })
+		if (selectedFiles.Count > 0)
 		{
 			foreach (string file in selectedFiles)
 			{
@@ -235,7 +235,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 		// Enable the options if a valid value is set as Active Account
 		DeployToIntune = on;
 		AreOnlineFeaturesEnabled = on;
-		LocalOnlineStatusText = on ? "Cloud Deployment is Currently Active" : "Local Deployment is Currently Active";
+		LocalOnlineStatusText = on ? GlobalVars.GetStr("CloudDeploymentActive") : GlobalVars.GetStr("LocalDeploymentActive");
 
 		// If online features are turned off, clear the list of Intune groups
 		if (!on)
@@ -252,7 +252,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	{
 		if (XMLFiles.Count is 0)
 		{
-			MainInfoBar.WriteWarning("You need to select unsigned XML files to deploy first.");
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("SelectUnsignedXMLFilesToDeployWarningMsg"));
 			return;
 		}
 
@@ -263,7 +263,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 			// Disable the UI elements
 			AreElementsEnabled = false;
 
-			MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingXMLFiles") + XMLFiles.Count + GlobalVars.Rizz.GetString("UnsignedXMLFiles"));
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("DeployingXMLFiles") + XMLFiles.Count + GlobalVars.GetStr("UnsignedXMLFiles"));
 
 			MainInfoBarIsClosable = false;
 
@@ -284,7 +284,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 
 					if (!policyObject.Rules.Any(rule => rule.Item is OptionType.EnabledUnsignedSystemIntegrityPolicy))
 					{
-						throw new InvalidOperationException(GlobalVars.Rizz.GetString("SignedPolicyError") + file + "'");
+						throw new InvalidOperationException(GlobalVars.GetStr("SignedPolicyError") + file + "'");
 					}
 
 					string randomString = Guid.CreateVersion7().ToString("N");
@@ -295,7 +295,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 
 					await Dispatcher.EnqueueAsync(() =>
 					{
-						MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingXMLFile") + file + "'");
+						MainInfoBar.WriteInfo(GlobalVars.GetStr("DeployingXMLFile") + file + "'");
 					});
 
 					// Convert the XML file to CIP
@@ -326,13 +326,13 @@ internal sealed partial class DeploymentVM : ViewModelBase
 		catch (Exception ex)
 		{
 			errorsOccurred = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("DeploymentError"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("DeploymentError"));
 		}
 		finally
 		{
 			if (!errorsOccurred)
 			{
-				MainInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("DeploymentSuccess"));
+				MainInfoBar.WriteSuccess(GlobalVars.GetStr("DeploymentSuccess"));
 
 				// Clear the lists at the end if no errors occurred
 				XMLFiles.Clear();
@@ -390,16 +390,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 				{
 					SiPolicy.SiPolicy policyObj = Management.Initialize(xmlFile, null);
 
-					// Finding the policy name in the settings
-					Setting? nameSetting = policyObj.Settings.FirstOrDefault(x =>
-						string.Equals(x.Provider, "PolicyInfo", StringComparison.OrdinalIgnoreCase) &&
-						string.Equals(x.Key, "Information", StringComparison.OrdinalIgnoreCase) &&
-						string.Equals(x.ValueName, "Name", StringComparison.OrdinalIgnoreCase));
-
-					if (nameSetting is not null)
-					{
-						policyName = nameSetting.Value.Item.ToString();
-					}
+					policyName = PolicySettingsManager.GetPolicyName(policyObj, null);
 
 					// Construct an instance of the class in order to serialize it into JSON string for upload to Intune
 					CiPolicyInfo policy = new(
@@ -438,7 +429,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 
 		if (SignedXMLFiles.Count is 0)
 		{
-			MainInfoBar.WriteWarning("You need to select Signed XML files to deploy first.");
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("SelectXMLFilesToSignAndDeployWarningMsg"));
 			return;
 		}
 
@@ -477,7 +468,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 
 			MainInfoBarIsClosable = false;
 
-			MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingXMLFiles") + SignedXMLFiles.Count + GlobalVars.Rizz.GetString("SignedXMLFiles"));
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("DeployingXMLFiles") + SignedXMLFiles.Count + GlobalVars.GetStr("SignedXMLFiles"));
 
 			MainProgressBarVisibility = Visibility.Visible;
 
@@ -493,7 +484,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 
 					await Dispatcher.EnqueueAsync(() =>
 					{
-						MainInfoBar.WriteInfo((SignOnlyNoDeployToggleSwitch ? "Currently Signing XML file:" : GlobalVars.Rizz.GetString("DeployingXMLFile")) + file + "'");
+						MainInfoBar.WriteInfo((SignOnlyNoDeployToggleSwitch ? GlobalVars.GetStr("CurrentlySigningXMLFile") : GlobalVars.GetStr("DeployingXMLFile")) + file + "'");
 					});
 
 					// Add certificate's details to the policy
@@ -537,7 +528,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 
 							if (possibleAlreadyDeployedUnsignedVersion is not null)
 							{
-								Logger.Write(GlobalVars.Rizz.GetString("PolicyConflictMessage") + possibleAlreadyDeployedUnsignedVersion.PolicyID + GlobalVars.Rizz.GetString("RemovingPolicy"));
+								Logger.Write(GlobalVars.GetStr("PolicyConflictMessage") + possibleAlreadyDeployedUnsignedVersion.PolicyID + GlobalVars.GetStr("RemovingPolicy"));
 
 								CiToolHelper.RemovePolicy(possibleAlreadyDeployedUnsignedVersion.PolicyID!);
 							}
@@ -556,13 +547,13 @@ internal sealed partial class DeploymentVM : ViewModelBase
 		catch (Exception ex)
 		{
 			errorsOccurred = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("DeploymentError"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("DeploymentError"));
 		}
 		finally
 		{
 			if (!errorsOccurred)
 			{
-				MainInfoBar.WriteSuccess(SignOnlyNoDeployToggleSwitch ? "Successfully created signed CIP files for all of the selected XML files." : GlobalVars.Rizz.GetString("SignedDeploymentSuccess"));
+				MainInfoBar.WriteSuccess(SignOnlyNoDeployToggleSwitch ? GlobalVars.GetStr("SuccessfullyCreatedSignedCIPFiles") : GlobalVars.GetStr("SignedDeploymentSuccess"));
 
 				// Clear the lists at the end if no errors occurred
 				SignedXMLFiles.Clear();
@@ -584,7 +575,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	{
 		if (CIPFiles.Count is 0)
 		{
-			MainInfoBar.WriteWarning("You need to select CIP files to deploy first.");
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("SelectCIPFilesToDeployWarningMsg"));
 			return;
 		}
 
@@ -595,7 +586,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 			AreElementsEnabled = false;
 			MainInfoBarIsClosable = false;
 
-			MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingXMLFiles") + CIPFiles.Count + GlobalVars.Rizz.GetString("CIPFiles"));
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("DeployingXMLFiles") + CIPFiles.Count + GlobalVars.GetStr("CIPFiles"));
 
 			MainProgressBarVisibility = Visibility.Visible;
 
@@ -606,7 +597,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 				{
 					await Dispatcher.EnqueueAsync(() =>
 					{
-						MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingCIPFile") + file + "'");
+						MainInfoBar.WriteInfo(GlobalVars.GetStr("DeployingCIPFile") + file + "'");
 					});
 
 					string randomPolicyID = Guid.CreateVersion7().ToString().ToUpperInvariant();
@@ -626,13 +617,13 @@ internal sealed partial class DeploymentVM : ViewModelBase
 		catch (Exception ex)
 		{
 			errorsOccurred = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("DeploymentError"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("DeploymentError"));
 		}
 		finally
 		{
 			if (!errorsOccurred)
 			{
-				MainInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("CIPDeploymentSuccess"));
+				MainInfoBar.WriteSuccess(GlobalVars.GetStr("CIPDeploymentSuccess"));
 
 				// Clear the list at the end if no errors occurred
 				CIPFiles.Clear();
@@ -684,7 +675,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 	{
 		if (XMLFilesToConvertToCIP.Count is 0)
 		{
-			MainInfoBar.WriteWarning("You need to select XML files to convert first.");
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("SelectXMLFilesToDeployWarningMsg"));
 			return;
 		}
 
@@ -705,7 +696,7 @@ internal sealed partial class DeploymentVM : ViewModelBase
 					await Dispatcher.EnqueueAsync(() =>
 					{
 						MainInfoBar.WriteInfo(string.Format(
-							GlobalVars.Rizz.GetString("ConvertingFileToCIPMessage"),
+							GlobalVars.GetStr("ConvertingFileToCIPMessage"),
 							file
 						));
 					});
@@ -725,13 +716,13 @@ internal sealed partial class DeploymentVM : ViewModelBase
 		catch (Exception ex)
 		{
 			ErrorsOccurred = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorConvertingXMLToCIPMessage"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("ErrorConvertingXMLToCIPMessage"));
 		}
 		finally
 		{
 			if (!ErrorsOccurred)
 			{
-				MainInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("SuccessfullyConvertedXMLFilesToCIPMessage"));
+				MainInfoBar.WriteSuccess(GlobalVars.GetStr("SuccessfullyConvertedXMLFilesToCIPMessage"));
 			}
 
 			MainInfoBarIsClosable = true;
@@ -742,4 +733,16 @@ internal sealed partial class DeploymentVM : ViewModelBase
 
 	}
 
+	public void Dispose()
+	{
+		try
+		{
+			// Unsubscribe from the collection changed event to prevent memory leaks
+			ViewModelMSGraph.AuthenticatedAccounts.CollectionChanged -= AuthCompanionCLS.AuthenticatedAccounts_CollectionChanged;
+		}
+		catch { }
+
+		// Dispose the AuthenticationCompanion which implements IDisposable
+		AuthCompanionCLS?.Dispose();
+	}
 }

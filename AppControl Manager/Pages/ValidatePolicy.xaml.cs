@@ -15,7 +15,6 @@
 // See here for more information: https://github.com/HotCakeX/Harden-Windows-Security/blob/main/LICENSE
 //
 
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
@@ -28,8 +27,7 @@ namespace AppControlManager.Pages;
 internal sealed partial class ValidatePolicy : Page
 {
 
-	private AppSettings.Main AppSettings { get; } = App.AppHost.Services.GetRequiredService<AppSettings.Main>();
-	private ViewModels.ValidatePolicyVM ViewModel { get; } = App.AppHost.Services.GetRequiredService<ViewModels.ValidatePolicyVM>();
+	private ViewModels.ValidatePolicyVM ViewModel { get; } = ViewModels.ViewModelProvider.ValidatePolicyVM;
 
 	internal ValidatePolicy()
 	{

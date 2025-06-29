@@ -30,12 +30,19 @@ internal static class Master
 	/// <param name="xmlFilePath">Specifies the path to the XML file where the merged policy rules will be saved.</param>
 	/// <param name="authorization">Determines whether to allow or deny the specified rules during the merging process.</param>
 	/// <param name="stagingArea">Indicates the location where temporary files can be stored during the merging operation.</param>
-	internal static void Initiate(FileBasedInfoPackage incomingData, string xmlFilePath, SiPolicyIntel.Authorization authorization, string? stagingArea = null)
+	/// <param name="noAllowAllWildCards">If true, the policy containing the 2 Allow all rules for user mode and kernel mode file authorization will not be merged with the final policy.</param>
+	internal static void Initiate(
+		FileBasedInfoPackage incomingData,
+		string xmlFilePath,
+		SiPolicyIntel.Authorization authorization,
+		string? stagingArea = null,
+		bool noAllowAllWildCards = false)
 	{
-		Logger.Write(GlobalVars.Rizz.GetString("MergingRulesMessage"));
+		Logger.Write(GlobalVars.GetStr("MergingRulesMessage"));
 
 		if (authorization is SiPolicyIntel.Authorization.Allow)
 		{
+			NewWHQLFilePublisherLevelRules.CreateAllow(xmlFilePath, incomingData.WHQLFilePublisherSigners);
 			NewFilePublisherLevelRules.CreateAllow(xmlFilePath, incomingData.FilePublisherSigners);
 			NewPublisherLevelRules.CreateAllow(xmlFilePath, incomingData.PublisherSigners);
 			NewHashLevelRules.CreateAllow(xmlFilePath, incomingData.CompleteHashes);
@@ -46,6 +53,7 @@ internal static class Master
 		}
 		else
 		{
+			NewWHQLFilePublisherLevelRules.CreateDeny(xmlFilePath, incomingData.WHQLFilePublisherSigners);
 			NewFilePublisherLevelRules.CreateDeny(xmlFilePath, incomingData.FilePublisherSigners);
 			NewPublisherLevelRules.CreateDeny(xmlFilePath, incomingData.PublisherSigners);
 			NewHashLevelRules.CreateDeny(xmlFilePath, incomingData.CompleteHashes);
@@ -55,8 +63,15 @@ internal static class Master
 			string finalAllowAllFilePath = Path.Combine(stagingArea!, "AllowAll.xml");
 			File.Copy(GlobalVars.AllowAllTemplatePolicyPath, finalAllowAllFilePath, true);
 
-			// Merge the policy with the AllowAll XML policy since this is a Deny policy type
-			SiPolicy.Merger.Merge(xmlFilePath, [xmlFilePath, finalAllowAllFilePath]);
+			if (noAllowAllWildCards)
+			{
+				SiPolicy.Merger.Merge(xmlFilePath, [xmlFilePath]);
+			}
+			else
+			{
+				// Merge the policy with the AllowAll XML policy since this is a Deny policy type
+				SiPolicy.Merger.Merge(xmlFilePath, [xmlFilePath, finalAllowAllFilePath]);
+			}
 		}
 
 	}

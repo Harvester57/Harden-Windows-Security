@@ -16,7 +16,6 @@
 //
 
 using System;
-using System.Collections.Generic;
 using AppControlManager.Others;
 
 namespace AppControlManager.XMLOps;
@@ -56,42 +55,7 @@ internal static class SetCiPolicyInfo
 
 		#region PolicyName Processing
 
-		if (!string.IsNullOrEmpty(policyName))
-		{
-
-			bool nameSettingFound = false;
-
-			foreach (SiPolicy.Setting item in policyObj.Settings)
-			{
-				if (string.Equals(item.ValueName, "Name", StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(item.Provider, "PolicyInfo", StringComparison.OrdinalIgnoreCase) &&
-					string.Equals(item.Key, "Information", StringComparison.OrdinalIgnoreCase))
-				{
-					item.Value.Item = policyName;
-
-					nameSettingFound = true;
-				}
-			}
-
-			// If the Setting node with ValueName="Name" does not exist, create it
-			if (!nameSettingFound)
-			{
-				SiPolicy.Setting newNameSetting = new()
-				{
-					Provider = "PolicyInfo",
-					Key = "Information",
-					ValueName = "Name",
-					Value = new SiPolicy.SettingValueType()
-					{
-						Item = policyName
-					}
-				};
-
-				List<SiPolicy.Setting> settings = [.. policyObj.Settings];
-				settings.Add(newNameSetting);
-				policyObj.Settings = [.. settings];
-			}
-		}
+		PolicySettingsManager.SetPolicyName(policyObj, policyName);
 
 		#endregion
 
@@ -120,7 +84,7 @@ internal static class SetCiPolicyInfo
 
 			if (!response.Item1)
 			{
-				throw new ArgumentException(string.Format(GlobalVars.Rizz.GetString("InvalidGuidFormatError"), basePolicyID));
+				throw new ArgumentException(string.Format(GlobalVars.GetStr("InvalidGuidFormatError"), basePolicyID));
 			}
 
 			// Set the BasePolicyID of the policy file to the user provided one
@@ -145,7 +109,7 @@ internal static class SetCiPolicyInfo
 		{
 			if (string.Equals(policyObj.PolicyID, policyObj.BasePolicyID, StringComparison.OrdinalIgnoreCase))
 			{
-				Logger.Write(GlobalVars.Rizz.GetString("SupplementalPolicyTypeChangeMessage"));
+				Logger.Write(GlobalVars.GetStr("SupplementalPolicyTypeChangeMessage"));
 
 				policyObj.PolicyType = SiPolicy.PolicyType.BasePolicy;
 			}
@@ -155,7 +119,7 @@ internal static class SetCiPolicyInfo
 		{
 			if (!string.Equals(policyObj.PolicyID, policyObj.BasePolicyID, StringComparison.OrdinalIgnoreCase))
 			{
-				Logger.Write(GlobalVars.Rizz.GetString("BasePolicyTypeChangeMessage"));
+				Logger.Write(GlobalVars.GetStr("BasePolicyTypeChangeMessage"));
 
 
 				policyObj.PolicyType = SiPolicy.PolicyType.SupplementalPolicy;
@@ -167,7 +131,7 @@ internal static class SetCiPolicyInfo
 		// Save the changes to the XML file
 		SiPolicy.Management.SavePolicyToFile(policyObj, filePath);
 
-		Logger.Write(string.Format(GlobalVars.Rizz.GetString("PolicyConfigurationSuccessMessage"), filePath, policyObj.PolicyType, policyObj.BasePolicyID, policyObj.PolicyID));
+		Logger.Write(string.Format(GlobalVars.GetStr("PolicyConfigurationSuccessMessage"), filePath, policyObj.PolicyType, policyObj.BasePolicyID, policyObj.PolicyID));
 
 		return policyObj.PolicyID;
 	}
@@ -199,7 +163,7 @@ internal static class SetCiPolicyInfo
 
 			if (!response.Item1)
 			{
-				throw new ArgumentException(string.Format(GlobalVars.Rizz.GetString("InvalidGuidFormatError"), ID));
+				throw new ArgumentException(string.Format(GlobalVars.GetStr("InvalidGuidFormatError"), ID));
 			}
 
 			// Set the BasePolicyID of the policy file to the user provided one
@@ -212,7 +176,7 @@ internal static class SetCiPolicyInfo
 		// Save the changes to the XML file
 		SiPolicy.Management.SavePolicyToFile(policyObj, filePath);
 
-		Logger.Write(string.Format(GlobalVars.Rizz.GetString("PolicyVersionSetSuccessMessage"), filePath, OriginalXMLPolicyVersion, version));
+		Logger.Write(string.Format(GlobalVars.GetStr("PolicyVersionSetSuccessMessage"), filePath, OriginalXMLPolicyVersion, version));
 	}
 
 

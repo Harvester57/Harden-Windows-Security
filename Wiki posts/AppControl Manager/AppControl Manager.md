@@ -317,10 +317,15 @@ function Build_ACM {
         [System.String]$RepoUrl = "https://github.com/HotCakeX/$RepoName/archive/refs/heads/$BranchName.zip"
         [System.String]$ZipPath = [System.IO.Path]::Combine($env:TEMP, "$RepoName.zip")
         [System.String]$InitialWorkingDirectory = $PWD.Path
+        $script:AppControlManagerDirectory = [System.IO.Path]::Combine($InitialWorkingDirectory, "$RepoName-$BranchName", 'AppControl Manager')
+
+        if (Test-Path -Path $script:AppControlManagerDirectory -PathType Container) {
+            Remove-Item -Path $script:AppControlManagerDirectory -Recurse -Force
+        }
+
         Invoke-WebRequest -Uri $RepoUrl -OutFile $ZipPath
         Expand-Archive -Path $ZipPath -DestinationPath $InitialWorkingDirectory -Force
         Remove-Item -Path $ZipPath -Force
-        $script:AppControlManagerDirectory = [System.IO.Path]::Combine($InitialWorkingDirectory, "$RepoName-$BranchName", 'AppControl Manager')
         Set-Location -Path $script:AppControlManagerDirectory
     }
     else {
@@ -372,7 +377,7 @@ function Build_ACM {
         if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed to install the Rust toolchain: $LASTEXITCODE") }
 
         Write-Host -Object "`nInstalling .NET SDK" -ForegroundColor Magenta
-        $null = winget install --id Microsoft.DotNet.SDK.9 --exact --accept-package-agreements --accept-source-agreements --uninstall-previous --force --source winget
+        $null = winget install --id Microsoft.DotNet.SDK.Preview --exact --accept-package-agreements --accept-source-agreements --uninstall-previous --force --source winget
         if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed to install .NET SDK: $LASTEXITCODE") }
 
         Write-Host -Object "`nInstalling Visual Studio Build Tools" -ForegroundColor Magenta
@@ -403,7 +408,7 @@ function Build_ACM {
         }
     }
 
-    # Remove any possible existing directories 
+    # Remove any possible existing directories
     Remove-Item -Path .\MSIXOutputX64 -Recurse -Force -ErrorAction Ignore
     Remove-Item -Path .\MSIXOutputARM64 -Recurse -Force -ErrorAction Ignore
     Remove-Item -Path .\MSIXBundleOutput -Recurse -Force -ErrorAction Ignore
@@ -522,7 +527,34 @@ function Build_ACM {
 
     Set-Location -Path '.\eXclude\Rust WMI Interop\Device Guard\Program'
 
+    if (Test-Path -PathType Leaf -LiteralPath 'Cargo.lock'){
+        Remove-Item -Force -LiteralPath 'Cargo.lock'
+    }
+
     cargo clean
+
+    cargo update --verbose
+
+    cargo tree
+
+    cargo build_x64
+
+    cargo build_arm64
+
+    Set-Location -Path $Current_Location
+
+
+    Set-Location -Path '.\eXclude\Rust Interop Library'
+
+    if (Test-Path -PathType Leaf -LiteralPath 'Cargo.lock'){
+        Remove-Item -Force -LiteralPath 'Cargo.lock'
+    }
+
+    cargo clean
+
+    cargo update --verbose
+
+    cargo tree
 
     cargo build_x64
 
@@ -562,6 +594,8 @@ function Build_ACM {
 
     Copy-Item -Path '.\eXclude\Rust WMI Interop\Device Guard\Program\target\x86_64-pc-windows-msvc\release\DeviceGuardWMIRetriever-X64.exe' -Destination '.\RustInterop\DeviceGuardWMIRetriever.exe' -Force
 
+    Copy-Item -Path '.\eXclude\Rust Interop Library\rust_interop-X64.dll' -Destination '.\RustInterop\RustInterop.dll' -Force
+
     # Generate for X64 architecture
     dotnet build 'AppControl Manager.slnx' --configuration Release --verbosity minimal /p:Platform=x64
 
@@ -575,6 +609,8 @@ function Build_ACM {
     Copy-Item -Path '.\eXclude\C++ WMI Interop\ManageDefender\ARM64\Release\ManageDefender-ARM64.exe' -Destination '.\CppInterop\ManageDefender.exe' -Force
 
     Copy-Item -Path '.\eXclude\Rust WMI Interop\Device Guard\Program\target\aarch64-pc-windows-msvc\release\DeviceGuardWMIRetriever-ARM64.exe' -Destination '.\RustInterop\DeviceGuardWMIRetriever.exe' -Force
+
+    Copy-Item -Path '.\eXclude\Rust Interop Library\rust_interop-ARM64.dll' -Destination '.\RustInterop\RustInterop.dll' -Force
 
     # Generate for ARM64 architecture
     dotnet build 'AppControl Manager.slnx' --configuration Release --verbosity minimal /p:Platform=ARM64

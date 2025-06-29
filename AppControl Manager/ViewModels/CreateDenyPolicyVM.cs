@@ -28,15 +28,15 @@ using AppControlManager.Pages;
 using AppControlManager.SiPolicy;
 using AppControlManager.XMLOps;
 using CommunityToolkit.WinUI;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace AppControlManager.ViewModels;
 
 internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 {
-	private PolicyEditorVM PolicyEditorViewModel { get; } = App.AppHost.Services.GetRequiredService<PolicyEditorVM>();
+	private PolicyEditorVM PolicyEditorViewModel { get; } = ViewModelProvider.PolicyEditorVM;
 
 	internal CreateDenyPolicyVM()
 	{
@@ -50,6 +50,8 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 			() => FilesAndFoldersInfoBarIsClosable, value => FilesAndFoldersInfoBarIsClosable = value,
 			() => FilesAndFoldersInfoBarTitle, value => FilesAndFoldersInfoBarTitle = value);
 
+		FilesAndFoldersCancellableButton = new(GlobalVars.GetStr("CreateDenyPolicyButton/Content"));
+
 		// InfoBar manager for the PFN section
 		PFNInfoBar = new InfoBarSettings(
 			() => PFNInfoBarIsOpen, value => PFNInfoBarIsOpen = value,
@@ -58,6 +60,8 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 			() => PFNInfoBarIsClosable, value => PFNInfoBarIsClosable = value,
 			() => PFNInfoBarTitle, value => PFNInfoBarTitle = value);
 
+		PFNBasedCancellableButton = new(GlobalVars.GetStr("CreateDenyPolicyButton/Content"));
+
 		// InfoBar manager for the CustomFilePathRules section
 		CustomFilePathRulesInfoBar = new InfoBarSettings(
 			() => CustomFilePathRulesInfoBarIsOpen, value => CustomFilePathRulesInfoBarIsOpen = value,
@@ -65,6 +69,8 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 			() => CustomFilePathRulesInfoBarSeverity, value => CustomFilePathRulesInfoBarSeverity = value,
 			() => CustomFilePathRulesInfoBarIsClosable, value => CustomFilePathRulesInfoBarIsClosable = value,
 			() => CustomFilePathRulesInfoBarTitle, value => CustomFilePathRulesInfoBarTitle = value);
+
+		PatternBasedFileRuleCancellableButton = new(GlobalVars.GetStr("CreateDenyPolicyButton/Content"));
 	}
 
 	#region Files and Folders scan
@@ -97,7 +103,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 	internal Visibility FilesAndFoldersInfoBarActionButtonVisibility { get; set => SP(ref field, value); } = Visibility.Collapsed;
 
-	internal string TotalCountOfTheFilesTextBox { get; set => SP(ref field, value); } = GlobalVars.Rizz.GetString("TotalFiles") + ": 0";
+	internal string TotalCountOfTheFilesTextBox { get; set => SP(ref field, value); } = GlobalVars.GetStr("TotalFiles") + ": 0";
 
 	/// <summary>
 	/// Selected File Paths
@@ -116,24 +122,17 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 	internal bool filesAndFoldersDeployButton { get; set => SP(ref field, value); }
 
-	private bool UsingWildCardFilePathRules { get; set; }
-
-	// The default selected scan level
-	internal ScanLevels filesAndFoldersScanLevel = ScanLevels.FilePublisher;
-	internal string FilesAndFoldersScanLevelComboBoxSelectedItem
+	internal ScanLevelsComboBoxType FilesAndFoldersScanLevelComboBoxSelectedItem
 	{
 		get; set
 		{
 			if (SP(ref field, value))
 			{
-				filesAndFoldersScanLevel = StringToScanLevel[field];
-
 				// For Wildcard file path rules, only folder paths should be used
-				UsingWildCardFilePathRules = filesAndFoldersScanLevel is ScanLevels.WildCardFolderPath;
-				FilesAndFoldersBrowseForFilesSettingsCardVisibility = filesAndFoldersScanLevel is ScanLevels.WildCardFolderPath ? Visibility.Collapsed : Visibility.Visible;
+				FilesAndFoldersBrowseForFilesSettingsCardVisibility = field.Level is ScanLevels.WildCardFolderPath ? Visibility.Collapsed : Visibility.Visible;
 			}
 		}
-	} = ScanLevelToString[ScanLevels.FilePublisher];
+	} = DefaultScanLevel;
 
 	internal double FilesAndFoldersScalabilityRadialGaugeValue
 	{
@@ -141,7 +140,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		{
 			if (SP(ref field, value))
 			{
-				FilesAndFoldersScalabilityButtonContent = GlobalVars.Rizz.GetString("Scalability") + field;
+				FilesAndFoldersScalabilityButtonContent = GlobalVars.GetStr("Scalability") + field;
 			}
 		}
 	} = 2;
@@ -149,7 +148,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// The content of the button that has the RadialGauge inside it.
 	/// </summary>
-	internal string FilesAndFoldersScalabilityButtonContent { get; set => SP(ref field, value); } = GlobalVars.Rizz.GetString("Scalability") + "2";
+	internal string FilesAndFoldersScalabilityButtonContent { get; set => SP(ref field, value); } = GlobalVars.GetStr("Scalability") + "2";
 
 	internal bool FilesAndFoldersInfoBarIsOpen { get; set => SP(ref field, value); }
 	internal bool FilesAndFoldersInfoBarIsClosable { get; set => SP(ref field, value); }
@@ -189,24 +188,24 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	{
 
 		// Measure header text widths first.
-		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileNameHeader/Text"));
-		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignatureStatusHeader/Text"));
-		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("OriginalFileNameHeader/Text"));
-		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("InternalNameHeader/Text"));
-		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileDescriptionHeader/Text"));
-		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("ProductNameHeader/Text"));
-		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FileVersionHeader/Text"));
-		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("PackageFamilyNameHeader/Text"));
-		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA256HashHeader/Text"));
-		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA1HashHeader/Text"));
-		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SigningScenarioHeader/Text"));
-		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FilePathHeader/Text"));
-		double maxWidth13 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA1PageHashHeader/Text"));
-		double maxWidth14 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SHA256PageHashHeader/Text"));
-		double maxWidth15 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("HasWHQLSignerHeader/Text"));
-		double maxWidth16 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FilePublishersHeader/Text"));
-		double maxWidth17 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("IsECCSignedHeader/Text"));
-		double maxWidth18 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("OpusDataHeader/Text"));
+		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileNameHeader/Text"));
+		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignatureStatusHeader/Text"));
+		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.GetStr("OriginalFileNameHeader/Text"));
+		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.GetStr("InternalNameHeader/Text"));
+		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileDescriptionHeader/Text"));
+		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.GetStr("ProductNameHeader/Text"));
+		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.GetStr("FileVersionHeader/Text"));
+		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.GetStr("PackageFamilyNameHeader/Text"));
+		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA256HashHeader/Text"));
+		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA1HashHeader/Text"));
+		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.GetStr("SigningScenarioHeader/Text"));
+		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.GetStr("FilePathHeader/Text"));
+		double maxWidth13 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA1PageHashHeader/Text"));
+		double maxWidth14 = ListViewHelper.MeasureText(GlobalVars.GetStr("SHA256PageHashHeader/Text"));
+		double maxWidth15 = ListViewHelper.MeasureText(GlobalVars.GetStr("HasWHQLSignerHeader/Text"));
+		double maxWidth16 = ListViewHelper.MeasureText(GlobalVars.GetStr("FilePublishersHeader/Text"));
+		double maxWidth17 = ListViewHelper.MeasureText(GlobalVars.GetStr("IsECCSignedHeader/Text"));
+		double maxWidth18 = ListViewHelper.MeasureText(GlobalVars.GetStr("OpusDataHeader/Text"));
 
 		// Iterate over all items to determine the widest string for each column.
 		foreach (FileIdentity item in FilesAndFoldersScanResults)
@@ -261,13 +260,18 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	{
 		if (Zero == true)
 		{
-			TotalCountOfTheFilesTextBox = GlobalVars.Rizz.GetString("TotalFiles") + ": 0";
+			TotalCountOfTheFilesTextBox = GlobalVars.GetStr("TotalFiles") + ": 0";
 		}
 		else
 		{
-			TotalCountOfTheFilesTextBox = GlobalVars.Rizz.GetString("TotalFiles") + ": " + FilesAndFoldersScanResults.Count;
+			TotalCountOfTheFilesTextBox = GlobalVars.GetStr("TotalFiles") + ": " + FilesAndFoldersScanResults.Count;
 		}
 	}
+
+	/// <summary>
+	/// Initialization details for the main Create button for the Files and Folders section
+	/// </summary>
+	internal readonly AnimatedCancellableButtonInitializer FilesAndFoldersCancellableButton;
 
 	/// <summary>
 	/// Main button's event handler for files and folder Deny policy creation
@@ -281,55 +285,62 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		// Reset the progress ring from previous runs or in case an error occurred
 		FilesAndFoldersProgressRingValue = 0;
 
+		// Check validation conditions but do NOT set button state until all checks pass
 		if (filesAndFoldersFilePaths.Count == 0 && filesAndFoldersFolderPaths.Count == 0)
 		{
-			FilesAndFoldersInfoBar.WriteWarning(GlobalVars.Rizz.GetString("NoFilesOrFoldersSelected"),
-				GlobalVars.Rizz.GetString("SelectFilesOrFoldersTitle"));
+			FilesAndFoldersInfoBar.WriteWarning(GlobalVars.GetStr("NoFilesOrFoldersSelected"),
+				GlobalVars.GetStr("SelectFilesOrFoldersTitle"));
+
 			return;
 		}
 
-		if (string.IsNullOrWhiteSpace(filesAndFoldersDenyPolicyName))
+		if (OperationModeComboBoxSelectedIndex is 0 && string.IsNullOrWhiteSpace(filesAndFoldersDenyPolicyName))
 		{
-			FilesAndFoldersInfoBar.WriteWarning(GlobalVars.Rizz.GetString("ChoosePolicyNameSubtitle"),
-				GlobalVars.Rizz.GetString("ChoosePolicyNameTitle"));
+			FilesAndFoldersInfoBar.WriteWarning(GlobalVars.GetStr("ChoosePolicyNameSubtitle"),
+				GlobalVars.GetStr("ChoosePolicyNameTitle"));
+
 			return;
 		}
 
+		// use the policy to merge with file if that option is enabled by the user
+		if (OperationModeComboBoxSelectedIndex is 1)
+		{
+			if (PolicyFileToMergeWith is null)
+			{
+				FilesAndFoldersInfoBar.WriteWarning(GlobalVars.GetStr("SelectPolicyToAddRulesToSubtitle"), GlobalVars.GetStr("SelectPolicyToAddRulesToTitle"));
+				return;
+			}
+		}
+
+		// All validation passed - NOW we set button state to indicate operation starting
 		_FilesAndFoldersDenyPolicyPath = null;
 
 		bool errorsOccurred = false;
 
+		FilesAndFoldersCancellableButton.Begin();
+
 		try
 		{
-
 			FilesAndFoldersElementsAreEnabled = false;
 
 			FilesAndFoldersInfoBar.IsClosable = false;
 
-			FilesAndFoldersInfoBar.WriteInfo(GlobalVars.Rizz.GetString("SelectedFilesAndFolders") + filesAndFoldersFilePaths.Count + GlobalVars.Rizz.GetString("FilesAnd") + filesAndFoldersFolderPaths.Count + GlobalVars.Rizz.GetString("Folders"));
+			FilesAndFoldersInfoBar.WriteInfo(GlobalVars.GetStr("SelectedFilesAndFolders") + filesAndFoldersFilePaths.Count + GlobalVars.GetStr("FilesAnd") + filesAndFoldersFolderPaths.Count + GlobalVars.GetStr("Folders"));
 
 			await Task.Run(async () =>
 			{
-
-				DirectoryInfo[] selectedDirectories = [];
-
-				// Convert user selected folder paths that are strings to DirectoryInfo objects
-				selectedDirectories = [.. filesAndFoldersFolderPaths.Select(dir => new DirectoryInfo(dir))];
-
-				FileInfo[] selectedFiles = [];
-
-				// Convert user selected file paths that are strings to FileInfo objects
-				selectedFiles = [.. filesAndFoldersFilePaths.Select(file => new FileInfo(file))];
-
 				IEnumerable<FileIdentity> LocalFilesResults = [];
 
+				FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
+
 				// Do the following steps only if Wildcard paths aren't going to be used because then only the selected folder paths are needed
-				if (!UsingWildCardFilePathRules)
+				if (FilesAndFoldersScanLevelComboBoxSelectedItem.Level is not ScanLevels.WildCardFolderPath)
 				{
-
 					// Collect all of the AppControl compatible files from user selected directories and files
-					(IEnumerable<FileInfo>, int) DetectedFilesInSelectedDirectories = FileUtility.GetFilesFast(selectedDirectories, selectedFiles, null);
-
+					(IEnumerable<string>, int) DetectedFilesInSelectedDirectories = FileUtility.GetFilesFast(filesAndFoldersFolderPaths,
+						filesAndFoldersFilePaths,
+						null,
+						FilesAndFoldersCancellableButton.Cts?.Token);
 
 					// Make sure there are AppControl compatible files
 					if (DetectedFilesInSelectedDirectories.Item2 is 0)
@@ -337,16 +348,18 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 						_ = Dispatcher.TryEnqueue(() =>
 						{
 							errorsOccurred = true;
-							FilesAndFoldersInfoBar.WriteWarning(GlobalVars.Rizz.GetString("NoCompatibleFilesDetected"),
-								GlobalVars.Rizz.GetString("NoCompatibleFilesTitle"));
+							FilesAndFoldersInfoBar.WriteWarning(GlobalVars.GetStr("NoCompatibleFilesDetected"),
+								GlobalVars.GetStr("NoCompatibleFilesTitle"));
 						});
 						return;
 					}
 
 					_ = Dispatcher.TryEnqueue(() =>
 					{
-						FilesAndFoldersInfoBar.WriteInfo(GlobalVars.Rizz.GetString("ScanningFiles") + DetectedFilesInSelectedDirectories.Item2 + GlobalVars.Rizz.GetString("AppControlCompatibleFiles"));
+						FilesAndFoldersInfoBar.WriteInfo(GlobalVars.GetStr("ScanningFiles") + DetectedFilesInSelectedDirectories.Item2 + GlobalVars.GetStr("AppControlCompatibleFiles"));
 					});
+
+					FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 					// Scan all of the detected files from the user selected directories
 					// Add the reference to the ViewModel class to the item so we can use it for navigation from the XAML
@@ -355,12 +368,14 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 						(ushort)FilesAndFoldersProgressRingValue,
 						FilesAndFoldersProgressRingValueProgress,
 						this,
-						(fi, vm) => fi.ParentViewModelCreateDenyPolicyVM = vm);
-
+						(fi, vm) => fi.ParentViewModelCreateDenyPolicyVM = vm,
+						FilesAndFoldersCancellableButton.Cts?.Token);
 
 					filesAndFoldersScanResultsList.Clear();
 
 					filesAndFoldersScanResultsList.AddRange(LocalFilesResults);
+
+					FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 					await Dispatcher.EnqueueAsync(() =>
 					{
@@ -374,9 +389,11 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 					_ = Dispatcher.TryEnqueue(() =>
 					{
-						FilesAndFoldersInfoBar.WriteInfo(GlobalVars.Rizz.GetString("ScanCompleted"));
+						FilesAndFoldersInfoBar.WriteInfo(GlobalVars.GetStr("ScanCompleted"));
 					});
 				}
+
+				FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 				DirectoryInfo stagingArea = StagingArea.NewStagingArea("FilesAndFoldersDenyPolicy");
 
@@ -384,38 +401,59 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 				string EmptyPolicyPath = PrepareEmptyPolicy.Prepare(stagingArea.FullName);
 
 				// Separate the signed and unsigned data
-				FileBasedInfoPackage DataPackage = SignerAndHashBuilder.BuildSignerAndHashObjects(data: [.. LocalFilesResults], level: filesAndFoldersScanLevel, folderPaths: filesAndFoldersFolderPaths);
+				FileBasedInfoPackage DataPackage = SignerAndHashBuilder.BuildSignerAndHashObjects(data: [.. LocalFilesResults], level: FilesAndFoldersScanLevelComboBoxSelectedItem.Level, folderPaths: filesAndFoldersFolderPaths);
+
+				FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 				// Insert the data into the empty policy file
-				Master.Initiate(DataPackage, EmptyPolicyPath, SiPolicyIntel.Authorization.Deny, stagingArea.FullName);
+				Master.Initiate(DataPackage, EmptyPolicyPath, SiPolicyIntel.Authorization.Deny, stagingArea.FullName, OperationModeComboBoxSelectedIndex is 1);
 
-				string OutputPath = Path.Combine(GlobalVars.UserConfigDir, $"{filesAndFoldersDenyPolicyName}.xml");
+				string OutputPath = OperationModeComboBoxSelectedIndex is 1 ? PolicyFileToMergeWith! : Path.Combine(GlobalVars.UserConfigDir, $"{filesAndFoldersDenyPolicyName}.xml");
 
-				// Set policy name and reset the policy ID
-				_ = SetCiPolicyInfo.Set(EmptyPolicyPath, true, filesAndFoldersDenyPolicyName, null, null);
+				if (OperationModeComboBoxSelectedIndex is 1)
+				{
+					// Merge the new Deny policy with the user selected policy - user selected policy is the main one in the merge operation
+					Merger.Merge(OutputPath, [EmptyPolicyPath]);
+				}
+				else
+				{
+					// Set policy name and reset the policy ID
+					_ = SetCiPolicyInfo.Set(EmptyPolicyPath, true, filesAndFoldersDenyPolicyName, null, null);
 
-				// Configure policy rule options
-				CiRuleOptions.Set(filePath: EmptyPolicyPath, template: CiRuleOptions.PolicyTemplate.Base);
+					FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
-				// Set policy version
-				SetCiPolicyInfo.Set(EmptyPolicyPath, new Version("1.0.0.0"));
+					// Configure policy rule options
+					CiRuleOptions.Set(filePath: EmptyPolicyPath, template: CiRuleOptions.PolicyTemplate.Base);
 
-				// Copying the policy file to the User Config directory - outside of the temporary staging area
-				File.Copy(EmptyPolicyPath, OutputPath, true);
+					// Set policy version
+					SetCiPolicyInfo.Set(EmptyPolicyPath, new Version("1.0.0.0"));
+
+					// Copying the policy file to the User Config directory - outside of the temporary staging area
+					File.Copy(EmptyPolicyPath, OutputPath, true);
+				}
 
 				_FilesAndFoldersDenyPolicyPath = OutputPath;
 
-				string CIPPath = Path.Combine(stagingArea.FullName, $"{filesAndFoldersDenyPolicyName}.cip");
+				// Use the name of the user selected file for CIP file name, otherwise use the name of the Deny policy provided by the user
+				string CIPName = OperationModeComboBoxSelectedIndex is 1
+					? $"{Path.GetFileNameWithoutExtension(PolicyFileToMergeWith!)}.cip"
+					: $"{filesAndFoldersDenyPolicyName}.cip";
+
+				string CIPPath = Path.Combine(stagingArea.FullName, CIPName);
+
+				FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 				// Convert the XML file to CIP and save it in the defined path
 				Management.ConvertXMLToBinary(OutputPath, null, CIPPath);
+
+				FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 				// If user selected to deploy the policy
 				if (filesAndFoldersDeployButton)
 				{
 					_ = Dispatcher.TryEnqueue(() =>
 					{
-						FilesAndFoldersInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingThePolicy"));
+						FilesAndFoldersInfoBar.WriteInfo(GlobalVars.GetStr("DeployingThePolicy"));
 					});
 
 					CiToolHelper.UpdatePolicy(CIPPath);
@@ -426,22 +464,31 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 					string finalCIPPath = Path.Combine(GlobalVars.UserConfigDir, Path.GetFileName(CIPPath));
 					File.Copy(CIPPath, finalCIPPath, true);
 				}
+
 			});
+
+			// Final check for cancellation after Task.Run completes
+			FilesAndFoldersCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 		}
 		catch (Exception ex)
 		{
-			errorsOccurred = true;
-			FilesAndFoldersInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorOccurredCreatingPolicy"));
+			HandleExceptions(ex, ref errorsOccurred, ref FilesAndFoldersCancellableButton.wasCancelled, FilesAndFoldersInfoBar, GlobalVars.GetStr("ErrorOccurredCreatingPolicy"));
 		}
 		finally
 		{
-			if (!errorsOccurred)
+			if (FilesAndFoldersCancellableButton.wasCancelled)
 			{
-				FilesAndFoldersInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("DenyPolicyCreatedSuccessfully") + filesAndFoldersDenyPolicyName + "'");
+				FilesAndFoldersInfoBar.WriteWarning(GlobalVars.GetStr("OperationCancelledByUser"));
+			}
+			else if (!errorsOccurred)
+			{
+				FilesAndFoldersInfoBar.WriteSuccess(GlobalVars.GetStr("DenyPolicyCreatedSuccessfully") + filesAndFoldersDenyPolicyName + "'");
 
 				FilesAndFoldersInfoBarActionButtonVisibility = Visibility.Visible;
 			}
+
+			FilesAndFoldersCancellableButton.End();
 
 			FilesAndFoldersInfoBar.IsClosable = true;
 
@@ -454,9 +501,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// </summary>
 	internal void FilesAndFoldersBrowseForFilesButton_Click()
 	{
-		List<string>? selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.AnyFilePickerFilter);
+		List<string> selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.AnyFilePickerFilter);
 
-		if (selectedFiles is { Count: > 0 })
+		if (selectedFiles.Count > 0)
 		{
 			foreach (string file in selectedFiles)
 			{
@@ -470,9 +517,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// </summary>
 	internal void FilesAndFoldersBrowseForFoldersButton_Click()
 	{
-		List<string>? selectedDirectories = FileDialogHelper.ShowMultipleDirectoryPickerDialog();
+		List<string> selectedDirectories = FileDialogHelper.ShowMultipleDirectoryPickerDialog();
 
-		if (selectedDirectories is { Count: > 0 })
+		if (selectedDirectories.Count > 0)
 		{
 			foreach (string dir in selectedDirectories)
 			{
@@ -489,18 +536,12 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// Button to clear the list of selected folder paths
 	/// </summary>
-	internal void FilesAndFoldersBrowseForFoldersButton_Flyout_Clear_Click()
-	{
-		filesAndFoldersFolderPaths.Clear();
-	}
+	internal void FilesAndFoldersBrowseForFoldersButton_Flyout_Clear_Click() => filesAndFoldersFolderPaths.Clear();
 
 	/// <summary>
 	/// Button to clear the list of selected file paths
 	/// </summary>
-	internal void FilesAndFoldersBrowseForFilesButton_Flyout_Clear_Click()
-	{
-		filesAndFoldersFilePaths.Clear();
-	}
+	internal void FilesAndFoldersBrowseForFilesButton_Flyout_Clear_Click() => filesAndFoldersFilePaths.Clear();
 
 	/// <summary>
 	/// Path to the Files and Folders Deny policy XML file
@@ -510,17 +551,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// Opens a policy editor for files and folders using a specified Deny policy path.
 	/// </summary>
-	internal async void OpenInPolicyEditor_FilesAndFolders()
-	{
-		try
-		{
-			await PolicyEditorViewModel.OpenInPolicyEditor(_FilesAndFoldersDenyPolicyPath);
-		}
-		catch (Exception ex)
-		{
-			FilesAndFoldersInfoBar.WriteError(ex);
-		}
-	}
+	internal async void OpenInPolicyEditor_FilesAndFolders() => await PolicyEditorViewModel.OpenInPolicyEditor(_FilesAndFoldersDenyPolicyPath);
+
+	internal async void OpenInDefaultFileHandler_FilesAndFolders() => await OpenInDefaultFileHandler(_FilesAndFoldersDenyPolicyPath);
 
 	/// <summary>
 	/// De-selects all of the displayed rows on the ListView
@@ -546,9 +579,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// Event handler for the Clear Data button
 	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	internal void ClearDataButton_Click(object sender, RoutedEventArgs e)
+	internal void ClearDataButton_Click()
 	{
 		FilesAndFoldersScanResults.Clear();
 		filesAndFoldersScanResultsList.Clear();
@@ -631,6 +662,11 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	internal string? PFNBasedSelectedItemsCount { get; set => SP(ref field, value); }
 
 	/// <summary>
+	/// Initialization details for the main Create button for the PFN-Based section
+	/// </summary>
+	internal readonly AnimatedCancellableButtonInitializer PFNBasedCancellableButton;
+
+	/// <summary>
 	/// The search keyword for filtering the apps list.
 	/// </summary>
 	internal string? PFNBasedSearchKeywordForAppsList
@@ -711,7 +747,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		if (lv is null) return;
 
 		int selectedCount = lv.SelectedItems.Count;
-		PFNBasedSelectedItemsCount = string.Format(GlobalVars.Rizz.GetString("SelectedAppsCount"), selectedCount);
+		PFNBasedSelectedItemsCount = string.Format(GlobalVars.GetStr("SelectedAppsCount"), selectedCount);
 
 		PFNBasedAppsListItemsSourceSelectedItems = new(lv.SelectedItems);
 	}
@@ -728,7 +764,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	private void PFNAppFilteringTextBox_TextChanged()
 	{
 		// Store the original collection if it hasn't been saved yet
-		_originalContacts ??= (ObservableCollection<GroupInfoListForPackagedAppView>)PFNBasedAppsListItemsSource;
+		_originalContacts ??= PFNBasedAppsListItemsSource;
 
 		if (string.IsNullOrWhiteSpace(PFNBasedSearchKeywordForAppsList))
 		{
@@ -784,21 +820,34 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 		if (PFNBasedAppsListItemsSourceSelectedItems.Count is 0)
 		{
-			PFNInfoBar.WriteWarning(GlobalVars.Rizz.GetString("NoAppSelectedForDenyPolicy"),
+			PFNInfoBar.WriteWarning(GlobalVars.GetStr("NoAppSelectedForDenyPolicy"),
 				"PFN based policy");
 			return;
 		}
 
-		if (string.IsNullOrWhiteSpace(PFNBasedDenyPolicyName))
+		if (OperationModeComboBoxSelectedIndex is 0 && string.IsNullOrWhiteSpace(PFNBasedDenyPolicyName))
 		{
-			PFNInfoBar.WriteWarning(GlobalVars.Rizz.GetString("ChoosePolicyNameSubtitle"),
-				GlobalVars.Rizz.GetString("ChoosePolicyNameTitle"));
+			PFNInfoBar.WriteWarning(GlobalVars.GetStr("ChoosePolicyNameSubtitle"),
+				GlobalVars.GetStr("ChoosePolicyNameTitle"));
 			return;
 		}
 
-		bool ErrorsOccurred = false;
+		// use the policy to merge with file if that option is enabled by the user
+		if (OperationModeComboBoxSelectedIndex is 1)
+		{
+			if (PolicyFileToMergeWith is null)
+			{
+				FilesAndFoldersInfoBar.WriteWarning(GlobalVars.GetStr("SelectPolicyToAddRulesToSubtitle"), GlobalVars.GetStr("SelectPolicyToAddRulesToTitle"));
+				return;
+			}
+		}
 
+		// All validation passed - NOW we set button state to indicate operation starting
 		_PFNDenyPolicyPath = null;
+
+		bool errorsOccurred = false;
+
+		PFNBasedCancellableButton.Begin();
 
 		try
 		{
@@ -807,7 +856,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 			PFNInfoBar.IsClosable = false;
 
-			PFNInfoBar.WriteInfo(GlobalVars.Rizz.GetString("CreatingPFNBasedDenyPolicy"));
+			PFNInfoBar.WriteInfo(GlobalVars.GetStr("CreatingPFNBasedDenyPolicy"));
+
+			PFNBasedCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 			// A list to store the selected PackagedAppView items
 			List<string> selectedAppsPFNs = [];
@@ -815,6 +866,8 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 			// Loop through the selected items
 			foreach (var selectedItem in PFNBasedAppsListItemsSourceSelectedItems)
 			{
+				PFNBasedCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
+
 				if (selectedItem is PackagedAppView appView)
 				{
 					// Add the selected item's PFN to the list
@@ -830,39 +883,60 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 				// Get the path to an empty policy file
 				string EmptyPolicyPath = PrepareEmptyPolicy.Prepare(stagingArea.FullName);
 
+				PFNBasedCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
+
 				// Separate the signed and unsigned data
 				FileBasedInfoPackage DataPackage = SignerAndHashBuilder.BuildSignerAndHashObjects(level: ScanLevels.PFN, packageFamilyNames: selectedAppsPFNs);
 
 				// Insert the data into the empty policy file
-				Master.Initiate(DataPackage, EmptyPolicyPath, SiPolicyIntel.Authorization.Deny, stagingArea.FullName);
+				Master.Initiate(DataPackage, EmptyPolicyPath, SiPolicyIntel.Authorization.Deny, stagingArea.FullName, OperationModeComboBoxSelectedIndex is 1);
 
-				string OutputPath = Path.Combine(GlobalVars.UserConfigDir, $"{PFNBasedDenyPolicyName}.xml");
+				string OutputPath = OperationModeComboBoxSelectedIndex is 1 ? PolicyFileToMergeWith! : Path.Combine(GlobalVars.UserConfigDir, $"{PFNBasedDenyPolicyName}.xml");
 
-				// Set policy name and reset the policy ID
-				_ = SetCiPolicyInfo.Set(EmptyPolicyPath, true, PFNBasedDenyPolicyName, null, null);
+				PFNBasedCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
-				// Configure policy rule options
-				CiRuleOptions.Set(filePath: EmptyPolicyPath, template: CiRuleOptions.PolicyTemplate.Base);
+				if (OperationModeComboBoxSelectedIndex is 1)
+				{
+					// Merge the new Deny policy with the user selected policy - user selected policy is the main one in the merge operation
+					Merger.Merge(OutputPath, [EmptyPolicyPath]);
+				}
+				else
+				{
+					// Set policy name and reset the policy ID
+					_ = SetCiPolicyInfo.Set(EmptyPolicyPath, true, PFNBasedDenyPolicyName, null, null);
 
-				// Set policy version
-				SetCiPolicyInfo.Set(EmptyPolicyPath, new Version("1.0.0.0"));
+					// Configure policy rule options
+					CiRuleOptions.Set(filePath: EmptyPolicyPath, template: CiRuleOptions.PolicyTemplate.Base);
 
-				// Copying the policy file to the User Config directory - outside of the temporary staging area
-				File.Copy(EmptyPolicyPath, OutputPath, true);
+					// Set policy version
+					SetCiPolicyInfo.Set(EmptyPolicyPath, new Version("1.0.0.0"));
+
+					PFNBasedCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
+
+					// Copying the policy file to the User Config directory - outside of the temporary staging area
+					File.Copy(EmptyPolicyPath, OutputPath, true);
+				}
 
 				_PFNDenyPolicyPath = OutputPath;
 
-				string CIPPath = Path.Combine(stagingArea.FullName, $"{PFNBasedDenyPolicyName}.cip");
+				// Use the name of the user selected file for CIP file name, otherwise use the name of the Deny policy provided by the user
+				string CIPName = OperationModeComboBoxSelectedIndex is 1
+					? $"{Path.GetFileNameWithoutExtension(PolicyFileToMergeWith!)}.cip"
+					: $"{PFNBasedDenyPolicyName}.cip";
+
+				string CIPPath = Path.Combine(stagingArea.FullName, CIPName);
 
 				// Convert the XML file to CIP and save it in the defined path
 				Management.ConvertXMLToBinary(OutputPath, null, CIPPath);
+
+				PFNBasedCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 				// If user selected to deploy the policy
 				if (PFNBasedShouldDeploy)
 				{
 					_ = Dispatcher.TryEnqueue(() =>
 					{
-						PFNInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingThePolicy"));
+						PFNInfoBar.WriteInfo(GlobalVars.GetStr("DeployingThePolicy"));
 					});
 
 					CiToolHelper.UpdatePolicy(CIPPath);
@@ -877,17 +951,23 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		}
 		catch (Exception ex)
 		{
-			ErrorsOccurred = true;
-			PFNInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorOccurredScanningDrivers"));
+			HandleExceptions(ex, ref errorsOccurred, ref PFNBasedCancellableButton.wasCancelled, PFNInfoBar, GlobalVars.GetStr("ErrorOccurredScanningDrivers"));
 		}
 		finally
 		{
-			if (!ErrorsOccurred)
+
+			if (PFNBasedCancellableButton.wasCancelled)
 			{
-				PFNInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("DenyPolicyCreated"));
+				PFNInfoBar.WriteWarning(GlobalVars.GetStr("OperationCancelledByUser"));
+			}
+			else if (!errorsOccurred)
+			{
+				PFNInfoBar.WriteSuccess(GlobalVars.GetStr("DenyPolicyCreated"));
 
 				PFNInfoBarActionButtonVisibility = Visibility.Visible;
 			}
+
+			PFNBasedCancellableButton.End();
 
 			PFNElementsAreEnabled = true;
 
@@ -903,17 +983,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// Opens a policy editor for PFN using a specified Deny policy path.
 	/// </summary>
-	internal async void OpenInPolicyEditor_PFN()
-	{
-		try
-		{
-			await PolicyEditorViewModel.OpenInPolicyEditor(_PFNDenyPolicyPath);
-		}
-		catch (Exception ex)
-		{
-			PFNInfoBar.WriteError(ex);
-		}
-	}
+	internal async void OpenInPolicyEditor_PFN() => await PolicyEditorViewModel.OpenInPolicyEditor(_PFNDenyPolicyPath);
+
+	internal async void OpenInDefaultFileHandler_PFN() => await OpenInDefaultFileHandler(_PFNDenyPolicyPath);
 
 	#endregion
 
@@ -952,11 +1024,15 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	internal string? CustomPatternBasedFileRuleBasedDenyPolicyName { get; set => SP(ref field, value); }
 
 	/// <summary>
+	/// Initialization details for the main Create button for the Pattern Based FileRule section
+	/// </summary>
+	internal readonly AnimatedCancellableButtonInitializer PatternBasedFileRuleCancellableButton;
+
+	/// <summary>
 	/// Event handler for the main button - to create Deny pattern based File path policy
 	/// </summary>
 	internal async void CreateCustomPatternBasedFileRuleDenyPolicyButton_Click()
 	{
-		bool errorsOccurred = false;
 
 		CustomFilePathRulesSettingsExpanderIsExpanded = true;
 
@@ -964,19 +1040,34 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 		if (string.IsNullOrWhiteSpace(DenyPolicyCustomPatternBasedCustomPatternTextBox))
 		{
-			CustomFilePathRulesInfoBar.WriteWarning(GlobalVars.Rizz.GetString("EnterCustomPatternSubtitle"),
-				GlobalVars.Rizz.GetString("EnterCustomPatternTitle"));
+			CustomFilePathRulesInfoBar.WriteWarning(GlobalVars.GetStr("EnterCustomPatternSubtitle"),
+				GlobalVars.GetStr("EnterCustomPatternTitle"));
 			return;
 		}
 
-		if (string.IsNullOrWhiteSpace(CustomPatternBasedFileRuleBasedDenyPolicyName))
+		if (OperationModeComboBoxSelectedIndex is 0 && string.IsNullOrWhiteSpace(CustomPatternBasedFileRuleBasedDenyPolicyName))
 		{
-			CustomFilePathRulesInfoBar.WriteWarning(GlobalVars.Rizz.GetString("ChoosePolicyNameSubtitle"),
-				GlobalVars.Rizz.GetString("ChoosePolicyNameTitle"));
+			CustomFilePathRulesInfoBar.WriteWarning(GlobalVars.GetStr("ChoosePolicyNameSubtitle"),
+				GlobalVars.GetStr("ChoosePolicyNameTitle"));
 			return;
 		}
 
+		// use the policy to merge with file if that option is enabled by the user
+		if (OperationModeComboBoxSelectedIndex is 1)
+		{
+			if (PolicyFileToMergeWith is null)
+			{
+				FilesAndFoldersInfoBar.WriteWarning(GlobalVars.GetStr("SelectPolicyToAddRulesToSubtitle"), GlobalVars.GetStr("SelectPolicyToAddRulesToTitle"));
+				return;
+			}
+		}
+
+		// All validation passed - NOW we set button state to indicate operation starting
 		_CustomPatternBasedFileRuleDenyPolicyPath = null;
+
+		bool errorsOccurred = false;
+
+		PatternBasedFileRuleCancellableButton.Begin();
 
 		try
 		{
@@ -984,7 +1075,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 			CustomFilePathRulesInfoBarIsClosable = false;
 
-			CustomFilePathRulesInfoBar.WriteInfo(GlobalVars.Rizz.GetString("CreatingPatternBasedFilePathRuleDenyPolicyMessage"));
+			CustomFilePathRulesInfoBar.WriteInfo(GlobalVars.GetStr("CreatingPatternBasedFilePathRuleDenyPolicyMessage"));
+
+			PatternBasedFileRuleCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 			await Task.Run(() =>
 			{
@@ -996,36 +1089,59 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 				// Separate the signed and unsigned data
 				FileBasedInfoPackage DataPackage = SignerAndHashBuilder.BuildSignerAndHashObjects(data: null, level: ScanLevels.CustomFileRulePattern, folderPaths: null, customFileRulePatterns: [DenyPolicyCustomPatternBasedCustomPatternTextBox]);
 
+				PatternBasedFileRuleCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
+
 				// Insert the data into the empty policy file
-				Master.Initiate(DataPackage, EmptyPolicyPath, SiPolicyIntel.Authorization.Deny, stagingArea.FullName);
+				Master.Initiate(DataPackage, EmptyPolicyPath, SiPolicyIntel.Authorization.Deny, stagingArea.FullName, OperationModeComboBoxSelectedIndex is 1);
 
-				string OutputPath = Path.Combine(GlobalVars.UserConfigDir, $"{CustomPatternBasedFileRuleBasedDenyPolicyName}.xml");
+				string OutputPath = OperationModeComboBoxSelectedIndex is 1 ? PolicyFileToMergeWith! : Path.Combine(GlobalVars.UserConfigDir, $"{CustomPatternBasedFileRuleBasedDenyPolicyName}.xml");
 
-				// Set policy name and reset the policy ID
-				_ = SetCiPolicyInfo.Set(EmptyPolicyPath, true, CustomPatternBasedFileRuleBasedDenyPolicyName, null, null);
+				PatternBasedFileRuleCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
-				// Configure policy rule options
-				CiRuleOptions.Set(filePath: EmptyPolicyPath, template: CiRuleOptions.PolicyTemplate.Base);
+				if (OperationModeComboBoxSelectedIndex is 1)
+				{
+					// Merge the new Deny policy with the user selected policy - user selected policy is the main one in the merge operation
+					Merger.Merge(OutputPath, [EmptyPolicyPath]);
+				}
+				else
+				{
+					// Set policy name and reset the policy ID
+					_ = SetCiPolicyInfo.Set(EmptyPolicyPath, true, CustomPatternBasedFileRuleBasedDenyPolicyName, null, null);
 
-				// Set policy version
-				SetCiPolicyInfo.Set(EmptyPolicyPath, new Version("1.0.0.0"));
+					// Configure policy rule options
+					CiRuleOptions.Set(filePath: EmptyPolicyPath, template: CiRuleOptions.PolicyTemplate.Base);
 
-				// Copying the policy file to the User Config directory - outside of the temporary staging area
-				File.Copy(EmptyPolicyPath, OutputPath, true);
+					// Set policy version
+					SetCiPolicyInfo.Set(EmptyPolicyPath, new Version("1.0.0.0"));
+
+					PatternBasedFileRuleCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
+
+					// Copying the policy file to the User Config directory - outside of the temporary staging area
+					File.Copy(EmptyPolicyPath, OutputPath, true);
+				}
 
 				_CustomPatternBasedFileRuleDenyPolicyPath = OutputPath;
 
-				string CIPPath = Path.Combine(stagingArea.FullName, $"{CustomPatternBasedFileRuleBasedDenyPolicyName}.cip");
+				// Use the name of the user selected file for CIP file name, otherwise use the name of the Deny policy provided by the user
+				string CIPName = OperationModeComboBoxSelectedIndex is 1
+					? $"{Path.GetFileNameWithoutExtension(PolicyFileToMergeWith!)}.cip"
+					: $"{CustomPatternBasedFileRuleBasedDenyPolicyName}.cip";
+
+				string CIPPath = Path.Combine(stagingArea.FullName, CIPName);
+
+				PatternBasedFileRuleCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 				// Convert the XML file to CIP and save it in the defined path
 				Management.ConvertXMLToBinary(OutputPath, null, CIPPath);
+
+				PatternBasedFileRuleCancellableButton.Cts?.Token.ThrowIfCancellationRequested();
 
 				// If user selected to deploy the policy
 				if (CustomPatternBasedFileRuleBasedDeployButton)
 				{
 					_ = Dispatcher.TryEnqueue(() =>
 					{
-						CustomFilePathRulesInfoBar.WriteInfo(GlobalVars.Rizz.GetString("DeployingThePolicy"));
+						CustomFilePathRulesInfoBar.WriteInfo(GlobalVars.GetStr("DeployingThePolicy"));
 					});
 
 					CiToolHelper.UpdatePolicy(CIPPath);
@@ -1041,17 +1157,22 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		}
 		catch (Exception ex)
 		{
-			errorsOccurred = true;
-			CustomFilePathRulesInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorOccurredCreatingPolicy"));
+			HandleExceptions(ex, ref errorsOccurred, ref PatternBasedFileRuleCancellableButton.wasCancelled, CustomFilePathRulesInfoBar, GlobalVars.GetStr("ErrorOccurredCreatingPolicy"));
 		}
 		finally
 		{
-			if (!errorsOccurred)
+			if (PatternBasedFileRuleCancellableButton.wasCancelled)
 			{
-				CustomFilePathRulesInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("SuccessfullyCreatedPatternBasedFilePathRuleDenyPolicyMessage"));
+				CustomFilePathRulesInfoBar.WriteWarning(GlobalVars.GetStr("OperationCancelledByUser"));
+			}
+			else if (!errorsOccurred)
+			{
+				CustomFilePathRulesInfoBar.WriteSuccess(GlobalVars.GetStr("SuccessfullyCreatedPatternBasedFilePathRuleDenyPolicyMessage"));
 
 				CustomFilePathRulesInfoBarActionButtonVisibility = Visibility.Visible;
 			}
+
+			PatternBasedFileRuleCancellableButton.End();
 
 			CustomFilePathRulesElementsAreEnabled = true;
 
@@ -1088,18 +1209,78 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// Opens a policy editor for CustomPatternBasedFileRule using a specified Deny policy path.
 	/// </summary>
-	internal async void OpenInPolicyEditor_CustomPatternBasedFileRule()
+	internal async void OpenInPolicyEditor_CustomPatternBasedFileRule() => await PolicyEditorViewModel.OpenInPolicyEditor(_CustomPatternBasedFileRuleDenyPolicyPath);
+
+	internal async void OpenInDefaultFileHandler_CustomPatternBasedFileRule() => await OpenInDefaultFileHandler(_CustomPatternBasedFileRuleDenyPolicyPath);
+
+	#endregion
+
+	#region Policy Creation Mode
+
+	/// <summary>
+	/// The path to the policy file that user selected to add the new rules to.
+	/// </summary>
+	internal string? PolicyFileToMergeWith { get; set => SP(ref field, value); }
+
+	/// <summary>
+	/// Whether the button that allows for picking a policy file to add the rules to is enabled or disabled.
+	/// </summary>
+	internal bool PolicyFileToMergeWithPickerButtonIsEnabled { get; set => SP(ref field, value); }
+
+	/// <summary>
+	/// Controls the visibility of all of the elements related to browsing for base policy file.
+	/// </summary>
+	internal Visibility BasePolicyElementsVisibility
 	{
-		try
+		get; set => SP(ref field, value);
+	} = Visibility.Visible;
+
+
+	/// <summary>
+	/// The mode of operation for the Deny creation page.
+	/// Set to 0 (Creating New Policies) by default.
+	/// </summary>
+	internal int OperationModeComboBoxSelectedIndex
+	{
+		get;
+		set
 		{
-			await PolicyEditorViewModel.OpenInPolicyEditor(_CustomPatternBasedFileRuleDenyPolicyPath);
+			// Update the operation mode property
+			_ = SP(ref field, value);
+
+			// Automate the update of elements responsible for accepting base policy path.
+			// If this is set to 0, they should be visible, otherwise they should be collapsed.
+			BasePolicyElementsVisibility = field == 0 ? Visibility.Visible : Visibility.Collapsed;
+
+			PolicyFileToMergeWithPickerButtonIsEnabled = field == 1;
 		}
-		catch (Exception ex)
+	}
+
+	/// <summary>
+	/// Clears the PolicyFileToMergeWith
+	/// </summary>
+	internal void ClearPolicyFileToMergeWith()
+	{
+		PolicyFileToMergeWith = null;
+	}
+
+	internal void PolicyFileToMergeWithButton_Click()
+	{
+		string? selectedFile = FileDialogHelper.ShowFilePickerDialog(GlobalVars.XMLFilePickerFilter);
+
+		if (!string.IsNullOrEmpty(selectedFile))
 		{
-			CustomFilePathRulesInfoBar.WriteError(ex);
+			// Store the selected XML file path
+			PolicyFileToMergeWith = selectedFile;
 		}
 	}
 
 	#endregion
 
+	internal void _OpenInFileExplorer() => OpenInFileExplorer(ListViewHelper.ListViewsRegistry.DenyPolicy_FilesAndFolders_ScanResults);
+	internal void _OpenInFileExplorerShortCut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+	{
+		_OpenInFileExplorer();
+		args.Handled = true;
+	}
 }

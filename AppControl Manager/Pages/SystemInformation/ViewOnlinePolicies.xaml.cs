@@ -16,7 +16,6 @@
 //
 
 using AppControlManager.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
@@ -25,14 +24,12 @@ namespace AppControlManager.Pages;
 internal sealed partial class ViewOnlinePolicies : Page
 {
 
-	private ViewOnlinePoliciesVM ViewModel { get; } = App.AppHost.Services.GetRequiredService<ViewOnlinePoliciesVM>();
-	private MicrosoftGraph.ViewModelForMSGraph ViewModelMSGraph { get; } = App.AppHost.Services.GetRequiredService<MicrosoftGraph.ViewModelForMSGraph>();
-	private AppSettings.Main AppSettings { get; } = App.AppHost.Services.GetRequiredService<AppSettings.Main>();
+	private ViewOnlinePoliciesVM ViewModel { get; } = ViewModelProvider.ViewOnlinePoliciesVM;
 
 	internal ViewOnlinePolicies()
 	{
 		this.InitializeComponent();
-		this.DataContext = this;
+		this.DataContext = ViewModel;
 		this.NavigationCacheMode = NavigationCacheMode.Disabled;
 	}
 }

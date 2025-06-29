@@ -16,7 +16,6 @@
 //
 
 using AppControlManager.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
@@ -28,11 +27,10 @@ namespace AppControlManager.Pages;
 internal sealed partial class PolicyEditor : Page
 {
 
-	private PolicyEditorVM ViewModel { get; } = App.AppHost.Services.GetRequiredService<PolicyEditorVM>();
-	private AppSettings.Main AppSettings { get; } = App.AppHost.Services.GetRequiredService<AppSettings.Main>();
+	private PolicyEditorVM ViewModel { get; } = ViewModelProvider.PolicyEditorVM;
 
-	internal static Flyout? _DiamondButtonFlyout { get; set; }
-	internal static Button? _DiamondButton { get; set; }
+	internal static Flyout? _DiamondButtonFlyout { get; private set; }
+	internal static Button? _DiamondButton { get; private set; }
 
 	/// <summary>
 	/// Initializes a new instance of the PolicyEditor class.

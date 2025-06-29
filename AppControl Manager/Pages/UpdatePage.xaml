@@ -10,7 +10,7 @@
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    FlowDirection="{x:Bind AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
+    FlowDirection="{x:Bind ViewModel.AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
     mc:Ignorable="d">
 
     <ScrollViewer>
@@ -88,11 +88,13 @@
                 </controls:SettingsCard>
 
                 <customUI:SettingsCardV2 x:Uid="AutoUpdateCheckSettingsCard" HeaderIcon="{ui:FontIcon Glyph=&#xE774;}">
-                    <ToggleSwitch IsOn="{x:Bind AppSettings.AutoCheckForUpdateAtStartup, Mode=TwoWay}"/>
+                    <ToggleSwitch IsOn="{x:Bind ViewModel.AppSettings.AutoCheckForUpdateAtStartup, Mode=TwoWay}"
+                                  x:Uid="ToggleSwitchGeneral"/>
                 </customUI:SettingsCardV2>
 
                 <customUI:SettingsCardV2 x:Uid="HardenedUpdateProcedureSettingsCard" HeaderIcon="{ui:FontIcon Glyph=&#xF552;}" Visibility="{x:Bind ViewModel.HardenedProcedureSectionVisibility, Mode=OneWay}">
-                    <ToggleSwitch IsOn="{x:Bind ViewModel.UseHardenedInstallationProcess, Mode=TwoWay}" />
+                    <ToggleSwitch IsOn="{x:Bind ViewModel.UseHardenedInstallationProcess, Mode=TwoWay}"
+                                  x:Uid="ToggleSwitchGeneral"/>
                 </customUI:SettingsCardV2>
 
                 <controls:SettingsCard

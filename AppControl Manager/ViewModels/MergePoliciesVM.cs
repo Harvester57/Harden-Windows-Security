@@ -40,15 +40,11 @@ internal sealed partial class MergePoliciesVM : ViewModelBase
 
 	private readonly InfoBarSettings MainInfoBar;
 
-	internal bool IsElevated => App.IsElevated;
-
 	#region UI-Bound Properties
 
 	internal readonly UniqueStringObservableCollection OtherPolicies = [];
 
 	internal bool ShouldDeploy { get; set => SP(ref field, value); }
-
-	internal bool ShouldDeployToggleState = App.IsElevated;
 
 	internal string? MainPolicy { get; set => SP(ref field, value); }
 
@@ -75,13 +71,13 @@ internal sealed partial class MergePoliciesVM : ViewModelBase
 
 		if (string.IsNullOrWhiteSpace(MainPolicy))
 		{
-			MainInfoBar.WriteWarning(GlobalVars.Rizz.GetString("MergePolicies_SelectMainPolicySubtitle"));
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("MergePolicies_SelectMainPolicySubtitle"));
 			return;
 		}
 
 		if (OtherPolicies.Count is 0)
 		{
-			MainInfoBar.WriteWarning(GlobalVars.Rizz.GetString("MergePolicies_SelectOtherPoliciesSubtitle"));
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("MergePolicies_SelectOtherPoliciesSubtitle"));
 			return;
 		}
 
@@ -94,7 +90,7 @@ internal sealed partial class MergePoliciesVM : ViewModelBase
 
 			PolicyMergerInfoBarIsClosable = false;
 
-			MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("MergePolicies_MergingMessage"));
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("MergePolicies_MergingMessage"));
 
 			await Task.Run(() =>
 			{
@@ -106,12 +102,12 @@ internal sealed partial class MergePoliciesVM : ViewModelBase
 				{
 					_ = Dispatcher.TryEnqueue(() =>
 					{
-						MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("MergePolicies_DeployingMessage"));
+						MainInfoBar.WriteInfo(GlobalVars.GetStr("MergePolicies_DeployingMessage"));
 					});
 
-					string stagingArea = StagingArea.NewStagingArea(GlobalVars.Rizz.GetString("MergePolicies_StagingAreaName")).FullName;
+					string stagingArea = StagingArea.NewStagingArea(GlobalVars.GetStr("MergePolicies_StagingAreaName")).FullName;
 
-					string CIPPath = Path.Combine(stagingArea, GlobalVars.Rizz.GetString("MergePolicies_MergedPolicyFileName"));
+					string CIPPath = Path.Combine(stagingArea, GlobalVars.GetStr("MergePolicies_MergedPolicyFileName"));
 
 					SiPolicy.Management.ConvertXMLToBinary(MainPolicy, null, CIPPath);
 
@@ -122,13 +118,13 @@ internal sealed partial class MergePoliciesVM : ViewModelBase
 		catch (Exception ex)
 		{
 			errorsOccurred = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("MergePolicies_ErrorMessage"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("MergePolicies_ErrorMessage"));
 		}
 		finally
 		{
 			if (!errorsOccurred)
 			{
-				MainInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("MergePolicies_SuccessMessage"));
+				MainInfoBar.WriteSuccess(GlobalVars.GetStr("MergePolicies_SuccessMessage"));
 			}
 
 			PolicyMergerInfoBarIsClosable = true;
@@ -160,9 +156,9 @@ internal sealed partial class MergePoliciesVM : ViewModelBase
 	/// </summary>
 	internal void OtherPoliciesBrowseButton_Click()
 	{
-		List<string>? selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
+		List<string> selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.XMLFilePickerFilter);
 
-		if (selectedFiles is { Count: > 0 })
+		if (selectedFiles.Count > 0)
 		{
 			foreach (string file in selectedFiles)
 			{

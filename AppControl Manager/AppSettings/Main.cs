@@ -24,15 +24,14 @@ using Windows.Storage;
 
 namespace AppControlManager.AppSettings;
 
-#pragma warning disable CA1812
-
 /// <summary>
 /// A thread-safe, unified settings manager for the application.
 /// Properties are strongly typed and any change is immediately persisted to local storage.
 /// </summary>
 internal sealed partial class Main : ViewModelBase
 {
-	private readonly Lock _syncRoot = new();
+	// Single shared lock for all property setters
+	private readonly Lock SettingsLock = new();
 
 	private readonly ApplicationDataContainer _localSettings;
 
@@ -62,6 +61,7 @@ internal sealed partial class Main : ViewModelBase
 		LaunchActivationFilePath = ReadValue(nameof(LaunchActivationFilePath), LaunchActivationFilePath);
 		LaunchActivationAction = ReadValue(nameof(LaunchActivationAction), LaunchActivationAction);
 		ScreenShield = ReadValue(nameof(ScreenShield), ScreenShield);
+		PublishUserActivityInTheOS = ReadValue(nameof(PublishUserActivityInTheOS), PublishUserActivityInTheOS);
 	}
 
 	/// <summary>
@@ -94,32 +94,28 @@ internal sealed partial class Main : ViewModelBase
 	/// Helper method to immediately persist the new value to local storage.
 	/// TODO: Add logic for Enums that will be added in the future.
 	/// </summary>
-	private void SaveValue(string key, object value) => _localSettings.Values[key] = value;
+	private void SaveValue(string key, object value)
+	{
+		// Use the lock when setting values to the Settings Container
+		lock (SettingsLock)
+			_localSettings.Values[key] = value;
+	}
 
 	/// <summary>
 	/// Whether the app emits sounds during navigation or not
 	/// </summary>
 	internal bool SoundSetting
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(SoundSetting), field);
+				SaveValue(nameof(SoundSetting), field);
 
-					// Set the sound settings
-					ElementSoundPlayer.State = field ? ElementSoundPlayerState.On : ElementSoundPlayerState.Off;
-					ElementSoundPlayer.SpatialAudioMode = field ? ElementSpatialAudioMode.On : ElementSpatialAudioMode.Off;
-				}
+				// Set the sound settings
+				ElementSoundPlayer.State = field ? ElementSoundPlayerState.On : ElementSoundPlayerState.Off;
+				ElementSoundPlayer.SpatialAudioMode = field ? ElementSpatialAudioMode.On : ElementSpatialAudioMode.Off;
 			}
 		}
 	}
@@ -129,24 +125,15 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal bool NavViewBackground
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(NavViewBackground), field);
+				SaveValue(nameof(NavViewBackground), field);
 
-					// Notify NavigationBackgroundManager
-					NavigationBackgroundManager.OnNavigationBackgroundChanged(field);
-				}
+				// Notify NavigationBackgroundManager
+				NavigationBackgroundManager.OnNavigationBackgroundChanged(field);
 			}
 		}
 	}
@@ -156,21 +143,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string NavViewPaneDisplayMode
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(NavViewPaneDisplayMode), field);
-				}
+				SaveValue(nameof(NavViewPaneDisplayMode), field);
 			}
 		}
 	} = "Left";
@@ -180,21 +158,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string AppTheme
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(AppTheme), field);
-				}
+				SaveValue(nameof(AppTheme), field);
 			}
 		}
 	} = "Use System Setting";
@@ -204,21 +173,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string BackDropBackground
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(BackDropBackground), field);
-				}
+				SaveValue(nameof(BackDropBackground), field);
 			}
 		}
 	} = "MicaAlt";
@@ -228,21 +188,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string IconsStyle
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(IconsStyle), field);
-				}
+				SaveValue(nameof(IconsStyle), field);
 			}
 		}
 	} = "Monochromatic";
@@ -252,69 +203,42 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal int MainWindowWidth
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(MainWindowWidth), field);
-				}
+				SaveValue(nameof(MainWindowWidth), field);
 			}
 		}
-	} = 100; // Setting it to this value initially so that it will be determined naturally in MainWindow class
+	} = 700;
 
 	/// <summary>
 	/// Height of the main window
 	/// </summary>
 	internal int MainWindowHeight
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(MainWindowHeight), field);
-				}
+				SaveValue(nameof(MainWindowHeight), field);
 			}
 		}
-	} = 100; // Setting it to this value initially so that it will be determined naturally in MainWindow class
+	} = 700;
 
 	/// <summary>
 	/// Whether the main window is maximized prior to closing the app.
 	/// </summary>
 	internal bool MainWindowIsMaximized
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(MainWindowIsMaximized), field);
-				}
+				SaveValue(nameof(MainWindowIsMaximized), field);
 			}
 		}
 	}
@@ -324,21 +248,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal bool ListViewsVerticalCentering
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(ListViewsVerticalCentering), field);
-				}
+				SaveValue(nameof(ListViewsVerticalCentering), field);
 			}
 		}
 	}
@@ -348,21 +263,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal bool CacheSecurityCatalogsScanResults
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(CacheSecurityCatalogsScanResults), field);
-				}
+				SaveValue(nameof(CacheSecurityCatalogsScanResults), field);
 			}
 		}
 	} = true;
@@ -372,21 +278,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal bool PromptForElevationOnStartup
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(PromptForElevationOnStartup), field);
-				}
+				SaveValue(nameof(PromptForElevationOnStartup), field);
 			}
 		}
 	}
@@ -396,21 +293,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal bool AutomaticAssignmentSidebar
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(AutomaticAssignmentSidebar), field);
-				}
+				SaveValue(nameof(AutomaticAssignmentSidebar), field);
 			}
 		}
 	} = true;
@@ -420,21 +308,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal bool AutoCheckForUpdateAtStartup
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(AutoCheckForUpdateAtStartup), field);
-				}
+				SaveValue(nameof(AutoCheckForUpdateAtStartup), field);
 			}
 		}
 	} = true;
@@ -444,21 +323,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string ApplicationGlobalLanguage
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(ApplicationGlobalLanguage), field);
-				}
+				SaveValue(nameof(ApplicationGlobalLanguage), field);
 			}
 		}
 	} = "en-US";
@@ -468,21 +338,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string ApplicationGlobalFlowDirection
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(ApplicationGlobalFlowDirection), field);
-				}
+				SaveValue(nameof(ApplicationGlobalFlowDirection), field);
 			}
 		}
 	} = "LeftToRight";
@@ -493,21 +354,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string FileActivatedLaunchArg
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(FileActivatedLaunchArg), field);
-				}
+				SaveValue(nameof(FileActivatedLaunchArg), field);
 			}
 		}
 	} = string.Empty;
@@ -518,21 +370,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string CiPolicySchemaPath
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(CiPolicySchemaPath), field);
-				}
+				SaveValue(nameof(CiPolicySchemaPath), field);
 			}
 		}
 	} = string.Empty;
@@ -542,21 +385,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string LaunchActivationFilePath
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(LaunchActivationFilePath), field);
-				}
+				SaveValue(nameof(LaunchActivationFilePath), field);
 			}
 		}
 	} = string.Empty;
@@ -566,21 +400,12 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal string LaunchActivationAction
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					SaveValue(nameof(LaunchActivationAction), field);
-				}
+				SaveValue(nameof(LaunchActivationAction), field);
 			}
 		}
 	} = string.Empty;
@@ -591,24 +416,30 @@ internal sealed partial class Main : ViewModelBase
 	/// </summary>
 	internal bool ScreenShield
 	{
-		get
-		{
-			lock (_syncRoot)
-			{
-				return field;
-			}
-		}
+		get;
 		set
 		{
-			lock (_syncRoot)
+			if (SP(ref field, value))
 			{
-				if (SP(ref field, value))
-				{
-					WindowDisplayAffinity.SetWindowDisplayAffinity(GlobalVars.hWnd, field ? WindowDisplayAffinity.DisplayAffinity.WDA_EXCLUDEFROMCAPTURE : WindowDisplayAffinity.DisplayAffinity.WDA_NONE);
+				WindowDisplayAffinity.SetWindowDisplayAffinity(GlobalVars.hWnd, field ? WindowDisplayAffinity.DisplayAffinity.WDA_EXCLUDEFROMCAPTURE : WindowDisplayAffinity.DisplayAffinity.WDA_NONE);
 
-					SaveValue(nameof(ScreenShield), field);
-				}
+				SaveValue(nameof(ScreenShield), field);
 			}
 		}
 	}
+
+	/// <summary>
+	/// Whether the application can publish user activity in the OS so that user can then re-trace their steps in features such as Recall.
+	/// </summary>
+	internal bool PublishUserActivityInTheOS
+	{
+		get;
+		set
+		{
+			if (SP(ref field, value))
+			{
+				SaveValue(nameof(PublishUserActivityInTheOS), field);
+			}
+		}
+	} = true;
 }

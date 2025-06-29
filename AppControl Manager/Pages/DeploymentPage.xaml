@@ -16,7 +16,7 @@
     xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     xmlns:animatedvisuals="using:AnimatedVisuals"
     xmlns:labs="using:CommunityToolkit.Labs.WinUI"
-    FlowDirection="{x:Bind AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
+    FlowDirection="{x:Bind ViewModel.AppSettings.ApplicationGlobalFlowDirection, Mode=OneWay}"
     mc:Ignorable="d">
 
     <ScrollViewer>
@@ -137,8 +137,8 @@
                                             <controls:Segmented x:Name="segmentedControl"
                                                     HorizontalAlignment="Stretch"
                                                     SelectedIndex="0">
-                                                <controls:SegmentedItem Content="Active Account"
-                                                        Tag="Active">
+                                                <controls:SegmentedItem x:Uid="ActiveAccountSegmentedItem"
+                                                                        Tag="Active">
                                                     <controls:SegmentedItem.Icon>
                                                         <IconSourceElement>
                                                             <BitmapIconSource UriSource="/Assets/External/Bottle.png" ShowAsMonochrome="False" />
@@ -147,8 +147,8 @@
 
                                                 </controls:SegmentedItem>
 
-                                                <controls:SegmentedItem Content="Sign In"
-                                                         Tag="Authentication" >
+                                                <controls:SegmentedItem x:Uid="SignInSegmentedItem"
+                                                                        Tag="Authentication" >
                                                     <controls:SegmentedItem.Icon>
                                                         <IconSourceElement>
                                                             <BitmapIconSource UriSource="/Assets/External/Authentication.png" ShowAsMonochrome="False" />
@@ -156,8 +156,8 @@
                                                     </controls:SegmentedItem.Icon>
                                                 </controls:SegmentedItem>
 
-                                                <controls:SegmentedItem Content="Signed In Accounts"
-                                                        Tag="SignedIn">
+                                                <controls:SegmentedItem x:Uid="SignedInAccountsSegmentedItem"
+                                                                        Tag="SignedIn">
                                                     <controls:SegmentedItem.Icon>
                                                         <IconSourceElement>
                                                             <BitmapIconSource UriSource="/Assets/External/Vault.png" ShowAsMonochrome="False" />
@@ -175,7 +175,9 @@
 
                                                         <controls:WrapPanel Orientation="Vertical" VerticalSpacing="5" HorizontalSpacing="10" HorizontalAlignment="Center">
 
-                                                            <TextBlock Text="Details of the account that's currently in use" Margin="0,0,0,5" HorizontalAlignment="Center"/>
+                                                            <TextBlock x:Uid="CurrentlyInUseAccountDetailsTextBlock"
+                                                                       Margin="0,0,0,5"
+                                                                       HorizontalAlignment="Center"/>
 
                                                             <TextBox IsReadOnly="True" x:Uid="CurrentActiveAccountUsername" Text="{x:Bind ViewModel.AuthCompanionCLS.CurrentActiveAccountUsername, Mode=OneWay}" HorizontalAlignment="Center" Width="470"/>
                                                             <TextBox IsReadOnly="True" x:Uid="CurrentActiveAccountTenantID" Text="{x:Bind ViewModel.AuthCompanionCLS.CurrentActiveAccountTenantID, Mode=OneWay}" Margin="0,8,0,0" HorizontalAlignment="Center" Width="470"/>
@@ -204,7 +206,8 @@
                                                                                 <animatedvisuals:SignIn/>
                                                                             </AnimatedIcon.Source>
                                                                         </AnimatedIcon>
-                                                                        <TextBlock Text="Sign In" Margin="5,0,0,0" />
+                                                                        <TextBlock x:Uid="SignInTextBlock"
+                                                                                   Margin="5,0,0,0" />
                                                                     </StackPanel>
                                                                 </Button.Content>
                                                             </Button>
@@ -218,7 +221,8 @@
                                                                                 <animatedvisuals:Cancel/>
                                                                             </AnimatedIcon.Source>
                                                                         </AnimatedIcon>
-                                                                        <TextBlock Text="Cancel Signing In" Margin="5,0,0,0" />
+                                                                        <TextBlock x:Uid="CancelSigningInTextBlock"
+                                                                                   Margin="5,0,0,0" />
                                                                     </StackPanel>
                                                                 </Button.Content>
                                                             </Button>
@@ -277,7 +281,7 @@
                                                                                 <animatedvisuals:Logout/>
                                                                             </AnimatedIcon.Source>
                                                                         </AnimatedIcon>
-                                                                        <TextBlock Text="Remove" Margin="5,0,0,0" />
+                                                                        <TextBlock x:Uid="RemoveTextBlock" Margin="5,0,0,0" />
                                                                     </StackPanel>
                                                                 </Button.Content>
                                                             </Button>
@@ -291,7 +295,7 @@
                                                                                 <animatedvisuals:Select/>
                                                                             </AnimatedIcon.Source>
                                                                         </AnimatedIcon>
-                                                                        <TextBlock Text="Set as Active" Margin="5,0,0,0" />
+                                                                        <TextBlock x:Uid="SetAsActiveTextBlock" Margin="5,0,0,0" />
                                                                     </StackPanel>
                                                                 </Button.Content>
                                                             </Button>
@@ -403,7 +407,10 @@
                                           RegistryKey="Deployment_IntuneGroupsListView">
                                     <customUI:ListViewV3.ItemTemplate>
                                         <DataTemplate x:DataType="MSGraph:IntuneGroupItemListView">
-                                            <TextBlock Text="{x:Bind GroupName}" TextWrapping="Wrap" Margin="5" MaxWidth="380" />
+                                            <TextBlock Text="{x:Bind GroupName}"
+                                                       TextWrapping="Wrap"
+                                                       Margin="5"
+                                                       MaxWidth="380" />
                                         </DataTemplate>
                                     </customUI:ListViewV3.ItemTemplate>
                                 </customUI:ListViewV3>
@@ -427,7 +434,10 @@
                             <customUI:ButtonV2.Content>
                                 <controls:WrapPanel Orientation="Horizontal">
 
-                                    <AnimatedIcon Visibility="{x:Bind ViewModel.UnsignedXMLFilesLightAnimatedIconVisibility, Mode=OneWay}" Height="20" Margin="0,0,5,0" Width="20">
+                                    <AnimatedIcon Visibility="{x:Bind ViewModel.UnsignedXMLFilesLightAnimatedIconVisibility, Mode=OneWay}"
+                                                  Height="20"
+                                                  Margin="0,0,5,0"
+                                                  Width="20">
                                         <AnimatedIcon.Source>
                                             <animatedvisuals:Light/>
                                         </AnimatedIcon.Source>
@@ -459,15 +469,17 @@
 
                         </customUI:ButtonV2>
 
-                        <Button HorizontalAlignment="Center"                                
+                        <Button HorizontalAlignment="Center"
                                 HorizontalContentAlignment="Center"
                                 IsEnabled="{x:Bind ViewModel.AreElementsEnabled, Mode=OneWay}"
                                 Click="{x:Bind ViewModel.DeployUnsignedXMLButton_Click}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
                                         <FontIcon Glyph="&#xE8B6;" Margin="0,0,8,0" />
-                                        <TextBlock Text="Deploy"/>
+                                        <TextBlock x:Uid="DeployTextBlock"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Button.Content>
@@ -491,7 +503,10 @@
                             <customUI:ButtonV2.Content>
                                 <controls:WrapPanel Orientation="Horizontal">
 
-                                    <AnimatedIcon Visibility="{x:Bind ViewModel.SignedXMLFilesLightAnimatedIconVisibility, Mode=OneWay}" Height="20" Margin="0,0,5,0" Width="20">
+                                    <AnimatedIcon Visibility="{x:Bind ViewModel.SignedXMLFilesLightAnimatedIconVisibility, Mode=OneWay}"
+                                                  Height="20"
+                                                  Margin="0,0,5,0"
+                                                  Width="20">
                                         <AnimatedIcon.Source>
                                             <animatedvisuals:Light/>
                                         </AnimatedIcon.Source>
@@ -541,12 +556,13 @@
 
                     <controls:SettingsExpander.Items>
 
-                        <customUI:SettingsCardV2
-                             Description="Only creates signed CIP file(s) in the user config directory without deploying them. Toggle this if you want to deploy them on another system."
-                             Header="Sign Only - No Deployment"
-                             HeaderIcon="{ui:FontIcon Glyph=&#xF572;}" IsClickEnabled="True" IsActionIconVisible="False">
+                        <customUI:SettingsCardV2 x:Uid="SignOnlyNoDeploySettingsCard"
+                                                 HeaderIcon="{ui:FontIcon Glyph=&#xF572;}"
+                                                 IsClickEnabled="True"
+                                                 IsActionIconVisible="False">
 
                             <ToggleSwitch IsOn="{x:Bind ViewModel.SignOnlyNoDeployToggleSwitch, Mode=TwoWay}"
+                                          x:Uid="ToggleSwitchGeneral"
                                           IsEnabled="{x:Bind ViewModel.AreElementsEnabled, Mode=OneWay}"/>
 
                         </customUI:SettingsCardV2>
@@ -575,7 +591,8 @@
                                         <Button x:Uid="ClearButton"
                                                 Click="{x:Bind ViewModel.BrowseForCIPBinaryFilesButton_Flyout_Clear_Click}" />
 
-                                        <TextBlock Text="View the CIP files you selected." TextWrapping="WrapWholeWords" />
+                                        <TextBlock x:Uid="ViewSelectedCIPFilesTextBlock"
+                                                   TextWrapping="WrapWholeWords" />
 
                                         <ListBox MinWidth="400"
                                                  SelectionMode="Single"
@@ -588,16 +605,18 @@
 
                         </customUI:ButtonV2>
 
-                        <Button HorizontalAlignment="Center"                                
+                        <Button HorizontalAlignment="Center"
                                 IsEnabled="{x:Bind ViewModel.AreElementsEnabled, Mode=OneWay}"
                                 HorizontalContentAlignment="Center"
                                 Click="{x:Bind ViewModel.DeployCIPButton_Click}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
 
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
                                         <FontIcon Glyph="&#xE8B6;" Margin="0,0,8,0" />
-                                        <TextBlock Text="Deploy"/>
+                                        <TextBlock x:Uid="DeployTextBlock"/>
                                     </StackPanel>
 
                                 </StackPanel>
@@ -628,7 +647,8 @@
                                         <Button x:Uid="ClearButton"
                                                 Click="{x:Bind ViewModel.BrowseForXMLPolicesButton_Flyout_Clear_Click}" />
 
-                                        <TextBlock Text="View the XML files you selected." TextWrapping="WrapWholeWords" />
+                                        <TextBlock x:Uid="ViewSelectedXMLFilesTextBlock"
+                                                   TextWrapping="WrapWholeWords" />
 
                                         <ListBox MinWidth="400"
                                                  SelectionMode="Single"
@@ -641,16 +661,18 @@
 
                         </customUI:ButtonV2>
 
-                        <Button HorizontalAlignment="Center"                                
+                        <Button HorizontalAlignment="Center"
                                 IsEnabled="{x:Bind ViewModel.AreElementsEnabled, Mode=OneWay}"
                                 HorizontalContentAlignment="Center"
                                 Click="{x:Bind ViewModel.ConvertXMLToCIPButton_Click}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
 
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
                                         <FontIcon Glyph="&#xE8B1;" Margin="0,0,8,0" />
-                                        <TextBlock Text="Convert"/>
+                                        <TextBlock x:Uid="ConvertTextBlock"/>
                                     </StackPanel>
 
                                 </StackPanel>

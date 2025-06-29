@@ -994,9 +994,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="NoMSIXBundlePath" xml:space="preserve">
     <value>No MSIXBundle path was selected</value>
   </data>
-  <data name="DetectingSignTool" xml:space="preserve">
-    <value>Detecting/Downloading the SignTool.exe from the Microsoft servers</value>
-  </data>
   <data name="DownloadsFinished" xml:space="preserve">
     <value>All Downloads finished, installing the new AppControl Manager version</value>
   </data>
@@ -1084,32 +1081,11 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="CIPDeploymentSuccess" xml:space="preserve">
     <value>Successfully deployed all of the selected CIP files</value>
   </data>
-  <data name="SigningIntoIntune" xml:space="preserve">
-    <value>Signing into Intune</value>
-  </data>
-  <data name="IntuneSignInSuccess" xml:space="preserve">
-    <value>Successfully signed into Intune</value>
-  </data>
   <data name="CloudDeploymentActive" xml:space="preserve">
     <value>Cloud Deployment is Currently Active</value>
   </data>
-  <data name="IntuneSignInCancelled" xml:space="preserve">
-    <value>Sign in to Intune was cancelled by the user</value>
-  </data>
-  <data name="IntuneSignInError" xml:space="preserve">
-    <value>There was an error signing into Intune: </value>
-  </data>
-  <data name="SigningOutOfIntune" xml:space="preserve">
-    <value>Signing out of Intune</value>
-  </data>
-  <data name="IntuneSignOutSuccess" xml:space="preserve">
-    <value>Successfully signed out of Intune</value>
-  </data>
   <data name="LocalDeploymentActive" xml:space="preserve">
     <value>Local Deployment is Currently Active</value>
-  </data>
-  <data name="IntuneSignOutError" xml:space="preserve">
-    <value>There was an error signing out of Intune: </value>
   </data>
   <data name="ProcessingTitle" xml:space="preserve">
     <value>Processing</value>
@@ -1179,9 +1155,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   </data>
   <data name="CreatingPFNBasedDenyPolicy" xml:space="preserve">
     <value>Creating the deny policy based on Package Family Names</value>
-  </data>
-  <data name="SelectedApps" xml:space="preserve">
-    <value>Selected Apps: </value>
   </data>
   <data name="DenyPolicyCreated" xml:space="preserve">
     <value>Successfully created the Deny policy</value>
@@ -1339,12 +1312,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
-  </data>
-  <data name="LastUpdatedLabel" xml:space="preserve">
-    <value>Last Updated: </value>
-  </data>
-  <data name="DriverBlockListError" xml:space="preserve">
-    <value>Error retrieving driver block list information.</value>
   </data>
   <data name="ConfiguringAutoUpdate" xml:space="preserve">
     <value>Configuring Scheduled task for auto update</value>
@@ -1823,15 +1790,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="PromptForElevationSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>If this is enabled, AppControl Manager will prompt for elevation to run with Administrator privileges on startup.</value>
   </data>
-  <data name="OpenInPolicyEditorButton.Content" xml:space="preserve">
-    <value>Open In The Policy Editor</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Open the policy in the Policy Editor where you can see detailed overview of the policy and have the option to customize it further right inside of this app.</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>Open the policy in the Policy Editor where you can see detailed overview of the policy and have the option to customize it further right inside of this app.</value>
-  </data>
   <data name="OnlyIncludeSelectedItemsToggleButton.Content" xml:space="preserve">
     <value>Only Use Selected Items</value>
   </data>
@@ -2174,16 +2132,16 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="UIFlowDirectionSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>Switch between Right-to-Left and Left-to-Right flow directions for the user interface elements.</value>
   </data>
-  <data name="AppElevationNotice.Main" xml:space="preserve">
+  <data name="AppElevationNoticeMain" xml:space="preserve">
     <value>Please launch AppControl Manager as Administrator to access this page</value>
   </data>
-  <data name="AppElevationNotice.Title" xml:space="preserve">
+  <data name="AppElevationNoticeTitle" xml:space="preserve">
     <value>Administrator privileges required</value>
   </data>
-  <data name="AppElevationNotice.ExtraPrompt" xml:space="preserve">
+  <data name="AppElevationNoticeExtraPrompt" xml:space="preserve">
     <value>Always prompt for elevation on app startup</value>
   </data>
-  <data name="AppElevationNotice.Relaunch" xml:space="preserve">
+  <data name="AppElevationNoticeRelaunch" xml:space="preserve">
     <value>Relaunch as Admin</value>
   </data>
   <data name="WindowMaximizedMsg" xml:space="preserve">
@@ -2483,15 +2441,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="CertificatesSearchBox.AutomationProperties.HelpText" xml:space="preserve">
     <value>Search among the certificate details data</value>
   </data>
-  <data name="SortingDirectionToggleButton.Text" xml:space="preserve">
-    <value>Descending Sorting</value>
-  </data>
-  <data name="SortingDirectionToggleButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>When checked, the sort will be performed in descending order, if unchecked the sort will be performed in ascending order.</value>
-  </data>
-  <data name="SortingDirectionToggleButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>When checked, the sort will be performed in descending order, if unchecked the sort will be performed in ascending order.</value>
-  </data>
   <data name="BrowseForCustomMSIXPathSettingsCard.Description" xml:space="preserve">
     <value>Browse for the AppControl Manager MSIXBundle file path on your device and then go back to the update page to install it.</value>
   </data>
@@ -2671,9 +2620,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   </data>
   <data name="AppearanceSectionSettingsExpander.AutomationProperties.HelpText" xml:space="preserve">
     <value>Use various available options to change the appearance and visual effects of the AppControl Manager</value>
-  </data>
-  <data name="LanguageSectionSettingsExpanderInfoBar.Message" xml:space="preserve">
-    <value>Please restart the app for language changes to be fully applied to the user interface.</value>
   </data>
   <data name="LanguageTextBlock.Text" xml:space="preserve">
     <value>Language</value>
@@ -3562,9 +3508,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="SelectedAppLockerEvtxForScanning" xml:space="preserve">
     <value>Selected {0} for AppLocker EVTX log scanning</value>
   </data>
-  <data name="TotalLogsZeroMessage" xml:space="preserve">
-    <value>Total logs: 0</value>
-  </data>
   <data name="TotalLogsCountMessage" xml:space="preserve">
     <value>Total logs: {0}</value>
   </data>
@@ -4227,9 +4170,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   </data>
   <data name="CommandFailedWithExitCodeErrorMessage" xml:space="preserve">
     <value>The command '{0} {1}' failed with exit code {2}. Error: {3}</value>
-  </data>
-    <data name="CoCreateInstanceFailedHResultMessage" xml:space="preserve">
-    <value>CoCreateInstance failed with HRESULT: 0x{0:X}</value>
   </data>
   <data name="ElevationRequestCancelledByUserMessage" xml:space="preserve">
     <value>Elevation request cancelled by the user.</value>
@@ -5269,7 +5209,6 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
 <data name="NoPublisherSignersDetectedDenyMessage" xml:space="preserve">
   <value>no Publisher signers detected to create deny rules for.</value>
 </data>
-<!-- New -->
   <data name="RMMBlockingSection.Header" xml:space="preserve">
     <value>Create RMM Blocking Policy</value>
   </data>
@@ -5305,5 +5244,461 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   </data>
   <data name="ScreenShieldSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>Prevent other apps such as screen recorders (including Recall) to record or take screenshots of the AppControl Manager's window.</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OnContent" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OffContent" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="SelectCIPFilesToDeployWarningMsg" xml:space="preserve">
+    <value>You need to select CIP files to deploy.</value>
+  </data>
+  <data name="SelectXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>You need to select XML files to convert to CIP binary.</value>
+  </data>
+  <data name="SuccessfullyCreatedSignedCIPFiles" xml:space="preserve">
+    <value>Successfully created signed CIP files for all of the selected XML files.</value>
+  </data>
+  <data name="CurrentlySigningXMLFile" xml:space="preserve">
+    <value>Currently Signing XML file:</value>
+  </data>
+  <data name="SelectXMLFilesToSignAndDeployWarningMsg" xml:space="preserve">
+    <value>You need to select XML files to sign and deploy.</value>
+  </data>
+  <data name="SelectUnsignedXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>You need to select unsigned XML files to deploy.</value>
+  </data>
+  <data name="CheckingForFileSignatures" xml:space="preserve">
+  <value>Checking for file signatures</value>
+</data>
+<data name="FileCertificatesScanResultMessage" xml:space="preserve">
+  <value>The file '{0}' has {1} signer(s). Data from the Security Catalogs on the system were {2} in the scan.</value>
+</data>
+<data name="IncludedText" xml:space="preserve">
+  <value>included</value>
+</data>
+<data name="NotIncludedText" xml:space="preserve">
+  <value>not included</value>
+</data>
+<data name="UserActivityNameForFileHashes" xml:space="preserve">
+  <value>Calculating Advanced File Hashes</value>
+</data>
+<data name="UserActivityNameForFileSignature" xml:space="preserve">
+  <value>Viewing File Certificates</value>
+</data>
+<data name="UserActivityNameForPolicyEditor" xml:space="preserve">
+  <value>Opening an App Control Policy In The Policy Editor</value>
+</data>
+ <data name="PublishUserActivityInTheOSSettingsCard.Description" xml:space="preserve">
+    <value>Publish various activities that you perform in the AppControl Manager to the OS, allowing them to appear and be available to you in Microsoft Recall so you can re-trace your actions.</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.Header" xml:space="preserve">
+    <value>Publish Activity In The OS</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Publish various activities that you perform in the AppControl Manager to the OS, allowing them to appear and be available to you in Microsoft Recall so you can re-trace your actions.</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Publish various activities that you perform in the AppControl Manager to the OS, allowing them to appear and be available to you in Microsoft Recall so you can re-trace your actions.</value>
+  </data>
+  <data name="OperationCancelledByUser" xml:space="preserve">
+    <value>The operation was cancelled.</value>
+  </data>
+    <data name="Cancelling" xml:space="preserve">
+    <value>Cancelling...</value>
+  </data>
+  <data name="DonationHyperLinkButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Your support helps me continue to create and maintain this project.</value>
+  </data>
+  <data name="DonationHyperLinkButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Your support helps me continue to create and maintain this project.</value>
+  </data>
+    <data name="DonationHyperLinkButton.Content" xml:space="preserve">
+    <value>Donate</value>
+  </data>
+    <data name="CopyToClipboard.Content" xml:space="preserve">
+    <value>Copy To Clipboard</value>
+  </data>
+  <data name="CopyToClipboard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Copy To Clipboard</value>
+  </data>
+  <data name="CopyToClipboard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Copy To Clipboard</value>
+  </data>
+    <data name="HashCopiedToClipboard" xml:space="preserve">
+    <value>Hash value copied to clipboard!</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.Content" xml:space="preserve">
+    <value>Scan for All Kernel-mode Logs</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Scan for All Kernel-mode Logs that are currently available on the system.</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Scan for All Kernel-mode Logs that are currently available on the system.</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.Content" xml:space="preserve">
+    <value>Scan for Kernel-mode Logs Since Last Reboot</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Scan for Kernel-mode Logs Since the system was last reboot.</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Scan for Kernel-mode Logs Since the system was last reboot.</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OnContent" xml:space="preserve">
+    <value>Text Selection is Enabled</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OffContent" xml:space="preserve">
+    <value>Text Selection is Disabled</value>
+  </data>
+    <data name="TextSelectionStateToggleSwitch.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enable or Disable the ability to be able to select texts in the List View rows.</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Enable or Disable the ability to be able to select texts in the List View rows.</value>
+  </data>
+  <data name="PolicyEditorClearAllData.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clears all of the data loaded on the user interface from the selected policy.</value>
+  </data>
+  <data name="PolicyEditorClearAllData.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Clears all of the data loaded on the user interface from the selected policy.</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Save the changes made to the data back to the policy XML file.</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Save the changes made to the data back to the policy XML file.</value>
+  </data>
+  <data name="BeginSimulationTextBlock.Text" xml:space="preserve">
+    <value>Begin Simulation</value>
+  </data>
+  <data name="BeginSimulation.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Start the Simulation using the selected configurations.</value>
+  </data>
+  <data name="BeginSimulation.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Start the Simulation using the selected configurations.</value>
+  </data>
+  <data name="RetrieveOnlinePoliciesTextBlock.Text" xml:space="preserve">
+    <value>Retrieve Online Policies</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.Header" xml:space="preserve">
+    <value>Sign Only - No Deployment</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.Description" xml:space="preserve">
+    <value>Only creates signed CIP file(s) in the user config directory without deploying them. Toggle this if you want to deploy them on another system.</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Only creates signed CIP file(s) in the user config directory without deploying them. Toggle this if you want to deploy them on another system.</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Only creates signed CIP file(s) in the user config directory without deploying them. Toggle this if you want to deploy them on another system.</value>
+  </data>
+  <data name="ViewSelectedCIPFilesTextBlock.Text" xml:space="preserve">
+    <value>View the CIP files you selected.</value>
+  </data>
+  <data name="ConvertTextBlock.Text" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="ViewSelectedXMLFilesTextBlock.Text" xml:space="preserve">
+    <value>View the XML files you selected.</value>
+  </data>
+  <data name="RemoveTextBlock.Text" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="SetAsActiveTextBlock.Text" xml:space="preserve">
+    <value>Set as Active</value>
+  </data>
+  <data name="SignInTextBlock.Text" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="CancelSigningInTextBlock.Text" xml:space="preserve">
+    <value>Set as Active</value>
+  </data>
+  <data name="CurrentlyInUseAccountDetailsTextBlock.Text" xml:space="preserve">
+    <value>Details of the account that's currently in use</value>
+  </data>
+  <data name="PolicyEditorSuccessfulSaveMessage" xml:space="preserve">
+    <value>Successfully saved the changes to the policy file.</value>
+  </data>
+  <data name="SidebarHelpHyperlinkTextBlock.Text" xml:space="preserve">
+    <value>Support - Ask Questions</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.PlaceholderText" xml:space="preserve">
+    <value>Search among the apps</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Search among the apps installed on the system.</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Search among the apps installed on the system.</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Deny Policy Name</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter a name for the Deny policy that will be created.</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Enter a name for the Deny policy that will be created.</value>
+  </data>
+  <data name="CustomPolicySettingsTabViewItem.Header" xml:space="preserve">
+    <value>Custom Policy Settings</value>
+  </data>
+  <data name="CustomPolicySettingsTitleTextBlock.Text" xml:space="preserve">
+    <value>Configure and manage custom policy settings and use presets to add predefined policies.</value>
+  </data>
+  <data name="CustomPolicySettingsPresets.PlaceholderText" xml:space="preserve">
+    <value>Select a setting preset</value>
+  </data>
+  <data name="AddSettingTextBlock.Text" xml:space="preserve">
+    <value>Add Setting</value>
+  </data>
+  <data name="DeletedSelectedSettingTextBlock.Text" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="ClearAllPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="NoPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>No Policy Settings</value>
+  </data>
+  <data name="NoPolicySettingsLoadedTextBlock.Text" xml:space="preserve">
+    <value>No custom policy settings have been loaded or created yet.</value>
+  </data>
+  <data name="EnterValueTextBox.PlaceholderText" xml:space="preserve">
+    <value>Enter value</value>
+  </data>
+  <data name="ValueNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Value name</value>
+  </data>
+  <data name="KeyIdentifierTextBox.PlaceholderText" xml:space="preserve">
+    <value>Key Identifier</value>
+  </data>
+  <data name="ProviderNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Provider name</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Clear all policy settings</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Clear all policy settings</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Delete selected policy setting</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Delete selected policy setting</value>
+  </data>
+  <data name="AddSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add a new blank policy setting</value>
+  </data>
+  <data name="AddSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Add a new blank policy setting</value>
+  </data>
+  <data name="DeployTextBlock.Text" xml:space="preserve">
+    <value>Deploy</value>
+  </data>
+  <data name="SignInSegmentedItem.Content" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="SignedInAccountsSegmentedItem.Content" xml:space="preserve">
+    <value>Signed In Accounts</value>
+  </data>
+  <data name="ActiveAccountSegmentedItem.Content" xml:space="preserve">
+    <value>Active Account</value>
+  </data>
+  <data name="FilterTextBlock.Text" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="BrowseForMDELogsTextBlock.Text" xml:space="preserve">
+    <value>Browse for MDE Advanced Hunting logs</value>
+  </data>
+  <data name="BrowseForMDELogsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Browse for MDE Advanced Hunting logs</value>
+  </data>
+  <data name="BrowseForMDELogsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Browse for MDE Advanced Hunting logs</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.Content" xml:space="preserve">
+    <value>Go to step 2</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Start deploying the selected policy in Audit mode and go to step 2</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Start deploying the selected policy in Audit mode and go to step 2</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.Content" xml:space="preserve">
+    <value>Go to step 3</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Start scanning the event logs and the selected directories (if any) and go to step 3</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Start scanning the event logs and the selected directories (if any) and go to step 3</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.Content" xml:space="preserve">
+    <value>Browse for folders</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Browse for folders of your new or existing apps that are installed and are getting blocked</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Browse for folders of your new or existing apps that are installed and are getting blocked</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.Header" xml:space="preserve">
+    <value>Supplemental Policy Name</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.PlaceholderText" xml:space="preserve">
+    <value>Enter a name for the Supplemental Policy</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter a name for the Supplemental policy that will be created.</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Enter a name for the Supplemental policy that will be created.</value>
+  </data>
+  <data name="Step1TextBlock.Text" xml:space="preserve">
+    <value>Step 1</value>
+  </data>
+    <data name="Step2TextBlock.Text" xml:space="preserve">
+    <value>Step 2</value>
+  </data>
+    <data name="Step3TextBlock.Text" xml:space="preserve">
+    <value>Step 3</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherLevelsMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: Using WHQLFilePublisher -&gt; FilePublisher -&gt; Publisher -&gt; Hash levels.</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherRulesCountMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: {0} WHQLFilePublisher Rules.</value>
+  </data>
+  <data name="BuildSignerProcessingWHQLFilePublisherMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: Processing WHQLFilePublisher data.</value>
+  </data>
+  <data name="WHQLFilePublisherSignersToAddMessage" xml:space="preserve">
+    <value>There are {0} WHQL File Publisher Signers to be added to the XML file</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedAllowMessage" xml:space="preserve">
+    <value>no WHQLFilePublisher signers detected to create allow rules for.</value>
+  </data>
+    <data name="EKUsNodeNotFoundMessage" xml:space="preserve">
+    <value>EKUs node not found</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedDenyMessage" xml:space="preserve">
+    <value>no WHQLFilePublisher signers detected to create deny rules for.</value>
+  </data>
+  <data name="WHQLFilePublisherRuleTypeFriendlyName" xml:space="preserve">
+    <value>WHQL File Publisher Rule Type</value>
+  </data>
+  <data name="AllowNewApps_SidebarButtonContent" xml:space="preserve">
+    <value>Allow New Apps Base Policy</value>
+  </data>
+  <data name="CustomPatternBasedSupplementalPolicyLabel" xml:space="preserve">
+    <value>Custom Pattern Supplemental Policy</value>
+  </data>
+  <data name="CloudTextBlock.Text" xml:space="preserve">
+    <value>Cloud</value>
+  </data>
+  <data name="LocalTextBlock.Text" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="CreateTextBlock.Text" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="UpdatePageCustomMSIXPath" xml:space="preserve">
+    <value>Custom MSIXBundle Path</value>
+  </data>
+  <data name="OpenInFileExplorer.Text" xml:space="preserve">
+    <value>Open In File Explorer</value>
+  </data>
+  <data name="OpenInFileExplorer.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open the folder where the file is located in the File Explorer.</value>
+  </data>
+  <data name="OpenInFileExplorer.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Open the folder where the file is located in the File Explorer.</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Open In The Policy Editor</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open the policy in the Policy Editor where you can see detailed overview of the policy and have the option to customize it further right inside of this app.</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Open the policy in the Policy Editor where you can see detailed overview of the policy and have the option to customize it further right inside of this app.</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Open The File</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open the file that was created using the default file handler configured in the operation system.</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Open the file that was created using the default file handler configured in the operation system.</value>
+  </data>
+  <data name="AdditionalActionsTextBlock.Text" xml:space="preserve">
+    <value>Additional Actions</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open the policy in the Policy Editor or choose another action from the list.</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Open the policy in the Policy Editor or choose another action from the list.</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Configure Rule Options</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open the policy in another page to configure its rule options further.</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Open the policy in another page to configure its rule options further.</value>
+  </data>
+  <data name="AddToPolicySegmentedItem.Content" xml:space="preserve">
+    <value>Add To Policy</value>
+  </data>
+  <data name="BasePolicyFileSegmentedItem.Content" xml:space="preserve">
+    <value>Base Policy File</value>
+  </data>
+  <data name="BasePolicyGUIDSegmentedItem.Content" xml:space="preserve">
+    <value>Base Policy GUID</value>
+  </data>
+  <data name="AddToPolicyDescription.Text" xml:space="preserve">
+    <value>Browse for a policy file to add the logs to. The new rules will be merged with any existing rules.</value>
+  </data>
+  <data name="BasePolicyFileDescription.Text" xml:space="preserve">
+    <value>Browse for a base policy file that the Supplemental policy that is going to be created will be associated with.</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.PlaceholderText" xml:space="preserve">
+    <value>Enter a Base policy GUID</value>
+  </data>
+    <data name="BasePolicyGUIDDescription.AutomationProperties.HelpText" xml:space="preserve">
+  <value>Enter the GUID of a Base policy file that the Supplemental policy that is going to be created will be associated with.</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Enter the GUID of a Base policy file that the Supplemental policy that is going to be created will be associated with.</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.PlaceholderText" xml:space="preserve">
+    <value>Filter By Date</value>
+  </data>
+    <data name="FilterByDateCalendarDatePicker.AutomationProperties.HelpText" xml:space="preserve">
+  <value>Will only show the data that are equal or newer than the selected date.</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Will only show the data that are equal or newer than the selected date.</value>
+  </data>
+  <data name="SubmitButton.Content" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="SubmitButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="SubmitButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Submit</value>
   </data>
 </root>

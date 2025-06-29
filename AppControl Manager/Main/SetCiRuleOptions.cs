@@ -16,6 +16,7 @@
 //
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using AppControlManager.Others;
@@ -37,7 +38,8 @@ internal static class CiRuleOptions
 
 	#region Defining the rule options for each policy type and scenario
 
-	private static readonly HashSet<OptionType> BaseRules = [
+	private static readonly FrozenSet<OptionType> BaseRules = new HashSet<OptionType>
+	{
 		OptionType.EnabledUMCI,
 		OptionType.RequiredWHQL,
 		OptionType.EnabledInheritDefaultPolicy,
@@ -48,9 +50,10 @@ internal static class CiRuleOptions
 		OptionType.EnabledAllowSupplementalPolicies,
 		OptionType.EnabledDynamicCodeSecurity,
 		OptionType.EnabledRevokedExpiredAsUnsigned
-	];
+	}.ToFrozenSet();
 
-	private static readonly HashSet<OptionType> BaseISGRules = [
+	private static readonly FrozenSet<OptionType> BaseISGRules = new HashSet<OptionType>
+	{
 		OptionType.EnabledUMCI,
 		OptionType.RequiredWHQL,
 		OptionType.EnabledInheritDefaultPolicy,
@@ -63,16 +66,17 @@ internal static class CiRuleOptions
 		OptionType.EnabledAllowSupplementalPolicies,
 		OptionType.EnabledDynamicCodeSecurity,
 		OptionType.EnabledRevokedExpiredAsUnsigned
-	];
+	}.ToFrozenSet();
 
-	private static readonly HashSet<OptionType> BaseKernelModeRules = [
+	private static readonly FrozenSet<OptionType> BaseKernelModeRules = new HashSet<OptionType>
+	{
 		OptionType.RequiredWHQL,
 		OptionType.EnabledInheritDefaultPolicy,
 		OptionType.EnabledUnsignedSystemIntegrityPolicy,
 		OptionType.EnabledUpdatePolicyNoReboot,
 		OptionType.EnabledAllowSupplementalPolicies,
 		OptionType.EnabledRevokedExpiredAsUnsigned
-	];
+	}.ToFrozenSet();
 
 	private static readonly HashSet<OptionType> SupplementalRules = [
 		OptionType.EnabledUnsignedSystemIntegrityPolicy
@@ -132,7 +136,7 @@ internal static class CiRuleOptions
 	{
 
 		Logger.Write(string.Format(
-			GlobalVars.Rizz.GetString("ConfiguringPolicyRuleOptionsForMessage"),
+			GlobalVars.GetStr("ConfiguringPolicyRuleOptionsForMessage"),
 			filePath));
 
 		// Instantiate the policy or use the supplied SiPolicy object
@@ -290,13 +294,13 @@ internal static class CiRuleOptions
 		foreach (OptionType option in toAdd)
 		{
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("AddingRuleOptionMessage"),
+				GlobalVars.GetStr("AddingRuleOptionMessage"),
 				option));
 		}
 		foreach (OptionType option in toRemove)
 		{
 			Logger.Write(string.Format(
-				GlobalVars.Rizz.GetString("RemovingRuleOptionMessage"),
+				GlobalVars.GetStr("RemovingRuleOptionMessage"),
 				option));
 		}
 		#endregion

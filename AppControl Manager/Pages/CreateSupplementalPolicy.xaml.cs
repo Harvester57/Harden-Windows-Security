@@ -18,7 +18,6 @@
 using AppControlManager.Others;
 using AppControlManager.ViewModels;
 using AppControlManager.WindowComponents;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -29,14 +28,11 @@ namespace AppControlManager.Pages;
 /// <summary>
 /// Represents a page for creating supplemental policies, managing data display and user interactions.
 /// </summary>
-
 internal sealed partial class CreateSupplementalPolicy : Page, IAnimatedIconsManager
 {
-	private CreateSupplementalPolicyVM ViewModel { get; } = App.AppHost.Services.GetRequiredService<CreateSupplementalPolicyVM>();
-	private AppSettings.Main AppSettings { get; } = App.AppHost.Services.GetRequiredService<AppSettings.Main>();
-	private SidebarVM sideBarVM { get; } = App.AppHost.Services.GetRequiredService<SidebarVM>();
+	private CreateSupplementalPolicyVM ViewModel { get; } = ViewModelProvider.CreateSupplementalPolicyVM;
+	private SidebarVM sideBarVM { get; } = ViewModelProvider.SidebarVM;
 
-	// [DynamicDependency(DynamicallyAccessedMemberTypes.PublicEvents, typeof(Border))]
 	internal CreateSupplementalPolicy()
 	{
 		this.InitializeComponent();
@@ -54,13 +50,15 @@ internal sealed partial class CreateSupplementalPolicy : Page, IAnimatedIconsMan
 		ViewModel.ISGBasePolicyPathLightAnimatedIconVisibility = visibility;
 		ViewModel.StrictKernelModeBasePolicyLightAnimatedIconVisibility = visibility;
 		ViewModel.PFNBasePolicyPathLightAnimatedIconVisibility = visibility;
+		ViewModel.CustomPatternBasedFileRuleBasePolicyPathLightAnimatedIconVisibility = visibility;
 
 		sideBarVM.AssignActionPacks(
-			(param => LightUp1(), GlobalVars.Rizz.GetString("FilesAndFoldersSupplementalPolicyLabel")),
-			(param => LightUp2(), GlobalVars.Rizz.GetString("CertificatesSupplementalPolicyLabel")),
-			(param => LightUp3(), GlobalVars.Rizz.GetString("ISGSupplementalPolicyLabel")),
-			(param => LightUp4(), GlobalVars.Rizz.GetString("StrictKernelModeSupplementalPolicyLabel")),
-			(param => LightUp5(), GlobalVars.Rizz.GetString("PFNSupplementalPolicyLabel"))
+			actionPack1: (param => LightUp1(), GlobalVars.GetStr("FilesAndFoldersSupplementalPolicyLabel")),
+			actionPack2: (param => LightUp2(), GlobalVars.GetStr("CertificatesSupplementalPolicyLabel")),
+			actionPack3: (param => LightUp3(), GlobalVars.GetStr("ISGSupplementalPolicyLabel")),
+			actionPack4: (param => LightUp4(), GlobalVars.GetStr("StrictKernelModeSupplementalPolicyLabel")),
+			actionPack5: (param => LightUp5(), GlobalVars.GetStr("PFNSupplementalPolicyLabel")),
+			actionPack6: (param => LightUp6(), GlobalVars.GetStr("CustomPatternBasedSupplementalPolicyLabel"))
 		);
 	}
 
@@ -109,22 +107,24 @@ internal sealed partial class CreateSupplementalPolicy : Page, IAnimatedIconsMan
 		}
 		ViewModel.PFNBasePolicyPath = MainWindowVM.SidebarBasePolicyPathTextBoxTextStatic;
 	}
+	private void LightUp6()
+	{
+		if (CustomPatternBasedFileRuleBrowseForBasePolicyButton.XamlRoot is not null)
+		{
+			CustomPatternBasedFileRuleBrowseForBasePolicyButton_FlyOut.ShowAt(CustomPatternBasedFileRuleBrowseForBasePolicyButton);
+		}
+		ViewModel.CustomPatternBasedFileRuleBasedBasePolicyPath = MainWindowVM.SidebarBasePolicyPathTextBoxTextStatic;
+	}
 
 	#endregion
 
 	// Since using behaviors in XAML is not Native AOT compatible, we use event handlers.
 	private async void OnBorderPointerEntered(object sender, PointerRoutedEventArgs e)
 	{
-		if (sender is UIElement element)
-		{
-			await ShadowEnterAnimation.StartAsync(element);
-		}
+		await ShadowEnterAnimation.StartAsync((UIElement)sender);
 	}
 	private async void OnBorderPointerExited(object sender, PointerRoutedEventArgs e)
 	{
-		if (sender is UIElement element)
-		{
-			await ShadowExitAnimation.StartAsync(element);
-		}
+		await ShadowExitAnimation.StartAsync((UIElement)sender);
 	}
 }

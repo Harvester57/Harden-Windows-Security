@@ -29,6 +29,7 @@ using AppControlManager.Others;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace AppControlManager.ViewModels;
 
@@ -113,7 +114,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 		{
 			if (SP(ref field, value))
 			{
-				ScalabilityButtonContent = GlobalVars.Rizz.GetString("Scalability") + field;
+				ScalabilityButtonContent = GlobalVars.GetStr("Scalability") + field;
 			}
 		}
 	} = 2;
@@ -121,7 +122,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 	/// <summary>
 	/// The content of the button that has the RadialGauge inside it.
 	/// </summary>
-	internal string ScalabilityButtonContent { get; set => SP(ref field, value); } = GlobalVars.Rizz.GetString("Scalability") + "2";
+	internal string ScalabilityButtonContent { get; set => SP(ref field, value); } = GlobalVars.GetStr("Scalability") + "2";
 
 	/// <summary>
 	/// Whether the Simulation should scan and take into account the security catalogs.
@@ -157,21 +158,21 @@ internal sealed partial class SimulationVM : ViewModelBase
 	{
 
 		// Measure header text widths first.
-		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("PathHeader/Text"));
-		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SourceHeader/Text"));
-		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("IsAuthorizedHeader/Text"));
-		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("MatchCriteriaHeader/Text"));
-		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SpecificFileNameLevelMatchCriteriaHeader/Text"));
-		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignerIDHeader/Text"));
-		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignerNameHeader/Text"));
-		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignerCertRootHeader/Text"));
-		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignerCertPublisherHeader/Text"));
-		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignerScopeHeader/Text"));
-		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("CertSubjectCNHeader/Text"));
-		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("CertIssuerCNHeader/Text"));
-		double maxWidth13 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("CertNotAfterHeader/Text"));
-		double maxWidth14 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("CertTBSValueHeader/Text"));
-		double maxWidth15 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("FilePathHeader/Text"));
+		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.GetStr("PathHeader/Text"));
+		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.GetStr("SourceHeader/Text"));
+		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.GetStr("IsAuthorizedHeader/Text"));
+		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.GetStr("MatchCriteriaHeader/Text"));
+		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.GetStr("SpecificFileNameLevelMatchCriteriaHeader/Text"));
+		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignerIDHeader/Text"));
+		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignerNameHeader/Text"));
+		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignerCertRootHeader/Text"));
+		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignerCertPublisherHeader/Text"));
+		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignerScopeHeader/Text"));
+		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.GetStr("CertSubjectCNHeader/Text"));
+		double maxWidth12 = ListViewHelper.MeasureText(GlobalVars.GetStr("CertIssuerCNHeader/Text"));
+		double maxWidth13 = ListViewHelper.MeasureText(GlobalVars.GetStr("CertNotAfterHeader/Text"));
+		double maxWidth14 = ListViewHelper.MeasureText(GlobalVars.GetStr("CertTBSValueHeader/Text"));
+		double maxWidth15 = ListViewHelper.MeasureText(GlobalVars.GetStr("FilePathHeader/Text"));
 
 		// Iterate over all items to determine the widest string for each column.
 		foreach (SimulationOutput item in SimulationOutputs)
@@ -234,7 +235,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 		}
 
 		// Perform a case-insensitive search in all relevant fields
-		List<SimulationOutput> filteredResults = [.. AllSimulationOutputs.Where(output =>
+		List<SimulationOutput> filteredResults = AllSimulationOutputs.Where(output =>
 			(output.Path is not null && output.Path.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
 			(output.Source is not null && output.Source.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
 			(output.MatchCriteria is not null && output.MatchCriteria.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
@@ -242,7 +243,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 			(output.CertSubjectCN is not null && output.CertSubjectCN.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
 			(output.SignerName is not null && output.SignerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
 			(output.FilePath is not null && output.FilePath.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-		)];
+		).ToList();
 
 		SimulationOutputs.Clear();
 
@@ -418,7 +419,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 
 		if (AllSimulationOutputs.Count is 0)
 		{
-			Logger.Write(GlobalVars.Rizz.GetString("NoSimulationOutputToExport"));
+			Logger.Write(GlobalVars.GetStr("NoSimulationOutputToExport"));
 			return;
 		}
 
@@ -568,7 +569,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 	/// Helper method to copy a specified property to clipboard without reflection
 	/// </summary>
 	/// <param name="getProperty">Function that retrieves the desired property value as a string</param>
-	private void CopyToClipboard(Func<SimulationOutput, string?> getProperty)
+	private static void CopyToClipboard(Func<SimulationOutput, string?> getProperty)
 	{
 		ListView? lv = ListViewHelper.GetListViewFromCache(ListViewHelper.ListViewsRegistry.Simulation);
 		if (lv is null) return;
@@ -590,7 +591,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 	{
 		if (XmlFilePath is null || !File.Exists(XmlFilePath))
 		{
-			MainInfoBar.WriteWarning(GlobalVars.Rizz.GetString("SelectExistingXmlPolicyFileMessage"));
+			MainInfoBar.WriteWarning(GlobalVars.GetStr("SelectExistingXmlPolicyFileMessage"));
 			return;
 		}
 
@@ -602,7 +603,7 @@ internal sealed partial class SimulationVM : ViewModelBase
 
 			MainInfoBarIsClosable = false;
 
-			MainInfoBar.WriteInfo(GlobalVars.Rizz.GetString("PerformingSimulationMessage"));
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("PerformingSimulationMessage"));
 
 			// Run the simulation
 			ConcurrentDictionary<string, SimulationOutput> result = await Task.Run(() =>
@@ -647,13 +648,13 @@ internal sealed partial class SimulationVM : ViewModelBase
 		catch (Exception ex)
 		{
 			error = true;
-			MainInfoBar.WriteError(ex, GlobalVars.Rizz.GetString("ErrorDuringSimulationMessage"));
+			MainInfoBar.WriteError(ex, GlobalVars.GetStr("ErrorDuringSimulationMessage"));
 		}
 		finally
 		{
 			if (!error)
 			{
-				MainInfoBar.WriteSuccess(GlobalVars.Rizz.GetString("SimulationCompletedSuccessfullyMessage"));
+				MainInfoBar.WriteSuccess(GlobalVars.GetStr("SimulationCompletedSuccessfullyMessage"));
 			}
 
 			AreElementsEnabled = true;
@@ -680,9 +681,9 @@ internal sealed partial class SimulationVM : ViewModelBase
 	/// </summary>
 	internal void SelectFilesButton_Click()
 	{
-		List<string>? selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.AnyFilePickerFilter);
+		List<string> selectedFiles = FileDialogHelper.ShowMultipleFilePickerDialog(GlobalVars.AnyFilePickerFilter);
 
-		if (selectedFiles is { Count: > 0 })
+		if (selectedFiles.Count > 0)
 		{
 			foreach (string item in selectedFiles)
 			{
@@ -696,9 +697,9 @@ internal sealed partial class SimulationVM : ViewModelBase
 	/// </summary>
 	internal void SelectFoldersButton_Click()
 	{
-		List<string>? selectedFolders = FileDialogHelper.ShowMultipleDirectoryPickerDialog();
+		List<string> selectedFolders = FileDialogHelper.ShowMultipleDirectoryPickerDialog();
 
-		if (selectedFolders is { Count: > 0 })
+		if (selectedFolders.Count > 0)
 		{
 			foreach (string folder in selectedFolders)
 			{
@@ -712,9 +713,9 @@ internal sealed partial class SimulationVM : ViewModelBase
 	/// </summary>
 	internal void CatRootPathsButton_Click()
 	{
-		List<string>? selectedCatRoots = FileDialogHelper.ShowMultipleDirectoryPickerDialog();
+		List<string> selectedCatRoots = FileDialogHelper.ShowMultipleDirectoryPickerDialog();
 
-		if (selectedCatRoots is { Count: > 0 })
+		if (selectedCatRoots.Count > 0)
 		{
 			CatRootPaths = selectedCatRoots;
 		}
@@ -747,4 +748,14 @@ internal sealed partial class SimulationVM : ViewModelBase
 		FolderPaths.Clear();
 	}
 
+	/// <summary>
+	/// CTRL + C shortcuts event handler
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="args"></param>
+	internal void CtrlC_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+	{
+		ListViewFlyoutMenuCopy_Click();
+		args.Handled = true;
+	}
 }

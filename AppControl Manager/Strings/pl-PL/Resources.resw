@@ -994,9 +994,6 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   <data name="NoMSIXBundlePath" xml:space="preserve">
     <value>Nie wybrano ścieżki MSIXBundle</value>
   </data>
-  <data name="DetectingSignTool" xml:space="preserve">
-    <value>Wykrywanie/Pobieranie SignTool.exe z serwerów Microsoft</value>
-  </data>
   <data name="DownloadsFinished" xml:space="preserve">
     <value>Wszystkie pobierania zakończone, instalowanie nowej wersji Menedżera AppControl</value>
   </data>
@@ -1084,32 +1081,11 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   <data name="CIPDeploymentSuccess" xml:space="preserve">
     <value>Pomyślnie wdrożono wszystkie wybrane pliki CIP</value>
   </data>
-  <data name="SigningIntoIntune" xml:space="preserve">
-    <value>Logowanie do Intune</value>
-  </data>
-  <data name="IntuneSignInSuccess" xml:space="preserve">
-    <value>Pomyślnie zalogowano do Intune</value>
-  </data>
   <data name="CloudDeploymentActive" xml:space="preserve">
     <value>Wdrożenie w chmurze jest obecnie aktywne</value>
   </data>
-  <data name="IntuneSignInCancelled" xml:space="preserve">
-    <value>Logowanie do Intune zostało anulowane przez użytkownika</value>
-  </data>
-  <data name="IntuneSignInError" xml:space="preserve">
-    <value>Wystąpił błąd podczas logowania do Intune: </value>
-  </data>
-  <data name="SigningOutOfIntune" xml:space="preserve">
-    <value>Wylogowywanie z Intune</value>
-  </data>
-  <data name="IntuneSignOutSuccess" xml:space="preserve">
-    <value>Pomyślnie wylogowano z Intune</value>
-  </data>
   <data name="LocalDeploymentActive" xml:space="preserve">
     <value>Wdrożenie lokalne jest obecnie aktywne</value>
-  </data>
-  <data name="IntuneSignOutError" xml:space="preserve">
-    <value>Wystąpił błąd podczas wylogowywania z Intune: </value>
   </data>
   <data name="ProcessingTitle" xml:space="preserve">
     <value>Przetwarzanie</value>
@@ -1179,9 +1155,6 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   </data>
   <data name="CreatingPFNBasedDenyPolicy" xml:space="preserve">
     <value>Tworzenie zasad odmowy na podstawie nazw rodzin pakietów</value>
-  </data>
-  <data name="SelectedApps" xml:space="preserve">
-    <value>Wybrane aplikacje: </value>
   </data>
   <data name="DenyPolicyCreated" xml:space="preserve">
     <value>Pomyślnie utworzono zasady odmowy</value>
@@ -1339,12 +1312,6 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Anuluj</value>
-  </data>
-  <data name="LastUpdatedLabel" xml:space="preserve">
-    <value>Ostatnia aktualizacja: </value>
-  </data>
-  <data name="DriverBlockListError" xml:space="preserve">
-    <value>Błąd pobierania informacji o liście zablokowanych sterowników.</value>
   </data>
   <data name="ConfiguringAutoUpdate" xml:space="preserve">
     <value>Konfigurowanie zaplanowanego zadania automatycznej aktualizacji</value>
@@ -1823,15 +1790,6 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   <data name="PromptForElevationSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>Jeśli ta opcja jest włączona, Menedżer AppControl wyświetli monit o podniesienie uprawnień w celu uruchomienia z uprawnieniami administratora podczas uruchamiania.</value>
   </data>
-  <data name="OpenInPolicyEditorButton.Content" xml:space="preserve">
-    <value>Otwórz w edytorze zasad</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Otwórz zasady w Edytorze zasad, gdzie możesz zobaczyć szczegółowy przegląd zasad i mieć możliwość dalszego dostosowania ich bezpośrednio w tej aplikacji.</value>
-  </data>
-  <data name="OpenInPolicyEditorButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>Otwórz zasady w Edytorze zasad, gdzie możesz zobaczyć szczegółowy przegląd zasad i mieć możliwość dalszego dostosowania ich bezpośrednio w tej aplikacji.</value>
-  </data>
   <data name="OnlyIncludeSelectedItemsToggleButton.Content" xml:space="preserve">
     <value>Użyj tylko wybranych elementów</value>
   </data>
@@ -2174,16 +2132,16 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   <data name="UIFlowDirectionSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
     <value>Przełączaj między kierunkami przepływu od prawej do lewej i od lewej do prawej dla elementów interfejsu użytkownika.</value>
   </data>
-  <data name="AppElevationNotice.Main" xml:space="preserve">
+  <data name="AppElevationNoticeMain" xml:space="preserve">
     <value>Proszę uruchomić Menedżera AppControl jako Administrator, aby uzyskać dostęp do tej strony</value>
   </data>
-  <data name="AppElevationNotice.Title" xml:space="preserve">
+  <data name="AppElevationNoticeTitle" xml:space="preserve">
     <value>Wymagane uprawnienia administratora</value>
   </data>
-  <data name="AppElevationNotice.ExtraPrompt" xml:space="preserve">
+  <data name="AppElevationNoticeExtraPrompt" xml:space="preserve">
     <value>Zawsze monituj o podniesienie uprawnień podczas uruchamiania aplikacji</value>
   </data>
-  <data name="AppElevationNotice.Relaunch" xml:space="preserve">
+  <data name="AppElevationNoticeRelaunch" xml:space="preserve">
     <value>Uruchom ponownie jako administrator</value>
   </data>
   <data name="WindowMaximizedMsg" xml:space="preserve">
@@ -2483,15 +2441,6 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   <data name="CertificatesSearchBox.AutomationProperties.HelpText" xml:space="preserve">
     <value>Przeszukaj dane szczegółów certyfikatu</value>
   </data>
-  <data name="SortingDirectionToggleButton.Text" xml:space="preserve">
-    <value>Sortowanie malejące</value>
-  </data>
-  <data name="SortingDirectionToggleButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Gdy zaznaczone, sortowanie będzie wykonywane w porządku malejącym, jeśli odznaczone, sortowanie będzie wykonywane w porządku rosnącym.</value>
-  </data>
-  <data name="SortingDirectionToggleButton.AutomationProperties.HelpText" xml:space="preserve">
-    <value>Gdy zaznaczone, sortowanie będzie wykonywane w porządku malejącym, jeśli odznaczone, sortowanie będzie wykonywane w porządku rosnącym.</value>
-  </data>
   <data name="BrowseForCustomMSIXPathSettingsCard.Description" xml:space="preserve">
     <value>Przeglądaj w poszukiwaniu ścieżki pliku MSIXBundle Menedżera AppControl na swoim urządzeniu, a następnie wróć na stronę aktualizacji, aby go zainstalować.</value>
   </data>
@@ -2671,9 +2620,6 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   </data>
   <data name="AppearanceSectionSettingsExpander.AutomationProperties.HelpText" xml:space="preserve">
     <value>Użyj różnych dostępnych opcji, aby zmienić wygląd i efekty wizualne Menedżera AppControl</value>
-  </data>
-  <data name="LanguageSectionSettingsExpanderInfoBar.Message" xml:space="preserve">
-    <value>Uruchom ponownie aplikację, aby zmiany języka zostały w pełni zastosowane do interfejsu użytkownika.</value>
   </data>
   <data name="LanguageTextBlock.Text" xml:space="preserve">
     <value>Język</value>
@@ -3562,9 +3508,6 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   <data name="SelectedAppLockerEvtxForScanning" xml:space="preserve">
     <value>Wybrano {0} do skanowania dziennika EVTX AppLocker</value>
   </data>
-  <data name="TotalLogsZeroMessage" xml:space="preserve">
-    <value>Całkowita liczba dzienników: 0</value>
-  </data>
   <data name="TotalLogsCountMessage" xml:space="preserve">
     <value>Całkowita liczba dzienników: {0}</value>
   </data>
@@ -4228,10 +4171,7 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   <data name="CommandFailedWithExitCodeErrorMessage" xml:space="preserve">
     <value>Polecenie „{0} {1}” nie powiodło się z kodem zakończenia {2}. Błąd: {3}</value>
   </data>
-    <data name="CoCreateInstanceFailedHResultMessage" xml:space="preserve">
-    <value>Funkcja CoCreateInstance nie powiodła się z HRESULT: 0x{0:X}</value>
-  </data>
-  <data name="ElevationRequestCancelledByUserMessage" xml:space="preserve">
+    <data name="ElevationRequestCancelledByUserMessage" xml:space="preserve">
     <value>Żądanie podniesienia uprawnień anulowane przez użytkownika.</value>
   </data>
   <data name="ActivationManagerFailedWithHRESULTMessage" xml:space="preserve">
@@ -5268,5 +5208,497 @@ UWAGA: Ta opcja jest zawsze wymuszana, jeśli jakakolwiek zasada UMCI Kontroli A
   </data>
   <data name="NoPublisherSignersDetectedDenyMessage" xml:space="preserve">
     <value>nie wykryto żadnych sygnatariuszy Wydawcy (Publisher), dla których można by utworzyć reguły blokujące.</value>
+  </data>
+    <data name="RMMBlockingSection.Header" xml:space="preserve">
+    <value>Utwórz Zasady Blokowania RMM</value>
+  </data>
+  <data name="RMMBlockingSection.Description" xml:space="preserve">
+    <value>Te zasady blokują dużą liczbę oprogramowania do Zdalnego Monitorowania i Zarządzania na podstawie nazw ich plików wykonywalnych i ścieżki pliku.</value>
+  </data>
+  <data name="RMMBlockingSection.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Te zasady blokują dużą liczbę oprogramowania do Zdalnego Monitorowania i Zarządzania na podstawie nazw ich plików wykonywalnych i ścieżki pliku.</value>
+  </data>
+  <data name="RMMBlockingSection.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Te zasady blokują dużą liczbę oprogramowania do Zdalnego Monitorowania i Zarządzania na podstawie nazw ich plików wykonywalnych i ścieżki pliku.</value>
+  </data>
+  <data name="RMMBlockingCreateButton.Content" xml:space="preserve">
+    <value>Utwórz</value>
+  </data>
+  <data name="RMMBlockingCreateButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Utwórz podstawowe zasady blokowania RMM</value>
+  </data>
+  <data name="RMMBlockingCreateButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Utwórz podstawowe zasady blokowania RMM</value>
+  </data>
+  <data name="RMMBlockingPolicyCreatedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie utworzono zasady blokowania RMM</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.Description" xml:space="preserve">
+    <value>Zapobiegaj innym aplikacjom, takim jak nagrywanie ekranu (w tym Recall), nagrywaniu lub robieniu zrzutów ekranu okna Menedżera Kontroli Aplikacji.</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.Header" xml:space="preserve">
+    <value>Osłona Ekranu</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Zapobiegaj innym aplikacjom, takim jak nagrywanie ekranu (w tym Recall), nagrywaniu lub robieniu zrzutów ekranu okna Menedżera Kontroli Aplikacji.</value>
+  </data>
+  <data name="ScreenShieldSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Zapobiegaj innym aplikacjom, takim jak nagrywanie ekranu (w tym Recall), nagrywaniu lub robieniu zrzutów ekranu okna Menedżera Kontroli Aplikacji.</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OnContent" xml:space="preserve">
+    <value>Włączone</value>
+  </data>
+  <data name="ToggleSwitchGeneral.OffContent" xml:space="preserve">
+    <value>Wyłączone</value>
+  </data>
+  <data name="SelectCIPFilesToDeployWarningMsg" xml:space="preserve">
+    <value>Musisz wybrać pliki CIP do wdrożenia.</value>
+  </data>
+  <data name="SelectXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>Musisz wybrać pliki XML do konwersji na binarne CIP.</value>
+  </data>
+  <data name="SuccessfullyCreatedSignedCIPFiles" xml:space="preserve">
+    <value>Pomyślnie utworzono podpisane pliki CIP dla wszystkich wybranych plików XML.</value>
+  </data>
+  <data name="CurrentlySigningXMLFile" xml:space="preserve">
+    <value>Obecnie podpisywany plik XML: </value>
+  </data>
+  <data name="SelectXMLFilesToSignAndDeployWarningMsg" xml:space="preserve">
+    <value>Musisz wybrać pliki XML do podpisania i wdrożenia.</value>
+  </data>
+  <data name="SelectUnsignedXMLFilesToDeployWarningMsg" xml:space="preserve">
+    <value>Musisz wybrać niepodpisane pliki XML do wdrożenia.</value>
+  </data>
+  <data name="CheckingForFileSignatures" xml:space="preserve">
+  <value>Sprawdzanie podpisów plików</value>
+</data>
+<data name="FileCertificatesScanResultMessage" xml:space="preserve">
+  <value>Plik '{0}' ma {1} sygnatariusz(y). Dane z Katalogów Bezpieczeństwa w systemie zostały {2} w skanowaniu.</value>
+</data>
+<data name="IncludedText" xml:space="preserve">
+  <value>uwzględnione</value>
+</data>
+<data name="NotIncludedText" xml:space="preserve">
+  <value>nieuwzględnione</value>
+</data>
+<data name="UserActivityNameForFileHashes" xml:space="preserve">
+  <value>Obliczanie Zaawansowanych Skrótów Plików</value>
+</data>
+<data name="UserActivityNameForFileSignature" xml:space="preserve">
+  <value>Przeglądanie Certyfikatów Plików</value>
+</data>
+<data name="UserActivityNameForPolicyEditor" xml:space="preserve">
+  <value>Otwieranie Zasad Kontroli Aplikacji w Edytorze Zasad</value>
+</data>
+ <data name="PublishUserActivityInTheOSSettingsCard.Description" xml:space="preserve">
+    <value>Publikuj różne aktywności wykonywane w Menedżerze Kontroli Aplikacji do systemu operacyjnego, umożliwiając im pojawienie się i dostępność w Microsoft Recall, abyś mógł śledzić swoje działania.</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.Header" xml:space="preserve">
+    <value>Publikuj Aktywność w Systemie Operacyjnym</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Publikuj różne aktywności wykonywane w Menedżerze Kontroli Aplikacji do systemu operacyjnego, umożliwiając im pojawienie się i dostępność w Microsoft Recall, abyś mógł śledzić swoje działania.</value>
+  </data>
+  <data name="PublishUserActivityInTheOSSettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Publikuj różne aktywności wykonywane w Menedżerze Kontroli Aplikacji do systemu operacyjnego, umożliwiając im pojawienie się i dostępność w Microsoft Recall, abyś mógł śledzić swoje działania.</value>
+  </data>
+  <data name="OperationCancelledByUser" xml:space="preserve">
+    <value>Operacja została anulowana.</value>
+  </data>
+    <data name="Cancelling" xml:space="preserve">
+    <value>Anulowanie...</value>
+  </data>
+  <data name="DonationHyperLinkButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Twoje wsparcie pomaga mi kontynuować tworzenie i utrzymywanie tego projektu.</value>
+  </data>
+  <data name="DonationHyperLinkButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Twoje wsparcie pomaga mi kontynuować tworzenie i utrzymywanie tego projektu.</value>
+  </data>
+    <data name="DonationHyperLinkButton.Content" xml:space="preserve">
+    <value>Wpłać Darowiznę</value>
+  </data>
+    <data name="CopyToClipboard.Content" xml:space="preserve">
+    <value>Kopiuj do Schowka</value>
+  </data>
+  <data name="CopyToClipboard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Kopiuj do Schowka</value>
+  </data>
+  <data name="CopyToClipboard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Kopiuj do Schowka</value>
+  </data>
+    <data name="HashCopiedToClipboard" xml:space="preserve">
+    <value>Wartość skrótu skopiowana do schowka!</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.Content" xml:space="preserve">
+    <value>Skanuj Wszystkie Dzienniki Trybu Jądra</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Skanuj wszystkie dzienniki trybu jądra dostępne obecnie w systemie.</value>
+  </data>
+  <data name="ScanForAllKernelModeLogs.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Skanuj wszystkie dzienniki trybu jądra dostępne obecnie w systemie.</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.Content" xml:space="preserve">
+    <value>Skanuj Dzienniki Trybu Jądra od Ostatniego Restartu</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Skanuj dzienniki trybu jądra od momentu ostatniego restartu systemu.</value>
+  </data>
+  <data name="ScanForKernelModeLogsSinceReboot.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Skanuj dzienniki trybu jądra od momentu ostatniego restartu systemu.</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OnContent" xml:space="preserve">
+    <value>Zaznaczanie Tekstu jest Włączone</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.OffContent" xml:space="preserve">
+    <value>Zaznaczanie Tekstu jest Wyłączone</value>
+  </data>
+    <data name="TextSelectionStateToggleSwitch.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Włącz lub wyłącz możliwość zaznaczania tekstów w wierszach Widoku Listy.</value>
+  </data>
+  <data name="TextSelectionStateToggleSwitch.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Włącz lub wyłącz możliwość zaznaczania tekstów w wierszach Widoku Listy.</value>
+  </data>
+  <data name="PolicyEditorClearAllData.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Czyści wszystkie dane załadowane w interfejsie użytkownika z wybranej zasady.</value>
+  </data>
+  <data name="PolicyEditorClearAllData.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Czyści wszystkie dane załadowane w interfejsie użytkownika z wybranej zasady.</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Zapisz zmiany wprowadzone w danych z powrotem do pliku XML zasady.</value>
+  </data>
+  <data name="PolicyEditorSaveTheChanges.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Zapisz zmiany wprowadzone w danych z powrotem do pliku XML zasady.</value>
+  </data>
+  <data name="BeginSimulationTextBlock.Text" xml:space="preserve">
+    <value>Rozpocznij Symulację</value>
+  </data>
+  <data name="BeginSimulation.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Rozpocznij symulację używając wybranych konfiguracji.</value>
+  </data>
+  <data name="BeginSimulation.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Rozpocznij symulację używając wybranych konfiguracji.</value>
+  </data>
+  <data name="RetrieveOnlinePoliciesTextBlock.Text" xml:space="preserve">
+    <value>Pobierz Zasady Online</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.Header" xml:space="preserve">
+    <value>Tylko Podpisywanie - Bez Wdrażania</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.Description" xml:space="preserve">
+    <value>Tworzy tylko podpisane pliki CIP w katalogu konfiguracji użytkownika bez ich wdrażania. Przełącz to, jeśli chcesz wdrożyć je w innym systemie.</value>
+  </data>
+    <data name="SignOnlyNoDeploySettingsCard.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Tworzy tylko podpisane pliki CIP w katalogu konfiguracji użytkownika bez ich wdrażania. Przełącz to, jeśli chcesz wdrożyć je w innym systemie.</value>
+  </data>
+  <data name="SignOnlyNoDeploySettingsCard.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Tworzy tylko podpisane pliki CIP w katalogu konfiguracji użytkownika bez ich wdrażania. Przełącz to, jeśli chcesz wdrożyć je w innym systemie.</value>
+  </data>
+  <data name="ViewSelectedCIPFilesTextBlock.Text" xml:space="preserve">
+    <value>Zobacz wybrane pliki CIP.</value>
+  </data>
+  <data name="ConvertTextBlock.Text" xml:space="preserve">
+    <value>Konwertuj</value>
+  </data>
+  <data name="ViewSelectedXMLFilesTextBlock.Text" xml:space="preserve">
+    <value>Zobacz wybrane pliki XML.</value>
+  </data>
+  <data name="RemoveTextBlock.Text" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="SetAsActiveTextBlock.Text" xml:space="preserve">
+    <value>Ustaw jako Aktywne</value>
+  </data>
+  <data name="SignInTextBlock.Text" xml:space="preserve">
+    <value>Zaloguj się</value>
+  </data>
+  <data name="CancelSigningInTextBlock.Text" xml:space="preserve">
+    <value>Ustaw jako Aktywne</value>
+  </data>
+  <data name="CurrentlyInUseAccountDetailsTextBlock.Text" xml:space="preserve">
+    <value>Szczegóły konta aktualnie używanego</value>
+  </data>
+  <data name="PolicyEditorSuccessfulSaveMessage" xml:space="preserve">
+    <value>Pomyślnie zapisano zmiany do pliku zasad.</value>
+  </data>
+  <data name="SidebarHelpHyperlinkTextBlock.Text" xml:space="preserve">
+    <value>Wsparcie - Zadaj Pytania</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.PlaceholderText" xml:space="preserve">
+    <value>Wyszukaj wśród aplikacji</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Wyszukaj wśród aplikacji zainstalowanych w systemie.</value>
+  </data>
+  <data name="AppsSearchBoxTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Wyszukaj wśród aplikacji zainstalowanych w systemie.</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Nazwa Zasady Odrzucenia</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Wprowadź nazwę dla zasady odrzucenia, która zostanie utworzona.</value>
+  </data>
+  <data name="DenyPolicyNameTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Wprowadź nazwę dla zasady odrzucenia, która zostanie utworzona.</value>
+  </data>
+  <data name="CustomPolicySettingsTabViewItem.Header" xml:space="preserve">
+    <value>Niestandardowe Ustawienia Zasad</value>
+  </data>
+  <data name="CustomPolicySettingsTitleTextBlock.Text" xml:space="preserve">
+    <value>Konfiguruj i zarządzaj niestandardowymi ustawieniami zasad oraz używaj szablonów do dodawania predefiniowanych zasad.</value>
+  </data>
+  <data name="CustomPolicySettingsPresets.PlaceholderText" xml:space="preserve">
+    <value>Wybierz szablon ustawień</value>
+  </data>
+  <data name="AddSettingTextBlock.Text" xml:space="preserve">
+    <value>Dodaj Ustawienie</value>
+  </data>
+  <data name="DeletedSelectedSettingTextBlock.Text" xml:space="preserve">
+    <value>Usuń Zaznaczone</value>
+  </data>
+  <data name="ClearAllPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>Wyczyść Wszystko</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="NoPolicySettingsTextBlock.Text" xml:space="preserve">
+    <value>Brak Ustawień Zasad</value>
+  </data>
+  <data name="NoPolicySettingsLoadedTextBlock.Text" xml:space="preserve">
+    <value>Nie zostały jeszcze załadowane lub utworzone niestandardowe ustawienia zasad.</value>
+  </data>
+  <data name="EnterValueTextBox.PlaceholderText" xml:space="preserve">
+    <value>Wprowadź wartość</value>
+  </data>
+  <data name="ValueNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Nazwa wartości</value>
+  </data>
+  <data name="KeyIdentifierTextBox.PlaceholderText" xml:space="preserve">
+    <value>Identyfikator Klucza</value>
+  </data>
+  <data name="ProviderNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Nazwa dostawcy</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Wyczyść wszystkie ustawienia zasad</value>
+  </data>
+  <data name="ClearAllPolicySettingsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Wyczyść wszystkie ustawienia zasad</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Usuń zaznaczone ustawienie zasad</value>
+  </data>
+  <data name="DeletedSelectedSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Usuń zaznaczone ustawienie zasad</value>
+  </data>
+  <data name="AddSettingButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Dodaj nowe puste ustawienie zasad</value>
+  </data>
+  <data name="AddSettingButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Dodaj nowe puste ustawienie zasad</value>
+  </data>
+  <data name="DeployTextBlock.Text" xml:space="preserve">
+    <value>Wdróż</value>
+  </data>
+  <data name="SignInSegmentedItem.Content" xml:space="preserve">
+    <value>Zaloguj się</value>
+  </data>
+  <data name="SignedInAccountsSegmentedItem.Content" xml:space="preserve">
+    <value>Zalogowane Konta</value>
+  </data>
+  <data name="ActiveAccountSegmentedItem.Content" xml:space="preserve">
+    <value>Aktywne Konto</value>
+  </data>
+  <data name="FilterTextBlock.Text" xml:space="preserve">
+    <value>Filtr</value>
+  </data>
+  <data name="BrowseForMDELogsTextBlock.Text" xml:space="preserve">
+    <value>Przeglądaj dzienniki zaawansowanego polowania MDE</value>
+  </data>
+  <data name="BrowseForMDELogsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Przeglądaj dzienniki zaawansowanego polowania MDE</value>
+  </data>
+  <data name="BrowseForMDELogsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Przeglądaj dzienniki zaawansowanego polowania MDE</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.Content" xml:space="preserve">
+    <value>Przejdź do kroku 2</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Rozpocznij wdrażanie wybranej zasady w trybie audytu i przejdź do kroku 2</value>
+  </data>
+  <data name="GoToStep2AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Rozpocznij wdrażanie wybranej zasady w trybie audytu i przejdź do kroku 2</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.Content" xml:space="preserve">
+    <value>Przejdź do kroku 3</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Rozpocznij skanowanie dzienników zdarzeń i wybranych katalogów (jeśli są) i przejdź do kroku 3</value>
+  </data>
+  <data name="GoToStep3AllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Rozpocznij skanowanie dzienników zdarzeń i wybranych katalogów (jeśli są) i przejdź do kroku 3</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.Content" xml:space="preserve">
+    <value>Przeglądaj foldery</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Przeglądaj foldery Twoich nowych lub istniejących aplikacji, które są zainstalowane i są blokowane</value>
+  </data>
+  <data name="BrowseForFoldersAllowNewAppsButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Przeglądaj foldery Twoich nowych lub istniejących aplikacji, które są zainstalowane i są blokowane</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.Header" xml:space="preserve">
+    <value>Nazwa Zasady Uzupełniającej</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.PlaceholderText" xml:space="preserve">
+    <value>Wprowadź nazwę dla Zasady Uzupełniającej</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Wprowadź nazwę dla zasady uzupełniającej, która zostanie utworzona.</value>
+  </data>
+  <data name="SupplementalPolicyNameAllowNewAppsTextBox.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Wprowadź nazwę dla zasady uzupełniającej, która zostanie utworzona.</value>
+  </data>
+  <data name="Step1TextBlock.Text" xml:space="preserve">
+    <value>Krok 1</value>
+  </data>
+    <data name="Step2TextBlock.Text" xml:space="preserve">
+    <value>Krok 2</value>
+  </data>
+    <data name="Step3TextBlock.Text" xml:space="preserve">
+    <value>Krok 3</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherLevelsMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: Używanie poziomów WHQLFilePublisher -&gt; FilePublisher -&gt; Publisher -&gt; Hash.</value>
+  </data>
+  <data name="BuildSignerWHQLFilePublisherRulesCountMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: {0} reguł WHQLFilePublisher.</value>
+  </data>
+  <data name="BuildSignerProcessingWHQLFilePublisherMessage" xml:space="preserve">
+    <value>BuildSignerAndHashObjects: Przetwarzanie danych WHQLFilePublisher.</value>
+  </data>
+  <data name="WHQLFilePublisherSignersToAddMessage" xml:space="preserve">
+    <value>Istnieje {0} podpisujących WHQL File Publisher do dodania do pliku XML</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedAllowMessage" xml:space="preserve">
+    <value>nie wykryto podpisujących WHQLFilePublisher do tworzenia reguł zezwoleń.</value>
+  </data>
+    <data name="EKUsNodeNotFoundMessage" xml:space="preserve">
+    <value>Węzeł EKUs nie został znaleziony</value>
+  </data>
+  <data name="NoWHQLFilePublisherSignersDetectedDenyMessage" xml:space="preserve">
+    <value>nie wykryto podpisujących WHQLFilePublisher do tworzenia reguł odmowy.</value>
+  </data>
+  <data name="WHQLFilePublisherRuleTypeFriendlyName" xml:space="preserve">
+    <value>Typ Reguły WHQL File Publisher</value>
+  </data>
+  <data name="AllowNewApps_SidebarButtonContent" xml:space="preserve">
+    <value>Podstawowa Polityka Zezwoleń dla Nowych Aplikacji</value>
+  </data>
+  <data name="CustomPatternBasedSupplementalPolicyLabel" xml:space="preserve">
+    <value>Uzupełniająca Polityka Oparta na Niestandardowym Wzorcu</value>
+  </data>
+  <data name="CloudTextBlock.Text" xml:space="preserve">
+    <value>Chmura</value>
+  </data>
+  <data name="LocalTextBlock.Text" xml:space="preserve">
+    <value>Lokalny</value>
+  </data>
+  <data name="CreateTextBlock.Text" xml:space="preserve">
+    <value>Utwórz</value>
+  </data>
+  <data name="UpdatePageCustomMSIXPath" xml:space="preserve">
+    <value>Niestandardowa Ścieżka MSIXBundle</value>
+  </data>
+  <data name="OpenInFileExplorer.Text" xml:space="preserve">
+    <value>Otwórz w Eksploratorze Plików</value>
+  </data>
+  <data name="OpenInFileExplorer.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Otwórz folder, w którym znajduje się plik w Eksploratorze Plików.</value>
+  </data>
+  <data name="OpenInFileExplorer.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Otwórz folder, w którym znajduje się plik w Eksploratorze Plików.</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Otwórz w Edytorze Zasad</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Otwórz zasadę w Edytorze Zasad, gdzie możesz zobaczyć szczegółowy przegląd zasady i mieć możliwość dalszego dostosowania jej bezpośrednio w tej aplikacji.</value>
+  </data>
+  <data name="OpenInPolicyEditorMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Otwórz zasadę w Edytorze Zasad, gdzie możesz zobaczyć szczegółowy przegląd zasady i mieć możliwość dalszego dostosowania jej bezpośrednio w tej aplikacji.</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Otwórz Plik</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Otwórz plik, który został utworzony przy użyciu domyślnego programu obsługi plików skonfigurowanego w systemie operacyjnym.</value>
+  </data>
+  <data name="OpenTheFileMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Otwórz plik, który został utworzony przy użyciu domyślnego programu obsługi plików skonfigurowanego w systemie operacyjnym.</value>
+  </data>
+  <data name="AdditionalActionsTextBlock.Text" xml:space="preserve">
+    <value>Dodatkowe Działania</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Otwórz zasadę w Edytorze Zasad lub wybierz inne działanie z listy.</value>
+  </data>
+  <data name="AdditionalActionsDropDownButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Otwórz zasadę w Edytorze Zasad lub wybierz inne działanie z listy.</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Skonfiguruj Opcje Reguły</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Otwórz zasadę na innej stronie, aby dalej skonfigurować opcje jej reguły.</value>
+  </data>
+  <data name="OpenInConfigurePolicyRuleOptionsMenuFlyoutItem.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Otwórz zasadę na innej stronie, aby dalej skonfigurować opcje jej reguły.</value>
+  </data>
+  <data name="AddToPolicySegmentedItem.Content" xml:space="preserve">
+    <value>Dodaj do Zasady</value>
+  </data>
+  <data name="BasePolicyFileSegmentedItem.Content" xml:space="preserve">
+    <value>Plik Zasady Podstawowej</value>
+  </data>
+  <data name="BasePolicyGUIDSegmentedItem.Content" xml:space="preserve">
+    <value>GUID Zasady Podstawowej</value>
+  </data>
+  <data name="AddToPolicyDescription.Text" xml:space="preserve">
+    <value>Przeglądaj w poszukiwaniu pliku zasady, do którego dodać dzienniki. Nowe reguły zostaną połączone z wszelkimi istniejącymi regułami.</value>
+  </data>
+  <data name="BasePolicyFileDescription.Text" xml:space="preserve">
+    <value>Przeglądaj w poszukiwaniu pliku zasady podstawowej, z którym zostanie powiązana Zasada Uzupełniająca, która ma zostać utworzona.</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.PlaceholderText" xml:space="preserve">
+    <value>Wprowadź GUID zasady podstawowej</value>
+  </data>
+    <data name="BasePolicyGUIDDescription.AutomationProperties.HelpText" xml:space="preserve">
+  <value>Wprowadź GUID pliku zasady podstawowej, z którym zostanie powiązana Zasada Uzupełniająca, która ma zostać utworzona.</value>
+  </data>
+  <data name="BasePolicyGUIDDescription.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Wprowadź GUID pliku zasady podstawowej, z którym zostanie powiązana Zasada Uzupełniająca, która ma zostać utworzona.</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.PlaceholderText" xml:space="preserve">
+    <value>Filtruj według Daty</value>
+  </data>
+    <data name="FilterByDateCalendarDatePicker.AutomationProperties.HelpText" xml:space="preserve">
+  <value>Będzie pokazywać tylko dane, które są równe lub nowsze niż wybrana data.</value>
+  </data>
+  <data name="FilterByDateCalendarDatePicker.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Będzie pokazywać tylko dane, które są równe lub nowsze niż wybrana data.</value>
+  </data>
+  <data name="SubmitButton.Content" xml:space="preserve">
+    <value>Prześlij</value>
+  </data>
+  <data name="SubmitButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Prześlij</value>
+  </data>
+  <data name="SubmitButton.AutomationProperties.HelpText" xml:space="preserve">
+    <value>Prześlij</value>
   </data>
 </root>

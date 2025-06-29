@@ -32,6 +32,7 @@ using AppControlManager.SimulationMethods;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace AppControlManager.ViewModels;
 
@@ -112,17 +113,17 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 	internal void CalculateColumnWidths()
 	{
 		// Measure header text widths first.
-		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SignerNumberHeader/Text"));
-		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("TypeHeader/Text"));
-		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SubjectCommonNameHeader/Text"));
-		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("IssuerCommonNameHeader/Text"));
-		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("NotBeforeHeader/Text"));
-		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("NotAfterHeader/Text"));
-		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("HashingAlgorithmHeader/Text"));
-		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("SerialNumberHeader/Text"));
-		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("ThumbprintHeader/Text"));
-		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("TBSHashHeader/Text"));
-		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.Rizz.GetString("ExtensionOIDsHeader/Text"));
+		double maxWidth1 = ListViewHelper.MeasureText(GlobalVars.GetStr("SignerNumberHeader/Text"));
+		double maxWidth2 = ListViewHelper.MeasureText(GlobalVars.GetStr("TypeHeader/Text"));
+		double maxWidth3 = ListViewHelper.MeasureText(GlobalVars.GetStr("SubjectCommonNameHeader/Text"));
+		double maxWidth4 = ListViewHelper.MeasureText(GlobalVars.GetStr("IssuerCommonNameHeader/Text"));
+		double maxWidth5 = ListViewHelper.MeasureText(GlobalVars.GetStr("NotBeforeHeader/Text"));
+		double maxWidth6 = ListViewHelper.MeasureText(GlobalVars.GetStr("NotAfterHeader/Text"));
+		double maxWidth7 = ListViewHelper.MeasureText(GlobalVars.GetStr("HashingAlgorithmHeader/Text"));
+		double maxWidth8 = ListViewHelper.MeasureText(GlobalVars.GetStr("SerialNumberHeader/Text"));
+		double maxWidth9 = ListViewHelper.MeasureText(GlobalVars.GetStr("ThumbprintHeader/Text"));
+		double maxWidth10 = ListViewHelper.MeasureText(GlobalVars.GetStr("TBSHashHeader/Text"));
+		double maxWidth11 = ListViewHelper.MeasureText(GlobalVars.GetStr("ExtensionOIDsHeader/Text"));
 
 		// Iterate over all items to determine the widest string for each column.
 		foreach (FileCertificateInfoCol item in FileCertificates)
@@ -175,7 +176,7 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 
 		List<FileCertificateInfoCol> results = [];
 
-		results = [.. FilteredCertificates.Where(cert =>
+		results = FilteredCertificates.Where(cert =>
 					(cert.SubjectCN is not null && cert.SubjectCN.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
 					(cert.IssuerCN is not null && cert.IssuerCN.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
 					(cert.TBSHash is not null && cert.TBSHash.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
@@ -187,7 +188,7 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 					(cert.HashingAlgorithm is not null && cert.HashingAlgorithm.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
 					(cert.SerialNumber is not null && cert.SerialNumber.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
 					(cert.Thumbprint is not null && cert.Thumbprint.Contains(query, StringComparison.OrdinalIgnoreCase))
-				)];
+				).ToList();
 
 		FileCertificates.Clear();
 
@@ -349,7 +350,7 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 		}
 	}
 
-	// Methods bound to each header button’s Click events.
+	// Methods bound to each header button's Click events.
 	internal void SortBySignerNumber()
 	{
 		Sort(CertificateSortColumn.SignerNumber);
@@ -419,17 +420,17 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 	{
 		// Use StringBuilder to format each property with its label for easy reading
 		return new StringBuilder()
-			.AppendLine(GlobalVars.Rizz.GetString("SignerNumberHeader/Text") + ": " + row.SignerNumber)
-			.AppendLine(GlobalVars.Rizz.GetString("TypeHeader/Text") + ": " + row.Type)
-			.AppendLine(GlobalVars.Rizz.GetString("SubjectCommonNameHeader/Text") + ": " + row.SubjectCN)
-			.AppendLine(GlobalVars.Rizz.GetString("IssuerCommonNameHeader/Text") + ": " + row.IssuerCN)
-			.AppendLine(GlobalVars.Rizz.GetString("NotBeforeHeader/Text") + ": " + row.NotBefore)
-			.AppendLine(GlobalVars.Rizz.GetString("NotAfterHeader/Text") + ": " + row.NotAfter)
-			.AppendLine(GlobalVars.Rizz.GetString("HashingAlgorithmHeader/Text") + ": " + row.HashingAlgorithm)
-			.AppendLine(GlobalVars.Rizz.GetString("SerialNumberHeader/Text") + ": " + row.SerialNumber)
-			.AppendLine(GlobalVars.Rizz.GetString("ThumbprintHeader/Text") + ": " + row.Thumbprint)
-			.AppendLine(GlobalVars.Rizz.GetString("TBSHashHeader/Text") + ": " + row.TBSHash)
-			.AppendLine(GlobalVars.Rizz.GetString("ExtensionOIDsHeader/Text") + ": " + row.OIDs)
+			.AppendLine(GlobalVars.GetStr("SignerNumberHeader/Text") + ": " + row.SignerNumber)
+			.AppendLine(GlobalVars.GetStr("TypeHeader/Text") + ": " + row.Type)
+			.AppendLine(GlobalVars.GetStr("SubjectCommonNameHeader/Text") + ": " + row.SubjectCN)
+			.AppendLine(GlobalVars.GetStr("IssuerCommonNameHeader/Text") + ": " + row.IssuerCN)
+			.AppendLine(GlobalVars.GetStr("NotBeforeHeader/Text") + ": " + row.NotBefore)
+			.AppendLine(GlobalVars.GetStr("NotAfterHeader/Text") + ": " + row.NotAfter)
+			.AppendLine(GlobalVars.GetStr("HashingAlgorithmHeader/Text") + ": " + row.HashingAlgorithm)
+			.AppendLine(GlobalVars.GetStr("SerialNumberHeader/Text") + ": " + row.SerialNumber)
+			.AppendLine(GlobalVars.GetStr("ThumbprintHeader/Text") + ": " + row.Thumbprint)
+			.AppendLine(GlobalVars.GetStr("TBSHashHeader/Text") + ": " + row.TBSHash)
+			.AppendLine(GlobalVars.GetStr("ExtensionOIDsHeader/Text") + ": " + row.OIDs)
 			.ToString();
 	}
 
@@ -635,7 +636,7 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 
 		try
 		{
-			MainInfoBar.WriteInfo("Checking for file signatures");
+			MainInfoBar.WriteInfo(GlobalVars.GetStr("CheckingForFileSignatures"));
 
 			// Get the file's extension
 			string fileExtension = Path.GetExtension(selectedFile);
@@ -680,7 +681,7 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 							{
 								Logger.Write(
 									string.Format(
-										GlobalVars.Rizz.GetString("FileHasHashMismatchMessage"),
+										GlobalVars.GetStr("FileHasHashMismatchMessage"),
 										selectedFile
 									)
 								);
@@ -696,7 +697,7 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 							{
 								Logger.Write(
 									string.Format(
-										GlobalVars.Rizz.GetString("FileHasHashMismatchMessage"),
+										GlobalVars.GetStr("FileHasHashMismatchMessage"),
 										selectedFile
 									)
 								);
@@ -800,7 +801,11 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 
 			CalculateColumnWidths();
 
-			MainInfoBar.WriteSuccess($"The file '{selectedFile}' has {(FilteredCertificates.Count > 0 ? FilteredCertificates.Max(x => x.SignerNumber) : 0)} signer(s). Data from the Security Catalogs on the system were {(IncludeSecurityCatalogsToggleSwitch ? "included" : "not included")} in the scan.");
+			MainInfoBar.WriteSuccess(string.Format(GlobalVars.GetStr("FileCertificatesScanResultMessage"), selectedFile, (FilteredCertificates.Count > 0 ? FilteredCertificates.Max(x => x.SignerNumber) : 0), (IncludeSecurityCatalogsToggleSwitch ? GlobalVars.GetStr("IncludedText") : GlobalVars.GetStr("NotIncludedText"))));
+
+			await PublishUserActivityAsync(LaunchProtocolActions.FileSignature,
+				selectedFile,
+				GlobalVars.GetStr("UserActivityNameForFileSignature"));
 		}
 		catch (Exception ex)
 		{
@@ -843,5 +848,16 @@ internal sealed partial class ViewFileCertificatesVM : ViewModelBase
 		{
 			MainInfoBar.WriteError(ex);
 		}
+	}
+
+	/// <summary>
+	/// CTRL + C shortcuts event handler
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="args"></param>
+	internal void CtrlC_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+	{
+		ListViewFlyoutMenuCopy_Click();
+		args.Handled = true;
 	}
 }
