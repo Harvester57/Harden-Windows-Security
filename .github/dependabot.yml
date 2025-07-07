@@ -7,43 +7,50 @@
 
 version: 2
 updates:
-  - package-ecosystem: "dotnet-sdk"
-    directories:
-      - "/AppControl Manager/"
-      - "/Harden-Windows-Security Module/"
-      - "/Harden Windows Security App (WIP)/"
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-    labels:
-      - "Dependabot"
-  - package-ecosystem: "nuget"
-    directories:
-      - "/AppControl Manager/"
-      - "/Harden-Windows-Security Module/"
-      - "/Harden Windows Security App (WIP)/"
-    schedule:
-      interval: "daily"
-      time: "07:30"
-      timezone: "Israel"
-    labels:
-      - "Dependabot"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      # Check for updates to GitHub Actions every week: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot
-      interval: "daily"
-    labels:
-      - "Dependabot"
-  - package-ecosystem: "cargo"
-    directories:
-      - "/AppControl Manager/eXclude/ResourceValidator/"
-      - "/AppControl Manager/eXclude/Rust WMI Interop/Device Guard/Library/"
-      - "/AppControl Manager/eXclude/Rust WMI Interop/Device Guard/Program/"
-      - "/AppControl Manager/eXclude/Rust WMI Interop/Microsoft Defender/Program/"
-      - "/AppControl Manager/eXclude/Rust WMI Interop/Microsoft Defender/Library/"
-      - "/AppControl Manager/eXclude/Rust WMI Interop/Microsoft Defender/Printing raw data with types/"
-    schedule:
-      interval: "daily"
-      time: "07:30"
-      timezone: "Israel"
+- package-ecosystem: "dotnet-sdk"
+  directories:
+  - "/AppControl Manager/"
+  - "/Harden-Windows-Security Module/"
+  - "/Harden Windows Security App (WIP)/"
+  schedule:
+    interval: "weekly"
+    day: "tuesday"
+  labels:
+  - "Dependabot"
+- package-ecosystem: "nuget"
+  directories:
+  - "/AppControl Manager/"
+  - "/Harden-Windows-Security Module/"
+  - "/Harden Windows Security App (WIP)/"
+  schedule:
+    interval: "daily"
+    time: "07:30"
+    timezone: "Israel"
+  labels:
+  - "Dependabot"
+- package-ecosystem: "github-actions"
+  directory: "/"
+  commit-message:
+    prefix: "actions"
+  labels: [ 'chore ' ]
+  schedule:
+    interval: "cron"
+    cronjob: "0 7 * * *"
+    timezone: "Europe/Paris"
+  groups:
+    actions-dependencies:
+      applies-to: version-updates
+      patterns:
+      - "*"
+- package-ecosystem: "cargo"
+  directories:
+  - "/AppControl Manager/eXclude/ResourceValidator/"
+  - "/AppControl Manager/eXclude/Rust WMI Interop/Device Guard/Library/"
+  - "/AppControl Manager/eXclude/Rust WMI Interop/Device Guard/Program/"
+  - "/AppControl Manager/eXclude/Rust WMI Interop/Microsoft Defender/Program/"
+  - "/AppControl Manager/eXclude/Rust WMI Interop/Microsoft Defender/Library/"
+  - "/AppControl Manager/eXclude/Rust WMI Interop/Microsoft Defender/Printing raw data with types/"
+  schedule:
+    interval: "daily"
+    time: "07:30"
+    timezone: "Israel"
