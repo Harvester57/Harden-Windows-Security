@@ -8,6 +8,9 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: windows-latest
@@ -97,7 +100,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed to install Microsoft.VCRedist: $LASTEXITCODE") }
 
       - name: Check out the repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Building And Packaging the AppControl Manager
         id: main_buildOp
@@ -915,7 +918,7 @@ jobs:
           }
 
       - name: Uploading Artifact 1
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           retention-days: 1
           compression-level: 0
@@ -923,7 +926,7 @@ jobs:
           path: ${{ env.MSIXBundle_PATH }}
 
       - name: Uploading Artifact 2
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           retention-days: 1
           compression-level: 0
@@ -931,7 +934,7 @@ jobs:
           path: ${{ env.X64MSBuildLog_PATH }}
 
       - name: Uploading Artifact 3
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           retention-days: 1
           compression-level: 0
@@ -939,7 +942,7 @@ jobs:
           path: ${{ env.ARM64MSBuildLog_PATH }}
 
       - name: Uploading Artifact 4
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           retention-days: 1
           compression-level: 0
@@ -947,7 +950,7 @@ jobs:
           path: ${{ env.X64Symbol_PATH }}
 
       - name: Uploading Artifact 5
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           retention-days: 1
           compression-level: 0
@@ -955,7 +958,7 @@ jobs:
           path: ${{ env.ARM64Symbol_PATH }}
 
       - name: Uploading Artifact 6
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           retention-days: 1
           compression-level: 0
@@ -973,7 +976,7 @@ jobs:
     steps:
 
       - name: Downloading all Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           path: Downloaded-Artifacts # Download all artifacts in this folder
           merge-multiple: true
@@ -982,7 +985,7 @@ jobs:
         run: ls -R Downloaded-Artifacts
 
       - name: Generating Artifact Attestation
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
         with:
         # subject-path: "${{ needs.build.outputs.MSIXBundle_PATH }}, ${{ needs.build.outputs.X64MSBuildLog_PATH }}, ${{ needs.build.outputs.ARM64MSBuildLog_PATH }}, ${{ needs.build.outputs.X64Symbol_PATH }}, ${{ needs.build.outputs.ARM64Symbol_PATH }}"
           subject-path: "Downloaded-Artifacts/*" # Use all the files in the artifact downloads folder
@@ -998,7 +1001,7 @@ jobs:
     steps:
 
       - name: Downloading all Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           path: Downloaded-Artifacts # Download all artifacts in this folder
           merge-multiple: true
@@ -1007,7 +1010,7 @@ jobs:
         run: ls -R Downloaded-Artifacts
 
       - name: Generating SBOM attestation
-        uses: actions/attest-sbom@v2
+        uses: actions/attest-sbom@bd218ad0dbcb3e146bd073d1d9c6d78e08aa8a0b # v2.4.0
         with:
         # subject-path: "${{ needs.build.outputs.MSIXBundle_PATH }}, ${{ needs.build.outputs.X64MSBuildLog_PATH }}, ${{ needs.build.outputs.ARM64MSBuildLog_PATH }}, ${{ needs.build.outputs.X64Symbol_PATH }}, ${{ needs.build.outputs.ARM64Symbol_PATH }}"
           subject-path: "Downloaded-Artifacts/*" # Use all the files in the artifact downloads folder
@@ -1024,7 +1027,7 @@ jobs:
     steps:
 
       - name: Check out the repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Updating The MSIXBundle Download Links and Version via Pull Request
         shell: pwsh

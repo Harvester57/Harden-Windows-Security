@@ -51,3 +51,28 @@ updates:
       interval: "daily"
       time: "07:30"
       timezone: "Israel"
+
+  - package-ecosystem: nuget
+    directory: /AppControl Manager
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /AppControl Manager/eXclude/DISMService
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /AppControl Manager/eXclude/PartnerCenter
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /Harden Windows Security App
+    schedule:
+      interval: daily
+
+  - package-ecosystem: nuget
+    directory: /Harden-Windows-Security Module
+    schedule:
+      interval: daily
