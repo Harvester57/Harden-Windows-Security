@@ -19,6 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+#if HARDEN_WINDOWS_SECURITY
+using HardenWindowsSecurity;
+#endif
 
 namespace AppControlManager.Others;
 
@@ -188,5 +191,40 @@ internal unsafe static class FileDialogHelper
 		}
 
 		return paths;
+	}
+
+	/// <summary>
+	/// Shows a save file dialog with filter and optional default filename.
+	/// </summary>
+	/// <param name="filter">Filter string in format "Description|*.ext|Description2|*.ext2"</param>
+	/// <param name="defaultFilename">Optional default filename to pre-fill in the dialog</param>
+	/// <returns>Selected save file path, or null if cancelled</returns>
+	/// <exception cref="COMException">Thrown when the operation fails</exception>
+	internal static unsafe string? ShowSaveFileDialog(string filter, string? defaultFilename = null)
+	{
+		IntPtr result = NativeMethods.show_save_file_dialog(filter, DirectoryToOpen, defaultFilename, out int lastError);
+
+		if (result == IntPtr.Zero)
+		{
+			if (lastError != 0)
+				throw Marshal.GetExceptionForHR(lastError)!;
+			return null; // User cancelled
+		}
+
+		try
+		{
+			string? selectedFilePath = Marshal.PtrToStringUTF8(result);
+
+			// Update the directory where user last browsed for future dialogs
+			string? selectedDirectory = Path.GetDirectoryName(selectedFilePath);
+			if (!string.IsNullOrEmpty(selectedDirectory))
+				DirectoryToOpen = selectedDirectory;
+
+			return selectedFilePath;
+		}
+		finally
+		{
+			NativeMethods.free_string(result);
+		}
 	}
 }

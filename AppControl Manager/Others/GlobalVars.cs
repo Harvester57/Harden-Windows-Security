@@ -17,6 +17,9 @@
 
 using System;
 using System.IO;
+#if HARDEN_WINDOWS_SECURITY
+using HardenWindowsSecurity;
+#endif
 using Microsoft.Windows.ApplicationModel.Resources;
 
 namespace AppControlManager.Others;
@@ -28,6 +31,29 @@ internal static class GlobalVars
 {
 	// Instantiate the ResourceLoader object to access the strings in the Resource.resw file
 	internal static ResourceLoader Rizz = new();
+
+#if HARDEN_WINDOWS_SECURITY
+
+	internal static Windows.ApplicationModel.Resources.ResourceLoader SecurityMeasuresRizzLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForViewIndependentUse("SecurityMeasures");
+
+	/// <summary>
+	/// This method is responsible for retrieving localized strings from the SecurityMeasures for Security measures' friendly name field based on a key.
+	/// </summary>
+	/// <param name="key"></param>
+	/// <returns></returns>
+	internal static string GetSecurityStr(string key)
+	{
+		try
+		{
+			return SecurityMeasuresRizzLoader.GetString(key);
+		}
+		catch (Exception ex)
+		{
+			Logger.Write($"Error retrieving localized string for key: {key}: {ex.Message}");
+			return key;
+		}
+	}
+#endif
 
 	/// <summary>
 	/// This method is responsible for retrieving localized strings from the resource files based on a key.
@@ -58,10 +84,17 @@ internal static class GlobalVars
 		Environment.GetEnvironmentVariable("SystemDrive") + @"\",
 		"Windows", "schemas", "CodeIntegrity", "cipolicy.xsd");
 
-	// Storing the path to the AppControl Manager folder in the Program Files
-	internal static readonly string UserConfigDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "AppControl Manager");
 
-	// Storing the path to User Config JSON file in the AppControl Manager folder in the Program Files
+#if HARDEN_WINDOWS_SECURITY
+	// Storing the path to the app's folder in the Program Files
+	internal static readonly string UserConfigDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Harden Windows Security");
+#endif
+#if APP_CONTROL_MANAGER
+	// Storing the path to the app's folder in the Program Files
+	internal static readonly string UserConfigDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "AppControl Manager");
+#endif
+
+	// Storing the path to User Config JSON file in the app's folder in the Program Files
 	internal static readonly string UserConfigJson = Path.Combine(UserConfigDir, "UserConfigurations", "UserConfigurations.json");
 
 	// Storing the path to the StagingArea folder in the AppControl Manager folder in the Program Files
@@ -88,6 +121,10 @@ internal static class GlobalVars
 	internal const string ExecutablesPickerFilter = "Executable file|*.exe";
 	internal const string CertificatePickerFilter = "Certificate file|*.cer";
 	internal const string EVTXPickerFilter = "EVTX log file|*.evtx";
+	internal const string JSONAndPOLPickerFilter = "JSON and POL files (*.json;*.pol)|*.json;*.pol";
+	internal const string POLPickerFilter = "Group Policy File|*.pol";
+	internal const string JSONPickerFilter = "JSON Files|*.json";
+	internal const string SecurityINFPickerFilter = "Security INF Files|*.inf";
 
 	// Name of the special automatic supplemental policy
 	internal const string AppControlManagerSpecialPolicyName = "AppControlManagerSupplementalPolicy";
@@ -129,7 +166,7 @@ internal static class GlobalVars
 	internal const string SiPolicyNamespace = "urn:schemas-microsoft-com:sipolicy";
 
 	// When the the list of installed packaged apps is retrieved, this URI is used whenever an installed app doesn't have a valid URI logo path
-	internal const string FallBackAppLogoURI = "ms-appx:///Assets/StoreLogo.backup.png";
+	internal const string FallBackAppLogoURI = "ms-appx:///Assets/Others/AppWithoutIconPlaceHolder.png";
 
 	// Path to the DeviceGuardWMIRetriever program in the App directory
 	internal static readonly string DeviceGuardWMIRetrieverProcessPath = Path.Combine(RustInteropPath, "DeviceGuardWMIRetriever.exe");
@@ -140,6 +177,10 @@ internal static class GlobalVars
 	// Path to the ScheduledTaskManager program in the App directory
 	internal static readonly string ScheduledTaskManagerProcessPath = Path.Combine(CppInteropPath, "ScheduledTaskManager.exe");
 
+	/// <summary>
+	/// To store the path to the system drive
+	/// </summary>
+	internal static readonly string SystemDrive = Environment.GetEnvironmentVariable("SystemDrive") ?? "C:";
 
 	static GlobalVars()
 	{

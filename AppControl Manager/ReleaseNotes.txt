@@ -1,0 +1,3 @@
+* Improved various aspects of ListViews in the app. Their column widths have more paddings to look better when the list is empty. Also some ListViews wouldn't maintain horizontal scroll position when you performed search and column sorting. This has been fixed.
+
+* Updated NuGet dependencies.

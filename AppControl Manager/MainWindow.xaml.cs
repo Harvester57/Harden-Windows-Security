@@ -15,12 +15,8 @@
 // See here for more information: https://github.com/HotCakeX/Harden-Windows-Security/blob/main/LICENSE
 //
 
-using System;
-using AnimatedVisuals;
 using AppControlManager.AppSettings;
 using AppControlManager.Others;
-using AppControlManager.ViewModels;
-using AppControlManager.WindowComponents;
 using Microsoft.UI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
@@ -29,9 +25,21 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Windows.ApplicationModel;
 using Windows.Graphics;
+using AnimatedVisuals;
 using Microsoft.UI.Xaml.Automation;
+using System;
 
+#if APP_CONTROL_MANAGER
+using AppControlManager.ViewModels;
+using AppControlManager.WindowComponents;
 namespace AppControlManager;
+#endif
+
+#if HARDEN_WINDOWS_SECURITY
+using HardenWindowsSecurity.ViewModels;
+using HardenWindowsSecurity.WindowComponents;
+namespace HardenWindowsSecurity;
+#endif
 
 /// <summary>
 /// MainWindow is a sealed class that represents the main application window, managing navigation, UI elements, and
@@ -43,7 +51,9 @@ internal sealed partial class MainWindow : Window
 #pragma warning disable CA1822
 	private MainWindowVM ViewModel { get; } = ViewModelProvider.MainWindowVM;
 	private AppSettings.Main AppSettings { get; } = App.Settings;
+#if APP_CONTROL_MANAGER
 	private SidebarVM sidebarVM { get; } = ViewModelProvider.SidebarVM;
+#endif
 #pragma warning restore CA1822
 
 	internal static Grid? RootGridPub { get; private set; }
@@ -65,7 +75,7 @@ internal sealed partial class MainWindow : Window
 		// Retrieve the window handle (HWND) of the main WinUI 3 window and store it in the global vars
 		GlobalVars.hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
 
-		// Set the window display affinity upon window creation to exclude it from capture if ScreenShield is enabled, otherwise set it to 
+		// Set the window display affinity upon window creation to exclude it from capture if ScreenShield is enabled, otherwise set it to
 		WindowDisplayAffinity.SetWindowDisplayAffinity(GlobalVars.hWnd, AppSettings.ScreenShield ? WindowDisplayAffinity.DisplayAffinity.WDA_EXCLUDEFROMCAPTURE : WindowDisplayAffinity.DisplayAffinity.WDA_NONE);
 
 		// https://learn.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.window.extendscontentintotitlebar
@@ -287,6 +297,7 @@ internal sealed partial class MainWindow : Window
 			? ElementTheme.Dark
 			: ElementTheme.Light;
 
+
 		// Set the requested theme based on the event
 		// If "Use System Setting" is used, the current system color mode will be assigned which can be either light/dark
 		// Also performs animated icon switch based on theme
@@ -300,17 +311,19 @@ internal sealed partial class MainWindow : Window
 					// Change the navigation icons based on dark/light theme only if "Animated" is the current icons style in use
 					if (string.Equals(App.Settings.IconsStyle, "Animated", StringComparison.OrdinalIgnoreCase))
 					{
+#if APP_CONTROL_MANAGER
 						ViewModel.AllowNewAppsIcon = new AnimatedIcon
 						{
 							Margin = new Thickness(0, -6, -6, -6),
 							Source = new StarBlack()
 						};
-
+#endif
 						ViewModel.UpdateIcon = new AnimatedIcon
 						{
 							Margin = new Thickness(0, -25, -25, -25),
 							Source = new HeartPulse()
 						};
+
 					}
 
 					break;
@@ -322,17 +335,19 @@ internal sealed partial class MainWindow : Window
 					// Change the navigation icons based on dark/light theme only if "Animated" is the current icons style in use
 					if (string.Equals(App.Settings.IconsStyle, "Animated", StringComparison.OrdinalIgnoreCase))
 					{
+#if APP_CONTROL_MANAGER
 						ViewModel.AllowNewAppsIcon = new AnimatedIcon
 						{
 							Margin = new Thickness(0, -6, -6, -6),
 							Source = new StarYellow()
 						};
-
+#endif
 						ViewModel.UpdateIcon = new AnimatedIcon
 						{
 							Margin = new Thickness(0, -5, -5, -5),
 							Source = new Heart()
 						};
+
 					}
 
 					break;
@@ -348,17 +363,19 @@ internal sealed partial class MainWindow : Window
 						// Change the navigation icons based on dark/light theme only if "Animated" is the current icons style in use
 						if (string.Equals(App.Settings.IconsStyle, "Animated", StringComparison.OrdinalIgnoreCase))
 						{
+#if APP_CONTROL_MANAGER
 							ViewModel.AllowNewAppsIcon = new AnimatedIcon
 							{
 								Margin = new Thickness(0, -6, -6, -6),
 								Source = new StarYellow()
 							};
-
+#endif
 							ViewModel.UpdateIcon = new AnimatedIcon
 							{
 								Margin = new Thickness(0, -5, -5, -5),
 								Source = new Heart()
 							};
+
 						}
 					}
 					else
@@ -366,17 +383,19 @@ internal sealed partial class MainWindow : Window
 						// Change the navigation icons based on dark/light theme only if "Animated" is the current icons style in use
 						if (string.Equals(App.Settings.IconsStyle, "Animated", StringComparison.OrdinalIgnoreCase))
 						{
+#if APP_CONTROL_MANAGER
 							ViewModel.AllowNewAppsIcon = new AnimatedIcon
 							{
 								Margin = new Thickness(0, -6, -6, -6),
 								Source = new StarBlack()
 							};
-
+#endif
 							ViewModel.UpdateIcon = new AnimatedIcon
 							{
 								Margin = new Thickness(0, -25, -25, -25),
 								Source = new HeartPulse()
 							};
+
 						}
 					}
 
@@ -404,11 +423,122 @@ internal sealed partial class MainWindow : Window
 			// Anything else that will be added in the future that will store texts related to UI elements on the Window itself from the resw file will have to be updated as well.
 			ViewModel.RebuildBreadcrumbMappings();
 			ViewModel.RebuildNavigationPageToItemContentMapForSearch();
-			CustomUIElements.CustomPatternBasedFilePath.PopulateFilePathPatternExamplesCollection();
+
+#if HARDEN_WINDOWS_SECURITY
 
 			TitleBarSearchBox.PlaceholderText = GlobalVars.GetStr("MainSearchAutoSuggestBox/PlaceholderText");
 			AutomationProperties.SetHelpText(TitleBarSearchBox, GlobalVars.GetStr("MainSearchAutoSuggestBox/AutomationProperties/HelpText"));
 			ToolTipService.SetToolTip(TitleBarSearchBox, GlobalVars.GetStr("MainSearchAutoSuggestBox/ToolTipService/ToolTip"));
+
+			// Main navigation items for Harden Windows Security
+			ProtectNavigationViewItemHeader.Content = GlobalVars.GetStr("ProtectNavigationViewItemHeader/Content");
+
+			ProtectNavItem.Content = GlobalVars.GetStr("ProtectNavigationViewItem/Content");
+			AutomationProperties.SetHelpText(ProtectNavItem, GlobalVars.GetStr("ProtectNavigationViewItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(ProtectNavItem, GlobalVars.GetStr("ProtectNavigationViewItem/ToolTipService/ToolTip"));
+
+			MicrosoftDefenderNavItem.Content = GlobalVars.GetStr("MicrosoftDefenderNavItem/Content");
+			AutomationProperties.SetHelpText(MicrosoftDefenderNavItem, GlobalVars.GetStr("MicrosoftDefenderNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(MicrosoftDefenderNavItem, GlobalVars.GetStr("MicrosoftDefenderNavItem/ToolTipService/ToolTip"));
+
+			ASRNavItem.Content = GlobalVars.GetStr("ASRNavItem/Content");
+			AutomationProperties.SetHelpText(ASRNavItem, GlobalVars.GetStr("ASRNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(ASRNavItem, GlobalVars.GetStr("ASRNavItem/ToolTipService/ToolTip"));
+
+			BitLockerNavItem.Content = GlobalVars.GetStr("BitLockerNavItem/Content");
+			AutomationProperties.SetHelpText(BitLockerNavItem, GlobalVars.GetStr("BitLockerNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(BitLockerNavItem, GlobalVars.GetStr("BitLockerNavItem/ToolTipService/ToolTip"));
+
+			TLSSecurityNavItem.Content = GlobalVars.GetStr("TLSSecurityNavItem/Content");
+			AutomationProperties.SetHelpText(TLSSecurityNavItem, GlobalVars.GetStr("TLSSecurityNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(TLSSecurityNavItem, GlobalVars.GetStr("TLSSecurityNavItem/ToolTipService/ToolTip"));
+
+			LockScreenNavItem.Content = GlobalVars.GetStr("LockScreenNavItem/Content");
+			AutomationProperties.SetHelpText(LockScreenNavItem, GlobalVars.GetStr("LockScreenNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(LockScreenNavItem, GlobalVars.GetStr("LockScreenNavItem/ToolTipService/ToolTip"));
+
+			UACNavItem.Content = GlobalVars.GetStr("UACNavItem/Content");
+			AutomationProperties.SetHelpText(UACNavItem, GlobalVars.GetStr("UACNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(UACNavItem, GlobalVars.GetStr("UACNavItem/ToolTipService/ToolTip"));
+
+			DeviceGuardNavItem.Content = GlobalVars.GetStr("DeviceGuardNavItem/Content");
+			AutomationProperties.SetHelpText(DeviceGuardNavItem, GlobalVars.GetStr("DeviceGuardNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(DeviceGuardNavItem, GlobalVars.GetStr("DeviceGuardNavItem/ToolTipService/ToolTip"));
+
+			WindowsFirewallNavItem.Content = GlobalVars.GetStr("WindowsFirewallNavItem/Content");
+			AutomationProperties.SetHelpText(WindowsFirewallNavItem, GlobalVars.GetStr("WindowsFirewallNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(WindowsFirewallNavItem, GlobalVars.GetStr("WindowsFirewallNavItem/ToolTipService/ToolTip"));
+
+			OptionalWindowsFeaturesNavItem.Content = GlobalVars.GetStr("OptionalWindowsFeaturesNavItem/Content");
+			AutomationProperties.SetHelpText(OptionalWindowsFeaturesNavItem, GlobalVars.GetStr("OptionalWindowsFeaturesNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(OptionalWindowsFeaturesNavItem, GlobalVars.GetStr("OptionalWindowsFeaturesNavItem/ToolTipService/ToolTip"));
+
+			WindowsNetworkingNavItem.Content = GlobalVars.GetStr("WindowsNetworkingNavItem/Content");
+			AutomationProperties.SetHelpText(WindowsNetworkingNavItem, GlobalVars.GetStr("WindowsNetworkingNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(WindowsNetworkingNavItem, GlobalVars.GetStr("WindowsNetworkingNavItem/ToolTipService/ToolTip"));
+
+			MiscellaneousNavItem.Content = GlobalVars.GetStr("MiscellaneousNavItem/Content");
+			AutomationProperties.SetHelpText(MiscellaneousNavItem, GlobalVars.GetStr("MiscellaneousNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(MiscellaneousNavItem, GlobalVars.GetStr("MiscellaneousNavItem/ToolTipService/ToolTip"));
+
+			WindowsUpdateNavItem.Content = GlobalVars.GetStr("WindowsUpdateNavItem/Content");
+			AutomationProperties.SetHelpText(WindowsUpdateNavItem, GlobalVars.GetStr("WindowsUpdateNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(WindowsUpdateNavItem, GlobalVars.GetStr("WindowsUpdateNavItem/ToolTipService/ToolTip"));
+
+			EdgeBrowserNavItem.Content = GlobalVars.GetStr("EdgeBrowserNavItem/Content");
+			AutomationProperties.SetHelpText(EdgeBrowserNavItem, GlobalVars.GetStr("EdgeBrowserNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(EdgeBrowserNavItem, GlobalVars.GetStr("EdgeBrowserNavItem/ToolTipService/ToolTip"));
+
+			CertificatesNavItem.Content = GlobalVars.GetStr("CertificatesNavItem/Content");
+			AutomationProperties.SetHelpText(CertificatesNavItem, GlobalVars.GetStr("CertificatesNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(CertificatesNavItem, GlobalVars.GetStr("CertificatesNavItem/ToolTipService/ToolTip"));
+
+			CountryIPBlockingNavItem.Content = GlobalVars.GetStr("CountryIPBlockingNavItem/Content");
+			AutomationProperties.SetHelpText(CountryIPBlockingNavItem, GlobalVars.GetStr("CountryIPBlockingNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(CountryIPBlockingNavItem, GlobalVars.GetStr("CountryIPBlockingNavItem/ToolTipService/ToolTip"));
+
+			NonAdminCommandsNavItem.Content = GlobalVars.GetStr("NonAdminCommandsNavItem/Content");
+			AutomationProperties.SetHelpText(NonAdminCommandsNavItem, GlobalVars.GetStr("NonAdminCommandsNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(NonAdminCommandsNavItem, GlobalVars.GetStr("NonAdminCommandsNavItem/ToolTipService/ToolTip"));
+
+			InstalledAppsManagementNavItem.Content = GlobalVars.GetStr("InstalledAppsManagementNavItem/Content");
+			AutomationProperties.SetHelpText(InstalledAppsManagementNavItem, GlobalVars.GetStr("InstalledAppsManagementNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(InstalledAppsManagementNavItem, GlobalVars.GetStr("InstalledAppsManagementNavItem/ToolTipService/ToolTip"));
+
+			FileReputationNavItem.Content = GlobalVars.GetStr("FileReputationNavItem/Content");
+			AutomationProperties.SetHelpText(FileReputationNavItem, GlobalVars.GetStr("FileReputationNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(FileReputationNavItem, GlobalVars.GetStr("FileReputationNavItem/ToolTipService/ToolTip"));
+
+			GroupPolicyEditorNavItem.Content = GlobalVars.GetStr("GroupPolicyEditorNavItem/Content");
+			AutomationProperties.SetHelpText(GroupPolicyEditorNavItem, GlobalVars.GetStr("GroupPolicyEditorNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(GroupPolicyEditorNavItem, GlobalVars.GetStr("GroupPolicyEditorNavItem/ToolTipService/ToolTip"));
+
+			DocumentationNavigationViewItemHeader.Content = GlobalVars.GetStr("DocumentationNavigationViewItemHeader/Content");
+
+			GitHubDocsNavItem.Content = GlobalVars.GetStr("GitHubDocsNavItem/Content");
+			AutomationProperties.SetHelpText(GitHubDocsNavItem, GlobalVars.GetStr("GitHubDocsNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(GitHubDocsNavItem, GlobalVars.GetStr("GitHubDocsNavItem/ToolTipService/ToolTip"));
+
+			LogsNavItem.Content = GlobalVars.GetStr("LogsNavItem/Content");
+			AutomationProperties.SetHelpText(LogsNavItem, GlobalVars.GetStr("LogsNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(LogsNavItem, GlobalVars.GetStr("LogsNavItem/ToolTipService/ToolTip"));
+
+			UpdateNavItem.Content = GlobalVars.GetStr("UpdateNavItem/Content");
+			AutomationProperties.SetHelpText(UpdateNavItem, GlobalVars.GetStr("UpdateNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(UpdateNavItem, GlobalVars.GetStr("UpdateNavItem/ToolTipService/ToolTip"));
+
+			SidebarTextBlock.Text = GlobalVars.GetStr("SidebarTextBlock/Text");
+
+			SidebarMainCaptionTextBlock.Text = GlobalVars.GetStr("SidebarMainCaptionTextBlock/Text");
+
+			SidebarGuideHyperlinkButton.Content = GlobalVars.GetStr("SidebarGuideHyperlinkButton/Content");
+
+			SidebarHelpHyperlinkTextBlock.Text = GlobalVars.GetStr("SidebarHelpHyperlinkTextBlock/Text");
+
+#endif
+
+#if APP_CONTROL_MANAGER
+			CustomUIElements.CustomPatternBasedFilePath.PopulateFilePathPatternExamplesCollection();
 
 			CreationNavigationViewItemHeader.Content = GlobalVars.GetStr("CreationNavigationViewItemHeader/Content");
 
@@ -488,28 +618,6 @@ internal sealed partial class MainWindow : Window
 			AutomationProperties.SetHelpText(ValidatePoliciesNavItem, GlobalVars.GetStr("ValidatePoliciesNavItem/AutomationProperties/HelpText"));
 			ToolTipService.SetToolTip(ValidatePoliciesNavItem, GlobalVars.GetStr("ValidatePoliciesNavItem/ToolTipService/ToolTip"));
 
-			DocumentationNavigationViewItemHeader.Content = GlobalVars.GetStr("DocumentationNavigationViewItemHeader/Content");
-
-			GitHubDocsNavItem.Content = GlobalVars.GetStr("GitHubDocsNavItem/Content");
-			AutomationProperties.SetHelpText(GitHubDocsNavItem, GlobalVars.GetStr("GitHubDocsNavItem/AutomationProperties/HelpText"));
-			ToolTipService.SetToolTip(GitHubDocsNavItem, GlobalVars.GetStr("GitHubDocsNavItem/ToolTipService/ToolTip"));
-
-			MSFTDocsNavItem.Content = GlobalVars.GetStr("MSFTDocsNavItem/Content");
-			AutomationProperties.SetHelpText(MSFTDocsNavItem, GlobalVars.GetStr("MSFTDocsNavItem/AutomationProperties/HelpText"));
-			ToolTipService.SetToolTip(MSFTDocsNavItem, GlobalVars.GetStr("MSFTDocsNavItem/ToolTipService/ToolTip"));
-
-			LogsNavItem.Content = GlobalVars.GetStr("LogsNavItem/Content");
-			AutomationProperties.SetHelpText(LogsNavItem, GlobalVars.GetStr("LogsNavItem/AutomationProperties/HelpText"));
-			ToolTipService.SetToolTip(LogsNavItem, GlobalVars.GetStr("LogsNavItem/ToolTipService/ToolTip"));
-
-			UpdateNavItem.Content = GlobalVars.GetStr("UpdateNavItem/Content");
-			AutomationProperties.SetHelpText(UpdateNavItem, GlobalVars.GetStr("UpdateNavItem/AutomationProperties/HelpText"));
-			ToolTipService.SetToolTip(UpdateNavItem, GlobalVars.GetStr("UpdateNavItem/ToolTipService/ToolTip"));
-
-			SidebarTextBlock.Text = GlobalVars.GetStr("SidebarTextBlock/Text");
-
-			SidebarMainCaptionTextBlock.Text = GlobalVars.GetStr("SidebarMainCaptionTextBlock/Text");
-
 			SidebarPinnedPolicyPathTextBlock.Text = GlobalVars.GetStr("SidebarPinnedPolicyPathTextBlock/Text");
 
 			SidebarPolicyPathPlaceHolder.PlaceholderText = GlobalVars.GetStr("SidebarPolicyPathPlaceHolder/PlaceholderText");
@@ -534,17 +642,18 @@ internal sealed partial class MainWindow : Window
 			AutomationProperties.SetHelpText(SidebarAutomaticAssignmentSettingsCard, GlobalVars.GetStr("SidebarAutomaticAssignmentSettingsCard/AutomationProperties/HelpText"));
 			ToolTipService.SetToolTip(SidebarAutomaticAssignmentSettingsCard, GlobalVars.GetStr("SidebarAutomaticAssignmentSettingsCard/ToolTipService/ToolTip"));
 
-			SidebarGuideHyperlinkButton.Content = GlobalVars.GetStr("SidebarGuideHyperlinkButton/Content");
-
 			OpenConfigDirectoryButtonText.Text = GlobalVars.GetStr("OpenConfigDirectoryButtonText/Text");
+
+			MSFTDocsNavItem.Content = GlobalVars.GetStr("MSFTDocsNavItem/Content");
+			AutomationProperties.SetHelpText(MSFTDocsNavItem, GlobalVars.GetStr("MSFTDocsNavItem/AutomationProperties/HelpText"));
+			ToolTipService.SetToolTip(MSFTDocsNavItem, GlobalVars.GetStr("MSFTDocsNavItem/ToolTipService/ToolTip"));
 
 			AutomationProperties.SetHelpText(OpenConfigDirectoryButton, GlobalVars.GetStr("OpenConfigDirectoryButton/AutomationProperties/HelpText"));
 			ToolTipService.SetToolTip(OpenConfigDirectoryButton, GlobalVars.GetStr("OpenConfigDirectoryButton/ToolTipService/ToolTip"));
 
-			SidebarHelpHyperlinkTextBlock.Text = GlobalVars.GetStr("SidebarHelpHyperlinkTextBlock/Text");
-
 			AutomaticAssignmentSidebarToggleSwitch.OnContent = GlobalVars.GetStr("ToggleSwitchGeneral/OnContent");
 			AutomaticAssignmentSidebarToggleSwitch.OffContent = GlobalVars.GetStr("ToggleSwitchGeneral/OffContent");
+#endif
 
 			Logger.Write("MainWindow localized text refreshed successfully");
 		}

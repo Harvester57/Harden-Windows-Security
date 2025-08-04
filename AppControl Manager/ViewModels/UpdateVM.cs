@@ -16,8 +16,23 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.IO;
+using AppControlManager.Others;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Windows.System;
+
+#if HARDEN_WINDOWS_SECURITY
+using HardenWindowsSecurity.Others;
+using AppControlManager.ViewModels;
+namespace HardenWindowsSecurity.ViewModels;
+#endif
+
+#if APP_CONTROL_MANAGER
+using Windows.ApplicationModel;
+using Windows.Foundation;
+using Windows.Management.Deployment;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -26,15 +41,8 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using AppControlManager.Others;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Windows.ApplicationModel;
-using Windows.Foundation;
-using Windows.Management.Deployment;
-using Windows.System;
-
 namespace AppControlManager.ViewModels;
+#endif
 
 #pragma warning disable IDE0063
 // Do not simplify using statements, keep them scoped for proper disposal otherwise files will be in use until the method is exited
@@ -54,12 +62,22 @@ internal sealed partial class UpdateVM : ViewModelBase
 
 	internal readonly InfoBarSettings MainInfoBar;
 
+#if APP_CONTROL_MANAGER
 	/// <summary>
 	/// Pattern for finding ASR rules that belong to the AppControl Manager
 	/// </summary>
 	/// <returns></returns>
 	[GeneratedRegex("__sadt7br7jpt02", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
 	internal partial Regex AppPFNRegex();
+
+	/// <summary>
+	/// Navigate to the extra sub-page
+	/// </summary>
+	internal void CheckForUpdate_Click()
+	{
+		App._nav.Navigate(typeof(Pages.UpdatePageCustomMSIXPath), null);
+	}
+#endif
 
 	/// <summary>
 	/// Common name of the on-device generated certificate used to sign the AppControl Manager MSIXBundle package
@@ -84,17 +102,7 @@ internal sealed partial class UpdateVM : ViewModelBase
 	/// <summary>
 	/// Content of the main update button
 	/// </summary>
-	internal string UpdateButtonContent
-	{
-		get; set
-		{
-			// This is changed by other non-UI threads.
-			_ = Dispatcher.TryEnqueue(() =>
-			{
-				_ = SP(ref field, value);
-			});
-		}
-	} = GlobalVars.GetStr("UpdateNavItem/ToolTipService/ToolTip");
+	internal string UpdateButtonContent { get; set => SP(ref field, value); } = GlobalVars.GetStr("UpdateNavItem/ToolTipService/ToolTip");
 
 	/// <summary>
 	/// To determine whether to use the user-supplied package or continue with downloading the package from GitHub.
@@ -166,15 +174,6 @@ internal sealed partial class UpdateVM : ViewModelBase
 	#endregion
 
 	/// <summary>
-	/// Navigate to the extra sub-page
-	/// </summary>
-	internal void CheckForUpdate_Click()
-	{
-		App._nav.Navigate(typeof(Pages.UpdatePageCustomMSIXPath), null);
-	}
-
-
-	/// <summary>
 	/// Event handler for check for update button
 	/// </summary>
 	internal async void CheckForUpdateButton_Click()
@@ -221,6 +220,7 @@ internal sealed partial class UpdateVM : ViewModelBase
 		}
 		else
 		{
+#if APP_CONTROL_MANAGER
 			try
 			{
 				CheckForUpdateButtonIsEnabled = false;
@@ -402,7 +402,7 @@ internal sealed partial class UpdateVM : ViewModelBase
 							*/
 
 
-							ASROutput = ProcessStarter.RunCommand(GlobalVars.ManageDefenderProcessPath, "get AttackSurfaceReductionOnlyExclusions");
+							ASROutput = ProcessStarter.RunCommand(GlobalVars.ManageDefenderProcessPath, "get 0 AttackSurfaceReductionOnlyExclusions");
 
 							// If there are ASR rule exclusions, find ones that belong to AppControl Manager and remove them
 							// Before adding new ones for the new version
@@ -573,6 +573,7 @@ internal sealed partial class UpdateVM : ViewModelBase
 
 				ProgressBarVisibility = Visibility.Collapsed;
 			}
+#endif
 		}
 	}
 

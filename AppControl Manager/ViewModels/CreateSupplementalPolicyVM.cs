@@ -98,6 +98,10 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 			() => CustomFilePathRulesInfoBarTitle, value => CustomFilePathRulesInfoBarTitle = value);
 
 		PatternBasedFileRuleCancellableButton = new(GlobalVars.GetStr("CreateSupplementalPolicyButton/Content"));
+
+		// To adjust the initial width of the columns, giving them nice paddings.
+		CalculateColumnWidthsStrictKernelMode();
+		CalculateColumnWidths();
 	}
 
 	internal Visibility FilesAndFoldersBasePolicyLightAnimatedIconVisibility { get; set => SP(ref field, value); } = Visibility.Collapsed;
@@ -233,7 +237,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	/// <summary>
 	/// Selected Supplemental policy name
 	/// </summary>
-	internal string? FilesAndFoldersSupplementalPolicyName { get; set => SP(ref field, value); }
+	internal string? FilesAndFoldersSupplementalPolicyName { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Whether the UI elements for Files and Folders section are enabled or disabled.
@@ -672,7 +676,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 		// Check if there are selected items in the ListView
 		if (lv.SelectedItems.Count > 0)
 		{
-			ListViewHelper.ConvertRowToText(lv.SelectedItems);
+			ListViewHelper.ConvertRowToText(lv.SelectedItems, ListViewHelper.FileIdentityPropertyMappings);
 		}
 	}
 
@@ -705,6 +709,8 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 		filesAndFoldersScanResultsList.Clear();
 
 		UpdateTotalFilesFilesAndFolders(true);
+
+		CalculateColumnWidths();
 	}
 
 	/// <summary>
@@ -714,7 +720,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	{
 		get; set
 		{
-			if (SP(ref field, value))
+			if (SPT(ref field, value))
 			{
 				ApplyFilters();
 			}
@@ -783,7 +789,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	/// <summary>
 	/// Selected Supplemental policy name,
 	/// </summary>
-	internal string? CertificatesBasedSupplementalPolicyName { get; set => SP(ref field, value); }
+	internal string? CertificatesBasedSupplementalPolicyName { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Whether the policy should be deployed or not.
@@ -1068,7 +1074,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	/// <summary>
 	/// Selected Supplemental policy name
 	/// </summary>
-	internal string? ISGBasedSupplementalPolicyName { get; set => SP(ref field, value); }
+	internal string? ISGBasedSupplementalPolicyName { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Path to the ISG Supplemental policy XML file
@@ -1364,7 +1370,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	/// <summary>
 	/// The name of the supplemental policy for Strict Kernel Mode.
 	/// </summary>
-	internal string? StrictKernelModePolicyName { get; set => SP(ref field, value); }
+	internal string? StrictKernelModePolicyName { get; set => SPT(ref field, value); }
 
 	internal bool StrictKernelModeSettingsExpanderIsExpanded { get; set => SP(ref field, value); }
 
@@ -1666,11 +1672,8 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 
 				// Since there can be more than one folder due to localizations such as en-US then from each of the folders, the bootres.dll.mui file is added
 
-				// Get the system drive
-				string systemDrive = Environment.GetEnvironmentVariable("SystemDrive")!;
-
 				// Define the directory path
-				string directoryPath = Path.Combine(systemDrive, "Windows", "Boot", "Resources");
+				string directoryPath = Path.Combine(GlobalVars.SystemDrive, "Windows", "Boot", "Resources");
 
 				// Iterate through each directory in the specified path
 				foreach (string directory in Directory.GetDirectories(directoryPath))
@@ -1679,7 +1682,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 					kernelModeDriversList.Add(Path.Combine(directory, "bootres.dll.mui"));
 				}
 
-				string sys32Dir = new(Path.Combine(systemDrive, "Windows", "System32"));
+				string sys32Dir = new(Path.Combine(GlobalVars.SystemDrive, "Windows", "System32"));
 
 				(IEnumerable<string>, int) filesOutput = FileUtility.GetFilesFast([sys32Dir], null, [".dll", ".sys"]);
 
@@ -1777,7 +1780,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 		// Check if there are selected items in the ListView
 		if (lv.SelectedItems.Count > 0)
 		{
-			ListViewHelper.ConvertRowToText(lv.SelectedItems);
+			ListViewHelper.ConvertRowToText(lv.SelectedItems, ListViewHelper.FileIdentityPropertyMappings);
 		}
 	}
 
@@ -1790,6 +1793,8 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 		StrictKernelModeScanResultsList.Clear();
 
 		UpdateTotalFilesStrictKernelMode(true);
+
+		CalculateColumnWidthsStrictKernelMode();
 	}
 
 	/// <summary>
@@ -1818,7 +1823,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	{
 		get; set
 		{
-			if (SP(ref field, value))
+			if (SPT(ref field, value))
 			{
 				StrictKernel_ApplyFilters();
 			}
@@ -1901,7 +1906,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	/// <summary>
 	/// The name of the supplemental policy that will be created.
 	/// </summary>
-	internal string? PFNBasedSupplementalPolicyName { get; set => SP(ref field, value); }
+	internal string? PFNBasedSupplementalPolicyName { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Whether the Supplemental policy should be deployed at the end.
@@ -1932,7 +1937,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	{
 		get; set
 		{
-			if (SP(ref field, value))
+			if (SPT(ref field, value))
 			{
 				PFNAppFilteringTextBox_TextChanged();
 			}
@@ -1957,7 +1962,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 		try
 		{
 			PFNElementsAreEnabled = false;
-			PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync();
+			PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync(this);
 		}
 		finally
 		{
@@ -2017,7 +2022,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 
 	// Used to store the original Apps collection so when we filter the results and then remove the filters,
 	// We can still have access to the original collection of apps
-	private ObservableCollection<GroupInfoListForPackagedAppView>? _originalContacts;
+	private ObservableCollection<GroupInfoListForPackagedAppView>? _AppsListBackingList;
 
 	/// <summary>
 	/// Event handler for when the search box of apps list changes
@@ -2025,23 +2030,20 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	private void PFNAppFilteringTextBox_TextChanged()
 	{
 		// Store the original collection if it hasn't been saved yet
-		_originalContacts ??= PFNBasedAppsListItemsSource;
+		_AppsListBackingList ??= PFNBasedAppsListItemsSource;
 
 		if (string.IsNullOrWhiteSpace(PFNBasedSearchKeywordForAppsList))
 		{
 			// If the filter is cleared, restore the original collection
-			PFNBasedAppsListItemsSource = _originalContacts;
+			PFNBasedAppsListItemsSource = _AppsListBackingList;
 			return;
 		}
 
 		// Filter the original collection
-		List<GroupInfoListForPackagedAppView> filtered = [.. _originalContacts
-			.Select(group => new GroupInfoListForPackagedAppView(group.Where(app =>
-				app.DisplayName.Contains(PFNBasedSearchKeywordForAppsList, StringComparison.OrdinalIgnoreCase)))
-			{
-				Key = group.Key // Preserve the group key
-			})
-			.Where(group => group.Any())];
+		List<GroupInfoListForPackagedAppView> filtered = _AppsListBackingList
+			.Select(group => new GroupInfoListForPackagedAppView(
+				items: group.Where(app => app.DisplayName.Contains(PFNBasedSearchKeywordForAppsList, StringComparison.OrdinalIgnoreCase)),
+				key: group.Key)).Where(group => group.Any()).ToList();
 
 		// Update the ListView source with the filtered data
 		PFNBasedAppsListItemsSource = new ObservableCollection<GroupInfoListForPackagedAppView>(filtered);
@@ -2057,7 +2059,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 			try
 			{
 				PFNElementsAreEnabled = false;
-				PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync();
+				PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync(this);
 			}
 			finally
 			{
@@ -2151,7 +2153,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 				if (selectedItem is PackagedAppView appView)
 				{
 					// Add the selected item's PFN to the list
-					selectedAppsPFNs.Add(appView.PackageFamilyNameActual);
+					selectedAppsPFNs.Add(appView.PackageFamilyName);
 				}
 			}
 
@@ -2264,6 +2266,118 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 
 	internal async void OpenInDefaultFileHandler_PFN() => await OpenInDefaultFileHandler(_PFNSupplementalPolicyPath);
 
+	/// <summary>
+	/// Event handler for copying app details to clipboard from the context menu.
+	/// </summary>
+	/// <param name="sender">The MenuFlyoutItem that was clicked</param>
+	/// <param name="e">Event arguments</param>
+	internal void CopyAppDetails_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			PFNInfoBar.IsClosable = false;
+
+			if (sender is not MenuFlyoutItem menuItem)
+			{
+				return;
+			}
+
+			// Navigate up the visual tree to find the PackagedAppView data context
+			DependencyObject? current = menuItem;
+			PackagedAppView? targetApp = null;
+
+			while (current is not null)
+			{
+				if (current is FrameworkElement element && element.DataContext is PackagedAppView app)
+				{
+					targetApp = app;
+					break;
+				}
+				current = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(current);
+			}
+
+			if (targetApp is null)
+			{
+				PFNInfoBar.WriteWarning("Could not determine which app's details to copy.");
+				return;
+			}
+
+			ListViewHelper.ConvertRowToText([targetApp], ListViewHelper.PackagedAppPropertyMappings);
+		}
+		catch (Exception ex)
+		{
+			PFNInfoBar.WriteError(ex);
+		}
+		finally
+		{
+			PFNInfoBar.IsClosable = true;
+		}
+	}
+
+	/// <summary>
+	/// Event handler for opening the installation location of a single app from the context menu.
+	/// </summary>
+	/// <param name="sender">The MenuFlyoutItem that was clicked</param>
+	/// <param name="e">Event arguments</param>
+	internal async void OpenAppLocation_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			PFNInfoBar.IsClosable = false;
+
+			if (sender is not MenuFlyoutItem menuItem)
+			{
+				return;
+			}
+
+			// Navigate up the visual tree to find the PackagedAppView data context
+			DependencyObject? current = menuItem;
+			PackagedAppView? targetApp = null;
+
+			while (current is not null)
+			{
+				if (current is FrameworkElement element && element.DataContext is PackagedAppView app)
+				{
+					targetApp = app;
+					break;
+				}
+				current = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(current);
+			}
+
+			if (targetApp is null)
+			{
+				PFNInfoBar.WriteWarning("Could not determine which app's location to open.");
+				return;
+			}
+
+			if (string.IsNullOrWhiteSpace(targetApp.InstallLocation))
+			{
+				PFNInfoBar.WriteWarning($"No installation location available for {targetApp.DisplayName}.");
+				return;
+			}
+
+			// Check if the directory exists
+			if (!Directory.Exists(targetApp.InstallLocation))
+			{
+				PFNInfoBar.WriteWarning($"Installation location does not exist: {targetApp.InstallLocation}");
+				return;
+			}
+
+			// Open the folder in File Explorer
+			await OpenInDefaultFileHandler(targetApp.InstallLocation);
+
+			PFNInfoBar.WriteInfo($"Opened installation location for {targetApp.DisplayName}");
+		}
+		catch (Exception ex)
+		{
+			PFNInfoBar.WriteError(ex);
+		}
+		finally
+		{
+			PFNInfoBar.IsClosable = true;
+		}
+	}
+
 	#endregion
 
 	#region Custom Pattern-based File Rule
@@ -2306,7 +2420,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	/// <summary>
 	/// The custom pattern used for file rule.
 	/// </summary>
-	internal string? SupplementalPolicyCustomPatternBasedCustomPatternTextBox { get; set => SP(ref field, value); }
+	internal string? SupplementalPolicyCustomPatternBasedCustomPatternTextBox { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Initialization details for the main Create button for the Pattern Based FileRule section
@@ -2316,7 +2430,7 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase
 	/// <summary>
 	/// Selected Supplemental policy name
 	/// </summary>
-	internal string? CustomPatternBasedFileRuleBasedSupplementalPolicyName { get; set => SP(ref field, value); }
+	internal string? CustomPatternBasedFileRuleBasedSupplementalPolicyName { get; set => SPT(ref field, value); }
 
 	internal void CustomPatternBasedFileRuleBrowseForBasePolicyButton_Click()
 	{

@@ -296,13 +296,45 @@ The build process will generate complete log files and you can use the [MSBuild 
 # Requires -RunAsAdministrator
 function Build_ACM {
     param(
-        [ValidateSet('AppControlManager_sadt7br7jpt02', 'VioletHansen.AppControlManager_ea7andspwdn10')]
-        [string]$PackageFamilyName,
+        [ValidateSet('Store', 'Self')]
+        [string]$Type,
         [bool]$DownloadRepo,
         [bool]$InstallDeps,
         [bool]$Workflow,
-        [bool]$UpdateWorkLoads
+        [bool]$UpdateWorkLoads,
+        [bool]$Install,
+        [bool]$Upload,
+        [bool]$X64ONLY
     )
+
+    [string]$PackageFamilyName = ''
+    [string]$PackageHashAlgo = ''
+    [string]$PackagePublisher = ''
+    [string]$PackageName = ''
+    [string]$PackagePhoneProductId = ''
+    [string]$PackagePhonePublisherId = ''
+    [string]$PackagePublisherDisplayName = ''
+
+    Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name 'LongPathsEnabled' -Value 1 -Force
+
+    if ($Type -eq 'Store') {
+        $PackageFamilyName = 'VioletHansen.AppControlManager_ea7andspwdn10'
+        $PackageHashAlgo = 'SHA256'
+        $PackagePublisher = 'CN=C62E63B6-6EF1-4F86-B80F-41A725BD0189'
+        $PackageName = 'VioletHansen.AppControlManager'
+        $PackagePhoneProductId = '4157a676-f4c2-4a8c-a511-b7fb2255c6f5'
+        $PackagePhonePublisherId = '387464d6-cb95-4e5f-9c8f-f153a4855fb2'
+        $PackagePublisherDisplayName = 'Violet Hansen'
+    }
+    else {
+        $PackageFamilyName = 'AppControlManager_sadt7br7jpt02'
+        $PackageHashAlgo = 'SHA512'
+        $PackagePublisher = 'CN=SelfSignedCertForAppControlManager'
+        $PackageName = 'AppControlManager'
+        $PackagePhoneProductId = '199a23ec-7cb6-4ab5-ab50-8baca348bc79'
+        $PackagePhonePublisherId = '00000000-0000-0000-0000-000000000000'
+        $PackagePublisherDisplayName = 'SelfSignedCertForAppControlManager'
+    }
 
     $ErrorActionPreference = 'Stop'
     # Start the stopwatch
@@ -420,6 +452,7 @@ function Build_ACM {
         dotnet workload update
         dotnet workload config --update-mode workload-set
         dotnet workload update
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed updating the workloads. Exit Code: $LASTEXITCODE") }
     }
 
     Write-Host -Object "`nChecking .NET info`n`n" -ForegroundColor Magenta
@@ -491,15 +524,29 @@ function Build_ACM {
 
     ### ManageDefender
 
-    . $MSBuildPath 'eXclude\C++ WMI Interop\ManageDefender\ManageDefender.slnx' /p:Configuration=Release /p:Platform=x64 /target:"clean;Build"
+    . $MSBuildPath 'eXclude\C++ WMI Interop\ManageDefender\ManageDefender.slnx' /p:Configuration=Release /p:Platform=x64 /target:"clean;Rebuild"
 
-    . $MSBuildPath 'eXclude\C++ WMI Interop\ManageDefender\ManageDefender.slnx' /p:Configuration=Release /p:Platform=arm64 /target:"clean;Build"
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building MS Defender solution for X64. Exit Code: $LASTEXITCODE") }
+
+    if (!$X64ONLY) {
+
+        . $MSBuildPath 'eXclude\C++ WMI Interop\ManageDefender\ManageDefender.slnx' /p:Configuration=Release /p:Platform=arm64 /target:"clean;Rebuild"
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building MS Defender solution for ARM64. Exit Code: $LASTEXITCODE") }
+    }
 
     ### ScheduledTaskManager
 
-    . $MSBuildPath 'eXclude\C++ ScheduledTaskManager\ScheduledTaskManager\ScheduledTaskManager.slnx' /p:Configuration=Release /p:Platform=x64 /target:"clean;Build"
+    . $MSBuildPath 'eXclude\C++ ScheduledTaskManager\ScheduledTaskManager\ScheduledTaskManager.slnx' /p:Configuration=Release /p:Platform=x64 /target:"clean;Rebuild"
 
-    . $MSBuildPath 'eXclude\C++ ScheduledTaskManager\ScheduledTaskManager\ScheduledTaskManager.slnx' /p:Configuration=Release /p:Platform=arm64 /target:"clean;Build"
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building ScheduledTaskManager solution for X64. Exit Code: $LASTEXITCODE") }
+
+    if (!$X64ONLY) {
+
+        . $MSBuildPath 'eXclude\C++ ScheduledTaskManager\ScheduledTaskManager\ScheduledTaskManager.slnx' /p:Configuration=Release /p:Platform=arm64 /target:"clean;Rebuild"
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building ScheduledTaskManager solution for ARM64. Exit Code: $LASTEXITCODE") }
+    }
 
     ### Shell
 
@@ -508,78 +555,182 @@ function Build_ACM {
     [string]$content = $content -replace 'static constexpr LPCWSTR APP_CONTROL_MANAGER_PFN = L"[^"]*";', "static constexpr LPCWSTR APP_CONTROL_MANAGER_PFN = L`"$newPFN`";"
     $content | Set-Content 'eXclude\Shell\Shell.cpp' -NoNewline -Force
 
-    . $MSBuildPath 'eXclude\Shell\Shell.slnx' /p:Configuration=Release /p:Platform=x64 /target:"clean;Build"
+    . $MSBuildPath 'eXclude\Shell\Shell.slnx' /p:Configuration=Release /p:Platform=x64 /target:"clean;Rebuild"
 
-    . $MSBuildPath 'eXclude\Shell\Shell.slnx' /p:Configuration=Release /p:Platform=arm64 /target:"clean;Build"
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building the Shell solution for X64. Exit Code: $LASTEXITCODE") }
+
+    if (!$X64ONLY) {
+
+        . $MSBuildPath 'eXclude\Shell\Shell.slnx' /p:Configuration=Release /p:Platform=arm64 /target:"clean;Rebuild"
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building the Shell solution for ARM64. Exit Code: $LASTEXITCODE") }
+    }
 
     #endregion
 
 
     #region --- RUST projects ---
 
-    rustup target add aarch64-pc-windows-msvc
+    # Uncomment this once stable toolchain supports ehcont security feature, till then we use nightly only
+    # rustup default stable
+    rustup default nightly
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed setting Rust toolchain to Stable. Exit Code: $LASTEXITCODE") }
+
+    if (!$X64ONLY) {
+
+        rustup target add aarch64-pc-windows-msvc
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed adding aarch64-pc-windows-msvc target to Rust toolchain. Exit Code: $LASTEXITCODE") }
+
+    }
 
     rustup target add x86_64-pc-windows-msvc
 
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed adding x86_64-pc-windows-msvc target to Rust toolchain. Exit Code: $LASTEXITCODE") }
+
     rustup update
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed updating Rust. Exit Code: $LASTEXITCODE") }
+
+    cargo version
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed checking for Rust version. Exit Code: $LASTEXITCODE") }
 
     [string]$Current_Location = (Get-Location).Path
 
     Set-Location -Path '.\eXclude\Rust WMI Interop\Device Guard\Program'
 
-    if (Test-Path -PathType Leaf -LiteralPath 'Cargo.lock'){
+    if (Test-Path -PathType Leaf -LiteralPath 'Cargo.lock') {
         Remove-Item -Force -LiteralPath 'Cargo.lock'
     }
 
     cargo clean
 
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed cleaning the Rust project. Exit Code: $LASTEXITCODE") }
+
     cargo update --verbose
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed updating Rust. Exit Code: $LASTEXITCODE") }
 
     cargo tree
 
+    rustup show active-toolchain
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed showing active Rust toolchain. Exit Code: $LASTEXITCODE") }
+
     cargo build_x64
 
-    cargo build_arm64
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building x64 Device Guard Rust project. Exit Code: $LASTEXITCODE") }
+
+    if (!$X64ONLY) {
+
+        cargo build_arm64
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building arm64 Device Guard Rust project. Exit Code: $LASTEXITCODE") }
+
+    }
 
     Set-Location -Path $Current_Location
 
 
     Set-Location -Path '.\eXclude\Rust Interop Library'
 
-    if (Test-Path -PathType Leaf -LiteralPath 'Cargo.lock'){
+    if (Test-Path -PathType Leaf -LiteralPath 'Cargo.lock') {
         Remove-Item -Force -LiteralPath 'Cargo.lock'
     }
 
+    rustup toolchain install nightly
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed installing nightly Rust toolchain. Exit Code: $LASTEXITCODE") }
+
+    rustup default nightly
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed setting Rust toolchain to Nightly. Exit Code: $LASTEXITCODE") }
+
+    rustup component add rust-src --toolchain nightly-x86_64-pc-windows-msvc
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed adding rust-src component to Nightly toolchain. Exit Code: $LASTEXITCODE") }
+
+    rustup update
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed updating Rust. Exit Code: $LASTEXITCODE") }
+
+    cargo version
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed checking for Rust version. Exit Code: $LASTEXITCODE") }
+
     cargo clean
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed cleaning the Rust project. Exit Code: $LASTEXITCODE") }
 
     cargo update --verbose
 
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed updating Rust. Exit Code: $LASTEXITCODE") }
+
     cargo tree
+
+    rustup show active-toolchain
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed showing active Rust toolchain. Exit Code: $LASTEXITCODE") }
 
     cargo build_x64
 
-    cargo build_arm64
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building x64 Rust Interop project. Exit Code: $LASTEXITCODE") }
+
+    if (!$X64ONLY) {
+
+        cargo build_arm64
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building ARM64 Rust Interop project. Exit Code: $LASTEXITCODE") }
+
+    }
 
     Set-Location -Path $Current_Location
 
     #endregion
 
+    #region XML Modifications
+
+    [string]$CsProjFilePath = (Resolve-Path -Path '.\AppControl Manager.csproj').Path
+    [string]$AppxManifestFilePath = (Resolve-Path -Path '.\Package.appxmanifest').Path
+
     # Adjust the Digest Algorithm based on the package source
-    [xml]$ProjXMLContent = Get-Content -Path '.\AppControl Manager.csproj' -Force
+    [xml]$ProjXMLContent = Get-Content -Path $CsProjFilePath -Force
 
     # Grab ALL existing nodes, wherever they are
     $nodes = $ProjXMLContent.SelectNodes('//AppxPackageSigningTimestampDigestAlgorithm')
 
     foreach ($node in $nodes) {
-        if ($PackageFamilyName -eq 'VioletHansen.AppControlManager_ea7andspwdn10') {
-            $node.InnerText = 'SHA256'
-        }
-        else {
-            $node.InnerText = 'SHA512'
-        }
+        $node.InnerText = $PackageHashAlgo
     }
 
-    $ProjXMLContent.Save('.\AppControl Manager.csproj')
+    $ProjXMLContent.Save($CsProjFilePath)
+
+    # Configure the Package Manifest Dits
+    [xml]$AppxManifestContent = Get-Content -Path $AppxManifestFilePath -Force
+
+    $ns = New-Object System.Xml.XmlNamespaceManager($AppxManifestContent.NameTable)
+    $ns.AddNamespace('ns', 'http://schemas.microsoft.com/appx/manifest/foundation/windows10')
+    $ns.AddNamespace('mp', 'http://schemas.microsoft.com/appx/2014/phone/manifest')
+
+    # Update the <Identity> attributes
+    $identity = $AppxManifestContent.SelectSingleNode('/ns:Package/ns:Identity', $ns)
+    $identity.SetAttribute('Name', $PackageName)
+    $identity.SetAttribute('Publisher', $PackagePublisher)
+
+    # Update the <mp:PhoneIdentity> attributes
+    $phoneId = $AppxManifestContent.SelectSingleNode('/ns:Package/mp:PhoneIdentity', $ns)
+    $phoneId.SetAttribute('PhoneProductId', $PackagePhoneProductId)
+    $phoneId.SetAttribute('PhonePublisherId', $PackagePhonePublisherId)
+
+    # Update the <PublisherDisplayName> element
+    $pubDisplay = $AppxManifestContent.SelectSingleNode('/ns:Package/ns:Properties/ns:PublisherDisplayName', $ns)
+    $pubDisplay.InnerText = $PackagePublisherDisplayName
+
+    $AppxManifestContent.Save($AppxManifestFilePath)
+
+    #endregion XML Modifications
 
     # https://learn.microsoft.com/dotnet/core/tools/dotnet-build
     # https://learn.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
@@ -594,28 +745,37 @@ function Build_ACM {
 
     Copy-Item -Path '.\eXclude\Rust WMI Interop\Device Guard\Program\target\x86_64-pc-windows-msvc\release\DeviceGuardWMIRetriever-X64.exe' -Destination '.\RustInterop\DeviceGuardWMIRetriever.exe' -Force
 
-    Copy-Item -Path '.\eXclude\Rust Interop Library\rust_interop-X64.dll' -Destination '.\RustInterop\RustInterop.dll' -Force
-
     # Generate for X64 architecture
+    dotnet clean 'AppControl Manager.slnx' --configuration Release
     dotnet build 'AppControl Manager.slnx' --configuration Release --verbosity minimal /p:Platform=x64
+
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building x64 AppControl Manager project. Exit Code: $LASTEXITCODE") }
 
     dotnet msbuild 'AppControl Manager.slnx' /p:Configuration=Release /p:AppxPackageDir="MSIXOutputX64\" /p:GenerateAppxPackageOnBuild=true /p:Platform=x64 -v:minimal /p:MsPdbCmfExeFullpath=$mspdbcmfPath -bl:X64MSBuildLog.binlog
 
-    # Copy the ARM64 components to the directory before the build starts
-    Copy-Item -Path '.\eXclude\Shell\ARM64\Release\Shell.dll' -Destination 'Shell' -Force
+    if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed packaging x64 AppControl Manager project. Exit Code: $LASTEXITCODE") }
 
-    Copy-Item -Path '.\eXclude\C++ ScheduledTaskManager\ScheduledTaskManager\ARM64\Release\ScheduledTaskManager-ARM64.exe' -Destination '.\CppInterop\ScheduledTaskManager.exe' -Force
+    if (!$X64ONLY) {
 
-    Copy-Item -Path '.\eXclude\C++ WMI Interop\ManageDefender\ARM64\Release\ManageDefender-ARM64.exe' -Destination '.\CppInterop\ManageDefender.exe' -Force
+        # Copy the ARM64 components to the directory before the build starts
+        Copy-Item -Path '.\eXclude\Shell\ARM64\Release\Shell.dll' -Destination 'Shell' -Force
 
-    Copy-Item -Path '.\eXclude\Rust WMI Interop\Device Guard\Program\target\aarch64-pc-windows-msvc\release\DeviceGuardWMIRetriever-ARM64.exe' -Destination '.\RustInterop\DeviceGuardWMIRetriever.exe' -Force
+        Copy-Item -Path '.\eXclude\C++ ScheduledTaskManager\ScheduledTaskManager\ARM64\Release\ScheduledTaskManager-ARM64.exe' -Destination '.\CppInterop\ScheduledTaskManager.exe' -Force
 
-    Copy-Item -Path '.\eXclude\Rust Interop Library\rust_interop-ARM64.dll' -Destination '.\RustInterop\RustInterop.dll' -Force
+        Copy-Item -Path '.\eXclude\C++ WMI Interop\ManageDefender\ARM64\Release\ManageDefender-ARM64.exe' -Destination '.\CppInterop\ManageDefender.exe' -Force
 
-    # Generate for ARM64 architecture
-    dotnet build 'AppControl Manager.slnx' --configuration Release --verbosity minimal /p:Platform=ARM64
+        Copy-Item -Path '.\eXclude\Rust WMI Interop\Device Guard\Program\target\aarch64-pc-windows-msvc\release\DeviceGuardWMIRetriever-ARM64.exe' -Destination '.\RustInterop\DeviceGuardWMIRetriever.exe' -Force
 
-    dotnet msbuild 'AppControl Manager.slnx' /p:Configuration=Release /p:AppxPackageDir="MSIXOutputARM64\" /p:GenerateAppxPackageOnBuild=true /p:Platform=ARM64 -v:minimal /p:MsPdbCmfExeFullpath=$mspdbcmfPath -bl:ARM64MSBuildLog.binlog
+        # Generate for ARM64 architecture
+        dotnet clean 'AppControl Manager.slnx' --configuration Release
+        dotnet build 'AppControl Manager.slnx' --configuration Release --verbosity minimal /p:Platform=ARM64
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed building ARM64 AppControl Manager project. Exit Code: $LASTEXITCODE") }
+
+        dotnet msbuild 'AppControl Manager.slnx' /p:Configuration=Release /p:AppxPackageDir="MSIXOutputARM64\" /p:GenerateAppxPackageOnBuild=true /p:Platform=ARM64 -v:minimal /p:MsPdbCmfExeFullpath=$mspdbcmfPath -bl:ARM64MSBuildLog.binlog
+
+        if ($LASTEXITCODE -ne 0) { throw [System.InvalidOperationException]::New("Failed packaging ARM64 AppControl Manager project. Exit Code: $LASTEXITCODE") }
+    }
 
     function Get-MSIXFile {
         param(
@@ -662,33 +822,55 @@ function Build_ACM {
     [System.String]$FinalMSIXX64SymbolName = [System.IO.Path]::GetFileName($FinalMSIXX64SymbolPath)
     #endregion
 
-    #region Finding ARM64 outputs
-    [System.String]$FinalMSIXARM64Path = Get-MSIXFile -BasePath ([System.IO.Path]::Combine($PWD.Path, 'MSIXOutputARM64')) -FolderPattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_Test' -FileNamePattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_arm64\.msix' -ErrorMessageFolder 'Could not find the directory for ARM64 MSIX file' -ErrorMessageFile 'Could not find the ARM64 MSIX file'
-    [System.String]$FinalMSIXARM64Name = [System.IO.Path]::GetFileName($FinalMSIXARM64Path)
-    [System.String]$FinalMSIXARM64SymbolPath = Get-MSIXFile -BasePath ([System.IO.Path]::Combine($PWD.Path, 'MSIXOutputARM64')) -FolderPattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_Test' -FileNamePattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_arm64\.msixsym' -ErrorMessageFolder 'Could not find the directory for ARM64 symbol file' -ErrorMessageFile 'Could not find the ARM64 symbol file'
-    [System.String]$FinalMSIXARM64SymbolName = [System.IO.Path]::GetFileName($FinalMSIXARM64SymbolPath)
-    #endregion
+    if (!$X64ONLY) {
+
+        #region Finding ARM64 outputs
+        [System.String]$FinalMSIXARM64Path = Get-MSIXFile -BasePath ([System.IO.Path]::Combine($PWD.Path, 'MSIXOutputARM64')) -FolderPattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_Test' -FileNamePattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_arm64\.msix' -ErrorMessageFolder 'Could not find the directory for ARM64 MSIX file' -ErrorMessageFile 'Could not find the ARM64 MSIX file'
+        [System.String]$FinalMSIXARM64Name = [System.IO.Path]::GetFileName($FinalMSIXARM64Path)
+        [System.String]$FinalMSIXARM64SymbolPath = Get-MSIXFile -BasePath ([System.IO.Path]::Combine($PWD.Path, 'MSIXOutputARM64')) -FolderPattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_Test' -FileNamePattern 'AppControl Manager_\d+\.\d+\.\d+\.\d+_arm64\.msixsym' -ErrorMessageFolder 'Could not find the directory for ARM64 symbol file' -ErrorMessageFile 'Could not find the ARM64 symbol file'
+        [System.String]$FinalMSIXARM64SymbolName = [System.IO.Path]::GetFileName($FinalMSIXARM64SymbolPath)
+        #endregion
+
+    }
 
     #region Detect and Validate File Versions
     [System.Text.RegularExpressions.Regex]$versionRegexX64 = [System.Text.RegularExpressions.Regex]::New('AppControl Manager_(\d+\.\d+\.\d+\.\d+)_x64\.msix')
-    [System.Text.RegularExpressions.Regex]$versionRegexARM64 = [System.Text.RegularExpressions.Regex]::New('AppControl Manager_(\d+\.\d+\.\d+\.\d+)_arm64\.msix')
+
+    if (!$X64ONLY) {
+
+        [System.Text.RegularExpressions.Regex]$versionRegexARM64 = [System.Text.RegularExpressions.Regex]::New('AppControl Manager_(\d+\.\d+\.\d+\.\d+)_arm64\.msix')
+    }
 
     [System.Text.RegularExpressions.Match]$MatchX64 = $versionRegexX64.Match($FinalMSIXX64Name)
-    [System.Text.RegularExpressions.Match]$MatchARM64 = $versionRegexARM64.Match($FinalMSIXARM64Name)
+
+    if (!$X64ONLY) {
+
+        [System.Text.RegularExpressions.Match]$MatchARM64 = $versionRegexARM64.Match($FinalMSIXARM64Name)
+
+    }
 
     if (!$MatchX64.Success) {
         throw [System.InvalidOperationException]::New('Could not detect version from X64 file name')
     }
 
-    if (!$MatchARM64.Success) {
-        throw [System.InvalidOperationException]::New('Could not detect version from ARM64 file name')
+    if (!$X64ONLY) {
+
+        if (!$MatchARM64.Success) {
+            throw [System.InvalidOperationException]::New('Could not detect version from ARM64 file name')
+        }
     }
 
     [System.String]$versionX64 = $MatchX64.Groups[1].Value
-    [System.String]$versionARM64 = $MatchARM64.Groups[1].Value
 
-    if ($versionX64 -ne $versionARM64) {
-        throw [System.InvalidOperationException]::New('The versions in X64 and ARM64 files do not match')
+    if (!$X64ONLY) {
+
+        [System.String]$versionARM64 = $MatchARM64.Groups[1].Value
+
+
+        if ($versionX64 -ne $versionARM64) {
+            throw [System.InvalidOperationException]::New('The versions in X64 and ARM64 files do not match')
+        }
+
     }
 
     # Craft the file name for the MSIX Bundle file
@@ -699,7 +881,12 @@ function Build_ACM {
     [System.String]$MSIXBundleOutput = [System.IO.Directory]::CreateDirectory([System.IO.Path]::Combine($script:AppControlManagerDirectory, 'MSIXBundleOutput')).FullName
 
     [System.IO.File]::Copy($FinalMSIXX64Path, [System.IO.Path]::Combine($MSIXBundleOutput, $FinalMSIXX64Name), $true)
-    [System.IO.File]::Copy($FinalMSIXARM64Path, [System.IO.Path]::Combine($MSIXBundleOutput, $FinalMSIXARM64Name), $true)
+
+    if (!$X64ONLY) {
+
+        [System.IO.File]::Copy($FinalMSIXARM64Path, [System.IO.Path]::Combine($MSIXBundleOutput, $FinalMSIXARM64Name), $true)
+
+    }
 
     # The path to the final MSIX Bundle file
     [System.String]$MSIXBundle = [System.IO.Path]::Combine($MSIXBundleOutput, $FinalBundleFileName)
@@ -760,16 +947,20 @@ function Build_ACM {
     Write-Host -Object "X64 MSIX File Name: $FinalMSIXX64Name" -ForegroundColor Green
     Write-Host -Object "X64 Symbols: $FinalMSIXX64SymbolPath" -ForegroundColor Green
 
-    Write-Host -Object "ARM64 MSIX File Path: $FinalMSIXARM64Path" -ForegroundColor Cyan
-    Write-Host -Object "ARM64 MSIX File Name: $FinalMSIXARM64Name" -ForegroundColor Cyan
-    Write-Host -Object "ARM64 Symbols: $FinalMSIXARM64SymbolPath" -ForegroundColor Cyan
+    if (!$X64ONLY) {
+
+        Write-Host -Object "ARM64 MSIX File Path: $FinalMSIXARM64Path" -ForegroundColor Cyan
+        Write-Host -Object "ARM64 MSIX File Name: $FinalMSIXARM64Name" -ForegroundColor Cyan
+        Write-Host -Object "ARM64 Symbols: $FinalMSIXARM64SymbolPath" -ForegroundColor Cyan
+
+    }
 
     Write-Host -Object "MSIX Bundle File Path: $MSIXBundle" -ForegroundColor Yellow
     Write-Host -Object "MSIX Bundle File Name: $FinalBundleFileName" -ForegroundColor Yellow
 
     if ($Workflow) {
 
-        [XML]$CSProjXMLContent = Get-Content -Path '.\AppControl Manager.csproj' -Force
+        [XML]$CSProjXMLContent = Get-Content -Path $CsProjFilePath -Force
         [string]$MSIXVersion = $CSProjXMLContent.Project.PropertyGroup.FileVersion
         [string]$MSIXVersion = $MSIXVersion.Trim() # It would have trailing whitespaces
         if ([string]::IsNullOrWhiteSpace($FinalMSIXX64Path) -or [string]::IsNullOrWhiteSpace($FinalMSIXX64Name) -or [string]::IsNullOrWhiteSpace($MSIXVersion)) { throw 'Necessary info could not be found' }
@@ -805,6 +996,26 @@ function Build_ACM {
         Add-Content -Path ($env:GITHUB_ENV, $env:GITHUB_OUTPUT) -Value 'SBOM_NAME=manifest.spdx.json'
     }
 
+    if ($Install -and $PackageFamilyName -eq 'AppControlManager_sadt7br7jpt02') {
+        (Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/HotCakeX/Harden-Windows-Security/main/Harden-Windows-Security.ps1') + "AppControl -Verbose -MSIXBundlePath '$MSIXBundle'" | Invoke-Expression
+    }
+
+    if ($Upload) {
+        dotnet clean '.\eXclude\PartnerCenter\PartnerCenter.slnx' --configuration Release
+        dotnet build '.\eXclude\PartnerCenter\PartnerCenter.slnx' --configuration Release --verbosity minimal
+        dotnet msbuild '.\eXclude\PartnerCenter\PartnerCenter.slnx' /p:Platform=x64 /p:PublishProfile=win-x64 /t:Publish -v:minimal
+
+        [System.String]$TokenEndpoint = $env:PARTNERCENTER_TOKENENDPOINT
+        [System.String]$ClientId = $env:PARTNERCENTER_CLIENTID
+        [System.String]$ClientSecret = $env:PARTNERCENTER_CLIENTSECRET
+        [System.String]$ApplicationId = $env:PARTNERCENTER_APPLICATIONID
+
+        [System.String]$PackageFilePath = $MSIXBundle
+        [System.String]$ReleaseNotesFilePath = (Resolve-Path -Path ReleaseNotes.txt).Path
+
+        . '.\eXclude\PartnerCenter\X64Output\PartnerCenter.exe' $TokenEndpoint $ClientId $ClientSecret $ApplicationId $PackageFilePath $ReleaseNotesFilePath
+    }
+
     if ($null -ne $Stopwatch) {
 
         $Stopwatch.Stop()
@@ -825,7 +1036,18 @@ Milliseconds : $($Elapsed.Milliseconds)
     }
 }
 
-Build_ACM -PackageFamilyName 'VioletHansen.AppControlManager_ea7andspwdn10' -DownloadRepo $false -InstallDeps $false -Workflow $false -UpdateWorkLoads $false
+# For GitHub workflow 1
+# Build_ACM -Type Self -DownloadRepo $false -InstallDeps $false -Workflow $true -UpdateWorkLoads $false -Install $false -Upload $false -X64ONLY $false
+# For GitHub workflow 2
+# Build_ACM -Type Store -DownloadRepo $false -InstallDeps $false -Workflow $true -UpdateWorkLoads $false -Install $false -Upload $true -X64ONLY $false
+# Example of building the app from the source code and installing it on a clean system with self-signed certificate
+# Build_ACM -Type Self -DownloadRepo $true -InstallDeps $true -Workflow $false -UpdateWorkLoads $false -Install $true -Upload $false -X64ONLY $false
+# Example of building the app from the source code on a clean system and uploading it to the Partner Center
+# Build_ACM -Type Store -DownloadRepo $true -InstallDeps $true -Workflow $false -UpdateWorkLoads $false -Install $false -Upload $true -X64ONLY $false
+# Local Test - X64 only
+# Build_ACM -Type Self -DownloadRepo $false -InstallDeps $false -Workflow $false -UpdateWorkLoads $false -Install $false -Upload $false -X64ONLY $true
+# Local Test - ARM64 + X64
+# Build_ACM -Type Self -DownloadRepo $false -InstallDeps $false -Workflow $false -UpdateWorkLoads $false -Install $false -Upload $false -X64ONLY $false
 
 ```
 

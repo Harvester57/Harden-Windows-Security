@@ -59,7 +59,7 @@ internal sealed partial class MDEAHPolicyCreationVM : ViewModelBase, IDisposable
 	}
 
 
-	#region MICROSOFT GRAPH IMPLEMENTATION DETAILS 
+	#region MICROSOFT GRAPH IMPLEMENTATION DETAILS
 
 	private void UpdateButtonsStates(bool on)
 	{
@@ -69,7 +69,7 @@ internal sealed partial class MDEAHPolicyCreationVM : ViewModelBase, IDisposable
 
 	internal readonly AuthenticationCompanion AuthCompanionCLS;
 
-	#endregion MICROSOFT GRAPH IMPLEMENTATION DETAILS 
+	#endregion MICROSOFT GRAPH IMPLEMENTATION DETAILS
 
 	internal readonly InfoBarSettings MainInfoBar;
 
@@ -87,10 +87,10 @@ internal sealed partial class MDEAHPolicyCreationVM : ViewModelBase, IDisposable
 	/// </summary>
 	internal string? MDEAdvancedHuntingLogs { get; set => SP(ref field, value); }
 
-	internal ListViewHelper.SortState SortState { get; set; } = new();
+	private ListViewHelper.SortState SortState { get; set; } = new();
 
 	// Variables to hold the data supplied by the UI elements
-	internal string? BasePolicyGUID { get; set => SP(ref field, value); }
+	internal string? BasePolicyGUID { get; set => SPT(ref field, value); }
 	internal string? PolicyToAddLogsTo { get; set => SP(ref field, value); }
 	internal string? BasePolicyXMLFile { get; set => SP(ref field, value); }
 
@@ -137,7 +137,7 @@ internal sealed partial class MDEAHPolicyCreationVM : ViewModelBase, IDisposable
 	{
 		get; set
 		{
-			if (SP(ref field, value))
+			if (SPT(ref field, value))
 			{
 				ApplyFilters();
 			}
@@ -153,7 +153,7 @@ internal sealed partial class MDEAHPolicyCreationVM : ViewModelBase, IDisposable
 	/// </summary>
 	private string? finalSupplementalPolicyPath;
 
-	internal string? PolicyNameTextBox { get; set => SP(ref field, value); }
+	internal string? PolicyNameTextBox { get; set => SPT(ref field, value); }
 
 	internal bool DeployPolicyToggle { get; set => SP(ref field, value); }
 
@@ -179,7 +179,7 @@ internal sealed partial class MDEAHPolicyCreationVM : ViewModelBase, IDisposable
 	} = 1;
 
 
-	internal string? DeviceNameTextBox { get; set => SP(ref field, value); }
+	internal string? DeviceNameTextBox { get; set => SPT(ref field, value); }
 
 	#region LISTVIEW IMPLEMENTATIONS
 
@@ -343,7 +343,7 @@ DeviceEvents
 		// Check if there are selected items in the ListView
 		if (lv.SelectedItems.Count > 0)
 		{
-			ListViewHelper.ConvertRowToText(lv.SelectedItems);
+			ListViewHelper.ConvertRowToText(lv.SelectedItems, ListViewHelper.FileIdentityPropertyMappings);
 		}
 	}
 
@@ -959,7 +959,7 @@ DeviceEvents
 	{
 		if (sender is Button button && button.Tag is string key)
 		{
-			if (ListViewHelper.PropertyMappings.TryGetValue(key, out (string Label, Func<FileIdentity, object?> Getter) mapping))
+			if (ListViewHelper.FileIdentityPropertyMappings.TryGetValue(key, out (string Label, Func<FileIdentity, object?> Getter) mapping))
 			{
 				ListViewHelper.SortColumn(
 					mapping.Getter,

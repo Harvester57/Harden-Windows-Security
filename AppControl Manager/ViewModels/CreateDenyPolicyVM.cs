@@ -71,6 +71,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 			() => CustomFilePathRulesInfoBarTitle, value => CustomFilePathRulesInfoBarTitle = value);
 
 		PatternBasedFileRuleCancellableButton = new(GlobalVars.GetStr("CreateDenyPolicyButton/Content"));
+
+		// To adjust the initial width of the columns, giving them nice paddings.
+		CalculateColumnWidths();
 	}
 
 	#region Files and Folders scan
@@ -118,7 +121,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// Selected Deny policy name
 	/// </summary>
-	internal string? filesAndFoldersDenyPolicyName { get; set => SP(ref field, value); }
+	internal string? filesAndFoldersDenyPolicyName { get; set => SPT(ref field, value); }
 
 	internal bool filesAndFoldersDeployButton { get; set => SP(ref field, value); }
 
@@ -584,6 +587,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		FilesAndFoldersScanResults.Clear();
 		filesAndFoldersScanResultsList.Clear();
 		UpdateTotalFiles(true);
+		CalculateColumnWidths();
 	}
 
 	/// <summary>
@@ -593,7 +597,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	{
 		get; set
 		{
-			if (SP(ref field, value))
+			if (SPT(ref field, value))
 			{
 				ApplyFilters();
 			}
@@ -673,7 +677,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	{
 		get; set
 		{
-			if (SP(ref field, value))
+			if (SPT(ref field, value))
 			{
 				PFNAppFilteringTextBox_TextChanged();
 			}
@@ -683,7 +687,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// The name of the Deny policy that will be created.
 	/// </summary>
-	internal string? PFNBasedDenyPolicyName { get; set => SP(ref field, value); }
+	internal string? PFNBasedDenyPolicyName { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Event handler for the Refresh button to get the apps list
@@ -693,7 +697,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		try
 		{
 			PFNElementsAreEnabled = false;
-			PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync();
+			PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync(this);
 		}
 		finally
 		{
@@ -774,13 +778,10 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 		}
 
 		// Filter the original collection
-		List<GroupInfoListForPackagedAppView> filtered = [.. _originalContacts
-			.Select(group => new GroupInfoListForPackagedAppView(group.Where(app =>
-				app.DisplayName.Contains(PFNBasedSearchKeywordForAppsList, StringComparison.OrdinalIgnoreCase)))
-			{
-				Key = group.Key // Preserve the group key
-			})
-			.Where(group => group.Any())];
+		List<GroupInfoListForPackagedAppView> filtered = _originalContacts
+			.Select(group => new GroupInfoListForPackagedAppView(
+				items: group.Where(app => app.DisplayName.Contains(PFNBasedSearchKeywordForAppsList, StringComparison.OrdinalIgnoreCase)),
+				key: group.Key)).Where(group => group.Any()).ToList();
 
 		// Update the ListView source with the filtered data
 		PFNBasedAppsListItemsSource = new ObservableCollection<GroupInfoListForPackagedAppView>(filtered);
@@ -797,7 +798,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 			try
 			{
 				PFNElementsAreEnabled = false;
-				PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync();
+				PFNBasedAppsListItemsSource = await GetAppsList.GetContactsGroupedAsync(this);
 			}
 			finally
 			{
@@ -851,7 +852,6 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 		try
 		{
-
 			PFNElementsAreEnabled = false;
 
 			PFNInfoBar.IsClosable = false;
@@ -871,7 +871,7 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 				if (selectedItem is PackagedAppView appView)
 				{
 					// Add the selected item's PFN to the list
-					selectedAppsPFNs.Add(appView.PackageFamilyNameActual);
+					selectedAppsPFNs.Add(appView.PackageFamilyName);
 				}
 			}
 
@@ -987,6 +987,118 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 
 	internal async void OpenInDefaultFileHandler_PFN() => await OpenInDefaultFileHandler(_PFNDenyPolicyPath);
 
+	/// <summary>
+	/// Event handler for copying app details to clipboard from the context menu.
+	/// </summary>
+	/// <param name="sender">The MenuFlyoutItem that was clicked</param>
+	/// <param name="e">Event arguments</param>
+	internal void CopyAppDetails_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			PFNInfoBar.IsClosable = false;
+
+			if (sender is not MenuFlyoutItem menuItem)
+			{
+				return;
+			}
+
+			// Navigate up the visual tree to find the PackagedAppView data context
+			DependencyObject? current = menuItem;
+			PackagedAppView? targetApp = null;
+
+			while (current is not null)
+			{
+				if (current is FrameworkElement element && element.DataContext is PackagedAppView app)
+				{
+					targetApp = app;
+					break;
+				}
+				current = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(current);
+			}
+
+			if (targetApp is null)
+			{
+				PFNInfoBar.WriteWarning("Could not determine which app's details to copy.");
+				return;
+			}
+
+			ListViewHelper.ConvertRowToText([targetApp], ListViewHelper.PackagedAppPropertyMappings);
+		}
+		catch (Exception ex)
+		{
+			PFNInfoBar.WriteError(ex);
+		}
+		finally
+		{
+			PFNInfoBar.IsClosable = true;
+		}
+	}
+
+	/// <summary>
+	/// Event handler for opening the installation location of a single app from the context menu.
+	/// </summary>
+	/// <param name="sender">The MenuFlyoutItem that was clicked</param>
+	/// <param name="e">Event arguments</param>
+	internal async void OpenAppLocation_Click(object sender, RoutedEventArgs e)
+	{
+		try
+		{
+			PFNInfoBar.IsClosable = false;
+
+			if (sender is not MenuFlyoutItem menuItem)
+			{
+				return;
+			}
+
+			// Navigate up the visual tree to find the PackagedAppView data context
+			DependencyObject? current = menuItem;
+			PackagedAppView? targetApp = null;
+
+			while (current is not null)
+			{
+				if (current is FrameworkElement element && element.DataContext is PackagedAppView app)
+				{
+					targetApp = app;
+					break;
+				}
+				current = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(current);
+			}
+
+			if (targetApp is null)
+			{
+				PFNInfoBar.WriteWarning("Could not determine which app's location to open.");
+				return;
+			}
+
+			if (string.IsNullOrWhiteSpace(targetApp.InstallLocation))
+			{
+				PFNInfoBar.WriteWarning($"No installation location available for {targetApp.DisplayName}.");
+				return;
+			}
+
+			// Check if the directory exists
+			if (!Directory.Exists(targetApp.InstallLocation))
+			{
+				PFNInfoBar.WriteWarning($"Installation location does not exist: {targetApp.InstallLocation}");
+				return;
+			}
+
+			// Open the folder in File Explorer
+			await OpenInDefaultFileHandler(targetApp.InstallLocation);
+
+			PFNInfoBar.WriteInfo($"Opened installation location for {targetApp.DisplayName}");
+		}
+		catch (Exception ex)
+		{
+			PFNInfoBar.WriteError(ex);
+		}
+		finally
+		{
+			PFNInfoBar.IsClosable = true;
+		}
+	}
+
 	#endregion
 
 	#region Custom Pattern-based File Rule
@@ -1016,12 +1128,12 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase
 	/// <summary>
 	/// The custom pattern used for file rule.
 	/// </summary>
-	internal string? DenyPolicyCustomPatternBasedCustomPatternTextBox { get; set => SP(ref field, value); }
+	internal string? DenyPolicyCustomPatternBasedCustomPatternTextBox { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Selected Deny policy name
 	/// </summary>
-	internal string? CustomPatternBasedFileRuleBasedDenyPolicyName { get; set => SP(ref field, value); }
+	internal string? CustomPatternBasedFileRuleBasedDenyPolicyName { get; set => SPT(ref field, value); }
 
 	/// <summary>
 	/// Initialization details for the main Create button for the Pattern Based FileRule section

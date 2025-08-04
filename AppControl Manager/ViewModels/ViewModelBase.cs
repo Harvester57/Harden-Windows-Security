@@ -18,16 +18,26 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using AppControlManager.IntelGathering;
 using AppControlManager.Others;
-using CommunityToolkit.WinUI;
-using Microsoft.UI.Xaml.Controls;
-using Windows.ApplicationModel.UserActivities;
+using Windows.Media.Core;
+using Windows.Media.Playback;
+using System.Threading.Tasks;
 using Windows.System;
+using Windows.ApplicationModel.UserActivities;
+using CommunityToolkit.WinUI;
+
+
+#if HARDEN_WINDOWS_SECURITY
+using HardenWindowsSecurity.AppSettings;
+using HardenWindowsSecurity;
+#endif
+
+#if APP_CONTROL_MANAGER
+using Microsoft.UI.Xaml.Controls;
+using System.Diagnostics;
+using AppControlManager.IntelGathering;
+#endif
 
 namespace AppControlManager.ViewModels;
 
@@ -40,12 +50,26 @@ internal abstract class ViewModelBase : INotifyPropertyChanged
 
 	// Expose the dispatcher queue so that derived classes can marshal
 	// calls to the UI thread when needed.
-	protected readonly Microsoft.UI.Dispatching.DispatcherQueue Dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
 
+	// This won't always be available, especially when a type inheriting from this is being instantiated before the app is fully initialized,
+	//protected readonly Microsoft.UI.Dispatching.DispatcherQueue Dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+
+	// Get it from the App class.
+	protected Microsoft.UI.Dispatching.DispatcherQueue Dispatcher => App.AppDispatcher;
+
+#if APP_CONTROL_MANAGER
 	/// <summary>
 	/// An instance property reference to the App settings that pages can x:Bind to.
 	/// </summary>
 	internal AppSettings.Main AppSettings => App.Settings;
+#endif
+
+#if HARDEN_WINDOWS_SECURITY
+	/// <summary>
+	/// An instance property reference to the App settings that pages can x:Bind to.
+	/// </summary>
+	internal Main AppSettings => App.Settings;
+#endif
 
 	/// <summary>
 	/// An instance property so pages can bind to.
@@ -72,7 +96,49 @@ internal abstract class ViewModelBase : INotifyPropertyChanged
 			return false;
 
 		field = newValue;
-		OnPropertyChanged(propertyName);
+
+		if (App.AppDispatcher.HasThreadAccess)
+		{
+			OnPropertyChanged(propertyName);
+		}
+		else
+		{
+			_ = App.AppDispatcher.TryEnqueue(() => OnPropertyChanged(propertyName));
+		}
+
+		return true;
+	}
+
+	/// <summary>
+	/// Only for properties that are nullable texts.
+	/// This plays type writing audio if Sound is enabled in the app settings.
+	/// </summary>
+	/// <param name="field"></param>
+	/// <param name="newValue"></param>
+	/// <param name="propertyName"></param>
+	/// <returns></returns>
+	protected bool SPT(ref string? field, string? newValue, [CallerMemberName] string? propertyName = null)
+	{
+		if (string.Equals(field, newValue, StringComparison.Ordinal))
+			return false;
+
+		field = newValue;
+
+		if (App.AppDispatcher.HasThreadAccess)
+		{
+			OnPropertyChanged(propertyName);
+		}
+		else
+		{
+			_ = App.AppDispatcher.TryEnqueue(() => OnPropertyChanged(propertyName));
+		}
+
+		if (App.Settings.SoundSetting && !string.IsNullOrEmpty(field))
+		{
+			TypeWriterMediaPlayer.Position = TypeWriterAudioStartTime;
+			TypeWriterMediaPlayer.Play();
+		}
+
 		return true;
 	}
 
@@ -85,6 +151,7 @@ internal abstract class ViewModelBase : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
+#if APP_CONTROL_MANAGER
 	internal readonly List<ScanLevelsComboBoxType> ScanLevelsSource =
 	[
 		new ScanLevelsComboBoxType("WHQL File Publisher", ScanLevels.WHQLFilePublisher, 5),
@@ -107,6 +174,8 @@ internal abstract class ViewModelBase : INotifyPropertyChanged
 	/// The default scan level used by the ItemsSources of ComboBoxes.
 	/// </summary>
 	internal static readonly ScanLevelsComboBoxType DefaultScanLevel = new("WHQL File Publisher", ScanLevels.WHQLFilePublisher, 5);
+
+#endif
 
 	/// <summary>
 	/// User Activity tracking field
@@ -186,64 +255,115 @@ internal abstract class ViewModelBase : INotifyPropertyChanged
 
 	/// <summary>
 	/// Handles different types of exceptions, used mainly by methods that deal with cancellable workflows.
+	/// It can detect OperationCanceledException at any nesting level within any exception hierarchy.
 	/// </summary>
-	/// <param name="exception"></param>
-	/// <param name="errorsOccurred"></param>
-	/// <param name="wasCancelled"></param>
-	/// <param name="infoBarSettings"></param>
-	/// <param name="errorMessage"></param>
+	/// <param name="exception">The exception to analyze</param>
+	/// <param name="errorsOccurred">Reference to error flag</param>
+	/// <param name="wasCancelled">Reference to cancellation flag</param>
+	/// <param name="infoBarSettings">InfoBar for displaying messages</param>
+	/// <param name="errorMessage">Optional error message</param>
 	internal static void HandleExceptions(
-	   Exception exception,
-	   ref bool errorsOccurred,
-	   ref bool wasCancelled,
-	   InfoBarSettings infoBarSettings,
-	   string? errorMessage = null)
+		Exception exception,
+		ref bool errorsOccurred,
+		ref bool wasCancelled,
+		InfoBarSettings infoBarSettings,
+		string? errorMessage = null)
 	{
+		// Find OperationCanceledException at any nesting level
+		bool containsCancellation = ContainsOperationCanceledException(exception);
 
-		// Check if it's an OperationCanceledException directly
-		if (exception is OperationCanceledException)
+		if (containsCancellation)
 		{
 			wasCancelled = true;
 			// Don't log this as an error, it's expected behavior
-			return;
-		}
-
-		// Check if it's an AggregateException
-		else if (exception is AggregateException aggregateEx)
-		{
-
-			// Check if any of the inner exceptions is an OperationCanceledException
-			bool containsCancellation = false;
-			aggregateEx.Handle(innerEx =>
-			{
-				if (innerEx is OperationCanceledException)
-				{
-					containsCancellation = true;
-					return true; // Mark this exception as handled
-				}
-				return false; // Don't handle other exceptions
-			});
-
-			if (containsCancellation)
-			{
-				wasCancelled = true;
-				// Don't log this as an error, it's expected behavior
-			}
-			else
-			{
-				errorsOccurred = true;
-				infoBarSettings.WriteError(aggregateEx);
-			}
 		}
 		else
 		{
-			// Handle any other exception type
 			errorsOccurred = true;
-
 			infoBarSettings.WriteError(exception, errorMessage);
 		}
 	}
 
+	/// <summary>
+	/// Recursively searches for OperationCanceledException in any exception hierarchy.
+	/// Handles deeply nested exceptions including AggregateExceptions, regular InnerException chains,
+	/// and any combination thereof.
+	/// </summary>
+	/// <param name="exception">The exception to search</param>
+	/// <returns>True if OperationCanceledException is found at any nesting level</returns>
+	private static bool ContainsOperationCanceledException(Exception exception)
+	{
+		// A HashSet to prevent infinite loops in case of circular references
+		HashSet<Exception> visited = new(ReferenceEqualityComparer.Instance);
+		return ContainsOperationCanceledExceptionRecursive(exception, visited);
+	}
+
+	/// <summary>
+	/// Recursive helper method to search for OperationCanceledException in any exception hierarchy.
+	/// This method comprehensively searches through:
+	/// - Direct exception type checking
+	/// - AggregateException.InnerExceptions collections
+	/// - Regular Exception.InnerException chains
+	/// - Any combination and nesting of the above
+	/// </summary>
+	/// <param name="exception">Current exception to examine</param>
+	/// <param name="visited">Set of already visited exceptions to prevent cycles</param>
+	/// <returns>True if OperationCanceledException is found</returns>
+	private static bool ContainsOperationCanceledExceptionRecursive(Exception exception, HashSet<Exception> visited)
+	{
+		// Prevent infinite loops from circular exception references
+		if (!visited.Add(exception))
+		{
+			return false;
+		}
+
+		// Check if current exception is OperationCanceledException
+		if (exception is OperationCanceledException)
+		{
+			return true;
+		}
+
+		// Handle AggregateException's inner exceptions collection
+		if (exception is AggregateException aggregateEx)
+		{
+			foreach (Exception innerEx in aggregateEx.InnerExceptions)
+			{
+				if (ContainsOperationCanceledExceptionRecursive(innerEx, visited))
+				{
+					return true;
+				}
+			}
+		}
+
+		// Handle regular InnerException chain (applies to ALL exception types)
+		// This is crucial for detecting nested exceptions in non-AggregateException hierarchies
+		if (exception.InnerException != null)
+		{
+			if (ContainsOperationCanceledExceptionRecursive(exception.InnerException, visited))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	/// <summary>
+	/// Determines if an exception hierarchy contains an OperationCanceledException at any nesting level.
+	/// This method can handle deeply nested exceptions including AggregateExceptions and regular InnerException chains.
+	/// Returns true if cancellation was detected, false otherwise.
+	/// </summary>
+	/// <param name="exception">The exception to analyze</param>
+	/// <returns>True if OperationCanceledException is found at any nesting level, false otherwise</returns>
+	internal static bool IsCancellationException(Exception exception)
+	{
+		HashSet<Exception> visited = new(ReferenceEqualityComparer.Instance);
+		return ContainsOperationCanceledExceptionRecursive(exception, visited);
+	}
+
+
+#if APP_CONTROL_MANAGER
 	/// <summary>
 	/// Opens the directory where a file is located in File Explorer.
 	/// </summary>
@@ -278,22 +398,18 @@ internal abstract class ViewModelBase : INotifyPropertyChanged
 
 		if (fileToOpen is not null)
 		{
-			string? Dir = Path.GetDirectoryName(fileToOpen);
-
-			if (Dir is not null)
+			ProcessStartInfo processInfo = new()
 			{
-				ProcessStartInfo processInfo = new()
-				{
-					FileName = "explorer.exe",
-					Arguments = Dir,
-					Verb = "runas",
-					UseShellExecute = true
-				};
+				FileName = "explorer.exe",
+				Arguments = $"/select,\"{fileToOpen}\"", // Scroll to the file in File Explorer and highlight it.
+				Verb = "runas",
+				UseShellExecute = true
+			};
 
-				_ = Process.Start(processInfo);
-			}
+			_ = Process.Start(processInfo);
 		}
 	}
+#endif
 
 	/// <summary>
 	/// Opens a file in the default file handler in the OS.
@@ -311,4 +427,26 @@ internal abstract class ViewModelBase : INotifyPropertyChanged
 			Logger.Write(ErrorWriter.FormatException(ex));
 		}
 	}
+
+	private static readonly MediaPlayer TypeWriterMediaPlayer = new()
+	{
+		Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/Audio/TypeWriter.wav"))
+	};
+
+	private static readonly TimeSpan TypeWriterAudioStartTime = TimeSpan.FromMilliseconds(167);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+	internal static void EmitTypingSound()
+	{
+		if (!App.Settings.SoundSetting) return;
+
+		TypeWriterMediaPlayer.Position = TypeWriterAudioStartTime;
+		TypeWriterMediaPlayer.Play();
+	}
+
+	/// <summary>
+	/// The current user's profile directory path.
+	/// </summary>
+	internal static readonly string UserProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
 }
